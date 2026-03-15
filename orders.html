@@ -5,31 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Orders - ALFRED PRODUCTS</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF6600">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="1.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
 </head>
 <body>
     <header>
         <div class="container">
             <div class="header-top">
                 <div class="logo">
-                   <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a>
+                   <a href="index.html"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a></a>
                 </div>
-                <div class="header-actions">
+                <div class="header-actions" id="userHeaderActions">
+                    <!-- Dynamic User Header -->
                     <a href="login.html" class="action-item">
                         <ion-icon name="person-outline"></ion-icon>
                         <span>Sign In</span>
-                    </a>
-                    <a href="messages.html" class="action-item">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        <span>Messages</span>
-                    </a>
-                    <a href="orders.html" class="action-item active">
-                        <ion-icon name="cart-outline"></ion-icon>
-                        <span>Orders</span>
                     </a>
                 </div>
             </div>
@@ -37,72 +40,104 @@
     </header>
 
     <main class="container dashboard-container">
-        <h2 style="margin-bottom: 30px;">Track Orders</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2>Your Purchase History</h2>
+            <button class="btn btn-outline" onclick="auth.signOut().then(() => window.location.reload())" id="logoutBtn" style="display: none;">Logout</button>
+        </div>
         
-        <div class="order-card">
-            <div class="order-info">
-                <div class="order-img">
-                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=400" alt="Product">
-                </div>
-                <div>
-                    <h4 style="margin-bottom: 5px;">Premium Oversized Cotton T-Shirt</h4>
-                    <p style="font-size: 13px; color: var(--text-muted);">Order ID: 8293019283 · Supplier: Apparel Direct Co.</p>
-                </div>
-            </div>
-            <div style="text-align: right;">
-                <span class="status-badge status-shipped">In Transit</span>
-                <p style="font-size: 14px; font-weight: 700; margin-top: 10px;">$480.00</p>
-                <button class="btn btn-outline" style="padding: 8px 20px; font-size: 13px; margin-top: 10px;" onclick="showTracking('8293019283')">Track Details</button>
+        <div id="ordersContainer">
+            <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                <ion-icon name="sync-outline" style="font-size: 40px; animation: rotate 2s linear infinite;"></ion-icon>
+                <p>Loading your orders...</p>
             </div>
         </div>
 
-        <!-- Tracking Details Modal -->
-        <div id="trackingModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; justify-content: center; align-items: center;">
-            <div style="background: white; width: 600px; border-radius: 12px; padding: 40px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-                <span style="position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px;" onclick="closeTracking()">&times;</span>
-                <h3 style="margin-bottom: 30px;">Tracking Information - ID: <span id="trackIdDisplay"></span></h3>
-                <div class="timeline" style="border-left: 2px solid var(--primary-color); margin-left: 20px; padding-left: 30px;">
-                    <div style="margin-bottom: 25px; position: relative;">
-                        <div style="position: absolute; left: -36px; top: 0; width: 10px; height: 10px; background: var(--primary-color); border-radius: 50%;"></div>
-                        <p style="font-weight: 600; font-size: 14px;">Arrived at Logistics Hub</p>
-                        <p style="font-size: 12px; color: var(--text-muted);">Beijing, CN · Today 09:20 AM</p>
-                    </div>
-                    <div style="margin-bottom: 25px; position: relative;">
-                         <div style="position: absolute; left: -36px; top: 0; width: 10px; height: 10px; background: var(--primary-color); border-radius: 50%;"></div>
-                        <p style="font-weight: 600; font-size: 14px;">Picked up by Carrier</p>
-                        <p style="font-size: 12px; color: var(--text-muted);">Industrial District, CN · Yesterday 04:15 PM</p>
-                    </div>
-                    <div style="position: relative;">
-                        <div style="position: absolute; left: -36px; top: 0; width: 10px; height: 10px; background: #ddd; border-radius: 50%;"></div>
-                        <p style="font-weight: 600; font-size: 14px; color: #999;">Order Processed</p>
-                        <p style="font-size: 12px; color: var(--text-muted);">Mar 14, 2026 · 11:30 AM</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="order-card">
-            <div class="order-info">
-                <div class="order-img">
-                    <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=400" alt="Product">
-                </div>
-                <div>
-                    <h4 style="margin-bottom: 5px;">Luxury Smart Watch Series X</h4>
-                    <p style="font-size: 13px; color: var(--text-muted);">Order ID: 1029384756 · Supplier: TechSource Global</p>
-                </div>
-            </div>
-            <div style="text-align: right;">
-                <span class="status-badge status-pending">Processing</span>
-                <p style="font-size: 14px; font-weight: 700; margin-top: 10px;">$1,250.00</p>
-                <button class="btn btn-outline" style="padding: 8px 20px; font-size: 13px; margin-top: 10px;">View Order</button>
-            </div>
+        <div id="noOrdersMessage" style="display: none; text-align: center; padding: 60px 0;">
+            <ion-icon name="bag-handle-outline" style="font-size: 80px; color: #eee;"></ion-icon>
+            <h3 style="color: #999; margin-top: 20px;">No orders found yet.</h3>
+            <a href="index.html" class="btn btn-primary" style="display: inline-block; margin-top: 20px; text-decoration: none;">Explore Products</a>
         </div>
     </main>
 
+    <!-- Tracking Modal -->
+    <div id="trackingModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; justify-content: center; align-items: center;">
+        <div style="background: white; width: 600px; border-radius: 12px; padding: 40px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+            <span style="position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px;" onclick="closeTracking()">&times;</span>
+            <h3 style="margin-bottom: 30px;">Tracking Status - ID: <span id="trackIdDisplay"></span></h3>
+            <div class="timeline" style="border-left: 2px solid var(--primary-color); margin-left: 20px; padding-left: 30px;">
+                <div style="margin-bottom: 25px; position: relative;" id="step1">
+                    <div style="position: absolute; left: -36px; top: 0; width: 10px; height: 10px; background: var(--primary-color); border-radius: 50%;"></div>
+                    <p style="font-weight: 600; font-size: 14px;">Order Confirmed & Payment Verified</p>
+                    <p style="font-size: 12px; color: var(--text-muted);" id="orderTimeDisplay"></p>
+                </div>
+                <!-- Additional steps can be added here -->
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+
+    <script src="script.js"></script>
     <script>
-        function showTracking(id) {
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('logoutBtn').style.display = 'block';
+                fetchUserOrders(user.uid);
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        function fetchUserOrders(uid) {
+            const container = document.getElementById('ordersContainer');
+            const noMsg = document.getElementById('noOrdersMessage');
+
+            db.collection("orders").where("userId", "==", uid).orderBy("timestamp", "desc").get()
+                .then((querySnapshot) => {
+                    container.innerHTML = '';
+                    if (querySnapshot.empty) {
+                        noMsg.style.display = 'block';
+                        return;
+                    }
+
+                    querySnapshot.forEach((doc) => {
+                        const order = doc.data();
+                        const date = order.timestamp ? order.timestamp.toDate().toLocaleDateString() : 'Just now';
+                        
+                        const orderDiv = document.createElement('div');
+                        orderDiv.className = 'order-card';
+                        orderDiv.style.marginBottom = '20px';
+                        orderDiv.innerHTML = `
+                            <div class="order-info">
+                                <div class="order-img">
+                                    <img src="${order.items[0].image}" alt="Product">
+                                </div>
+                                <div>
+                                    <h4 style="margin-bottom: 5px;">Order #${order.reference}</h4>
+                                    <p style="font-size: 13px; color: var(--text-muted);">${order.items.length} item(s) purchased on ${date}</p>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <span class="status-badge status-shipped" style="background: #e3f2fd; color: #1976d2;">Paid</span>
+                                <p style="font-size: 16px; font-weight: 700; margin-top: 10px;">$${parseFloat(order.total).toFixed(2)}</p>
+                                <button class="btn btn-outline" style="padding: 8px 15px; font-size: 12px; margin-top: 10px;" onclick="showTracking('${order.reference}', '${date}')">Details</button>
+                            </div>
+                        `;
+                        container.appendChild(orderDiv);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error fetching orders: ", error);
+                    container.innerHTML = '<p style="text-align: center; color: red;">Error loading orders.</p>';
+                });
+        }
+
+        function showTracking(id, date) {
             document.getElementById('trackingModal').style.display = 'flex';
             document.getElementById('trackIdDisplay').innerText = id;
+            document.getElementById('orderTimeDisplay').innerText = date;
         }
 
         function closeTracking() {
@@ -111,3 +146,5 @@
     </script>
 </body>
 </html>
+
+
