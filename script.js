@@ -229,7 +229,7 @@ function payWithPaystack() {
 
     let handler = PaystackPop.setup({
         key: 'pk_live_6b9968065dc0bd4842c97ffa138e49127c862888',
-        email: 'customer@example.com', // In a real app, get this from user profile
+        email: (auth.currentUser ? auth.currentUser.email : 'customer@example.com'),
         amount: amount || 5000, 
         currency: "GHS",
         ref: 'ALFRED_' + Math.floor((Math.random() * 1000000000) + 1),
@@ -244,6 +244,20 @@ function payWithPaystack() {
         },
         callback: function(response){
             alert('Payment Successful! Reference: ' + response.reference);
+            
+            // Save order to Firestore
+            saveOrderToFirestore({
+                items: [{
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    image: product.fallbackImage,
+                    quantity: 1
+                }],
+                total: priceStr,
+                reference: response.reference
+            });
+
             window.location.href = 'orders.html';
         },
         onClose: function(){
