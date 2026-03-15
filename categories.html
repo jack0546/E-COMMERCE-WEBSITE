@@ -14,19 +14,145 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
+    <style>
+        .category-explorer {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .category-nav {
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+        .category-nav h3 {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .category-nav ul {
+            list-style: none;
+        }
+        .category-nav li {
+            padding: 8px 0;
+        }
+        .category-nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+            display: block;
+        }
+        .category-nav a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+        .category-section {
+            margin-bottom: 60px;
+            scroll-margin-top: 100px;
+        }
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        .category-header h3 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-color);
+        }
+        .category-header .view-all {
+            font-size: 14px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .sub-category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+        }
+        .sub-category-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+        .sub-category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
+        }
+        .sub-category-img {
+            height: 140px;
+            overflow: hidden;
+            background: #f7f7f7;
+            position: relative;
+        }
+        .sub-category-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .sub-category-card:hover .sub-category-img img {
+            transform: scale(1.1);
+        }
+        .sub-category-name {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 12px 10px;
+            display: block;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.4;
+        }
+        @media (max-width: 900px) {
+            .category-explorer {
+                grid-template-columns: 1fr;
+            }
+            .category-nav {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="container">
             <div class="header-top">
                 <div class="logo">
-                   <a href="index.html"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a></a>
+                   <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a>
                 </div>
-                <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for products or categories...">
+                    <button>Search</button>
+                </div>
+                <div class="header-actions" id="headerActions">
                     <a href="login.html" class="action-item">
                         <ion-icon name="person-outline"></ion-icon>
                         <span>Sign In</span>
@@ -35,9 +161,9 @@
                         <ion-icon name="mail-outline"></ion-icon>
                         <span>Messages</span>
                     </a>
-                    <a href="orders.html" class="action-item">
+                    <a href="cart.html" class="action-item">
                         <ion-icon name="cart-outline"></ion-icon>
-                        <span>Orders</span>
+                        <span id="cartCount">0</span>
                     </a>
                 </div>
             </div>
@@ -53,70 +179,272 @@
         </div>
     </header>
 
-    <main class="container" style="padding: 40px 0;">
-        <h2 style="margin-bottom: 30px;">Source by Category</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
-            <a href="apparel.html" style="text-decoration: none; color: inherit;">
-                <div class="banner-card" style="padding: 30px; text-align: center; cursor: pointer;">
-                    <ion-icon name="shirt-outline" style="font-size: 40px; color: var(--primary-color);"></ion-icon>
-                    <h4 style="margin-top: 15px;">Apparel & Accessories</h4>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;">T-shirts, Dresses, Jeans...</p>
+    <main class="container">
+        <div class="category-explorer">
+            <aside class="category-nav">
+                <h3>All Markets</h3>
+                <ul id="sidebarNav">
+                    <!-- Nav items will be loaded here -->
+                </ul>
+            </aside>
+            <section id="categoryDisplay">
+                <div style="text-align: center; padding: 100px 0;">
+                    <ion-icon name="sync-outline" style="font-size: 48px; color: var(--primary-color); animation: spin 2s linear infinite;"></ion-icon>
+                    <p style="margin-top: 15px; color: var(--text-muted);">Organizing categories...</p>
                 </div>
-            </a>
-            <a href="electronics.html" style="text-decoration: none; color: inherit;">
-                <div class="banner-card" style="padding: 30px; text-align: center; cursor: pointer;">
-                    <ion-icon name="desktop-outline" style="font-size: 40px; color: var(--primary-color);"></ion-icon>
-                    <h4 style="margin-top: 15px;">Consumer Electronics</h4>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;">Smartphones, Laptops, Audio...</p>
-                </div>
-            </a>
-            <a href="home.html" style="text-decoration: none; color: inherit;">
-                <div class="banner-card" style="padding: 30px; text-align: center; cursor: pointer;">
-                    <ion-icon name="home-outline" style="font-size: 40px; color: var(--primary-color);"></ion-icon>
-                    <h4 style="margin-top: 15px;">Home & Garden</h4>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;">Furniture, Kitchen, Decor...</p>
-                </div>
-            </a>
-            <a href="sports.html" style="text-decoration: none; color: inherit;">
-                <div class="banner-card" style="padding: 30px; text-align: center; cursor: pointer;">
-                    <ion-icon name="football-outline" style="font-size: 40px; color: var(--primary-color);"></ion-icon>
-                    <h4 style="margin-top: 15px;">Sports & Entertainment</h4>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;">Outdoor, Fitness, Camping...</p>
-                </div>
-            </a>
-            <a href="industrial.html" style="text-decoration: none; color: inherit;">
-                <div class="banner-card" style="padding: 30px; text-align: center; cursor: pointer;">
-                    <ion-icon name="construct-outline" style="font-size: 40px; color: var(--primary-color);"></ion-icon>
-                    <h4 style="margin-top: 15px;">Industrial Machinery</h4>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;">ToolsProviders, Pumps, Parts...</p>
-                </div>
-            </a>
-            <a href="beauty.html" style="text-decoration: none; color: inherit;">
-                <div class="banner-card" style="padding: 30px; text-align: center; cursor: pointer;">
-                    <ion-icon name="sparkles-outline" style="font-size: 40px; color: var(--primary-color);"></ion-icon>
-                    <h4 style="margin-top: 15px;">Beauty & Personal Care</h4>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;">Skincare, Makeup, Hair...</p>
-                </div>
-            </a>
+            </section>
         </div>
     </main>
 
     <footer>
         <div class="container footer-grid">
             <div class="footer-col">
-                <h4>Get Support</h4>
+                <h4>Support</h4>
                 <ul>
                     <li><a href="help.html">Help Center</a></li>
-                    <li><a href="#">Live Chat</a></li>
+                    <li><a href="messages.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Trade Services</h4>
+                <ul>
+                    <li><a href="trade.html">Trade Assurance</a></li>
+                    <li><a href="logistics.html">Logistics Service</a></li>
                 </ul>
             </div>
         </div>
     </footer>
+
+    <style>
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const display = document.getElementById('categoryDisplay');
+            const nav = document.getElementById('sidebarNav');
+            
+            // Comprehensive Category Data structure based on user request
+            const sectors = [
+                {
+                    id: "sports",
+                    name: "Sports & Entertainment",
+                    items: ["Camping Gear", "Fishing Accessories", "Novelties", "Step Platforms", "Accessories", "Bows", "Slides", "Diving Reel", "Shot Put", "Tennis Net", "Flying Car", "Suspension Trainers", "Amusement Park Products"]
+                },
+                {
+                    id: "beauty",
+                    name: "Beauty",
+                    items: ["Perfume Gift Sets", "Perfume Set", "Body Mist", "Women's Perfume", "Deodorant Spray", "Deodorant", "Men's Perfume", "Cosmetic", "Nail Equipments", "Hair Removal Machine", "Makeup Sets", "Antiperspirant", "Nail Supplies"]
+                },
+                {
+                    id: "shoes",
+                    name: "Shoes & Accessories",
+                    items: ["Home Slippers", "Fur Slippers", "Moccasin Slippers", "Moccasins", "Flats", "Slides Slippers", "Sandals", "Women Flats", "Clogs Shoes", "Summer Sandals", "Beach Slippers", "Indoor Slippers", "Women Slides"]
+                },
+                {
+                    id: "toys",
+                    name: "Parents, Kids & Toys",
+                    items: ["Educational Toys", "Transformation Toys", "Swimming Pool", "Children Slippers", "Girls Sandals", "Clogs", "Slippers", "Snow Scooters", "Miscellaneous", "Pool Accessories", "Kaleidoscopes", "Water Toys", "Party Decoration"]
+                },
+                {
+                    id: "apparel",
+                    name: "Apparel & Accessories",
+                    items: ["Graduation Cap", "Cheongsam", "Sequins", "Trimmings", "Ice Hockey", "Rhinestones", "Men's Sets", "Muslim Skirt", "Pirate Hat", "Dance Pants", "Tactical Clothes", "Fabric Belts", "Pilot Shirt"]
+                },
+                {
+                    id: "electronics",
+                    name: "Consumer Electronics",
+                    items: ["Speaker Driver", "Keyboard switches", "Tf Card", "Camera Accessories", "Smart Products", "Computer Accessories", "Software", "Ethernet Adapter", "Satellite Multiswitch", "Hd Camcorder", "Uv Filter", "Camera Filters", "Soldering Mat"]
+                },
+                {
+                    id: "home",
+                    name: "Home & Garden",
+                    items: ["Snow Spray", "Blackout Curtain", "Smart Blinds", "Bouquet", "Curtains", "Bottle", "Roses", "Window Canopy", "Vertical Awning", "Automatic Curtain", "Blind Motor", "Valances", "Shade Cloth"]
+                },
+                {
+                    id: "outdoor",
+                    name: "Sportswear & Outdoor",
+                    items: ["Leg Warmers", "Leg Massager", "Knee Support", "Barefoot Shoes", "Volleyball Shoes", "Souvenirs", "Football Boots", "Hockey Skate", "Mtb Shoes", "Sports Gloves", "Back Support", "Sweatband", "Keeper Gloves"]
+                },
+                {
+                    id: "jewelry",
+                    name: "Jewelry, Eyewear & Watches",
+                    items: ["Jewelry Tools", "Acrylic beads", "Crystal Beads", "Silicone Beads", "Glass Beads", "Charms", "Amber", "Hair Sticks", "Headpiece", "Tourmaline", "Earring Cards", "Turquoise", "Christmas Jewelry"]
+                },
+                {
+                    id: "bags",
+                    name: "Luggage, Bags & Cases",
+                    items: ["Beauty Case", "College Bag", "Cosmetic Case", "Bag Accessories", "Wine Bag", "Shoulder Bag", "Backpack", "Bag Chain", "Shoulder Strap", "Lipstick Bags", "Luggage Scooter", "Lipstick Case", "Bag Handle"]
+                },
+                {
+                    id: "printing",
+                    name: "Packaging & Printing",
+                    items: ["Cardboard Boxes", "Paper Bags", "Plastic Bags", "Glass Bottles", "Labels", "Stickers", "Bubble Wrap", "Express Envelopes", "Gift Boxes", "Wine Boxes", "Jewelry Packaging"]
+                },
+                {
+                    id: "personal",
+                    name: "Personal Care & Home Care",
+                    items: ["Feminine Hygiene Products", "Laundry Soap", "After Shave Cologne", "Hair Extension Tools", "Washing Powder", "Aftershave", "Perfume Oil", "Sea Salt", "Hair Relaxers", "Breath Fresheners", "Detergent Sheets", "Detangling Brush", "Hair Mousse"]
+                },
+                {
+                    id: "health",
+                    name: "Health & Medical",
+                    items: ["Ecg Machine", "Insulin Syringe", "Medical Consumables", "Rehabilitation Equipment", "Veterinary Medicine", "Massage Products", "Stretcher", "Acupuncture Machine", "Rehabilitation Therapy Supplies", "Wheelchair Parts", "Scalpel Blade", "Sleeping Aid", "Pathological Analysis Equipments"]
+                },
+                {
+                    id: "gifts",
+                    name: "Gifts & Crafts",
+                    items: ["Name Tag", "Promotional Business Gifts", "Amethyst", "Key Chain", "Gift Sets", "Flags", "Metal Crafts", "Buffalo", "Nameplate", "Lucky Cat", "Plastic Key Chains", "Crystal Stone", "Leather Crafts"]
+                },
+                {
+                    id: "pet",
+                    name: "Pet Supplies",
+                    items: ["Dog Food", "Hamster Cage", "Dog Kennel", "Aquarium Filter", "Cat Tree", "Pet Accessories", "Aquariums", "Saltwater Aquarium", "Dog Ramp", "Sponge Filter", "Cat Toy", "Dog Car Seat", "Dog Crate"]
+                },
+                {
+                    id: "school",
+                    name: "School & Office",
+                    items: ["Water Color", "Paper Punch", "Bible Cover", "Cutting Plotter", "Art Supplies", "Erasers", "Medical Science", "World Globe", "Sketch Pad", "Watercolor Paper", "Id Badge Holder", "Binder Clips", "Cork Board"]
+                },
+                {
+                    id: "industrial",
+                    name: "Industrial Machinery",
+                    items: ["Air Dryer", "Farm Trailers", "Agriculture Products", "Grinder Machine", "Gasoline Engine", "Crystallizers", "Air Curtain", "Boiler Parts", "Shredder Blades", "Machine Tools Accessories", "Worm Gears", "Ultrasonic Extractor", "Shafts"]
+                },
+                {
+                    id: "commercial",
+                    name: "Commercial Equipment",
+                    items: ["Plastic Welders", "TIG Welders", "Arc Welders", "Welding Robot", "Spot Welders", "Laser Welders", "Welding Machine", "Amenity Kit", "Juice Dispenser", "Shopping Cart", "Poultry", "Food Cart", "Food Trailer"]
+                },
+                {
+                    id: "construction",
+                    name: "Construction & Real Estate",
+                    items: ["Excavators", "Concrete Mixers", "Scaffolding", "Pipes", "Roofing Tiles", "Steel Bars", "Windows", "Doors", "Marble", "Granite", "Real Estate Services"]
+                },
+                {
+                    id: "furniture",
+                    name: "Furniture",
+                    items: ["Office Chairs", "Sofas", "Dining Tables", "Beds", "Cabinets", "Desks", "Mattresses", "Outdoor Furniture", "Kids Furniture", "Hotel Furniture"]
+                },
+                {
+                    id: "lighting",
+                    name: "Lights & Lighting",
+                    items: ["LED Bulbs", "Smart Lighting", "Outdoor Lamps", "Chandeliers", "Solar Lights", "Flashlights", "Stage Lighting", "Grow Lights", "Night Lights"]
+                },
+                {
+                    id: "appliances",
+                    name: "Home Appliances",
+                    items: ["Air Conditioners", "Refrigerators", "Washing Machines", "Microwaves", "Vacuum Cleaners", "Water Heaters", "Blenders", "Coffee Makers"]
+                },
+                {
+                    id: "automotive",
+                    name: "Automotive & Tools",
+                    items: ["Car Chargers", "Diagnostic Tools", "Tire Pressure Gauges", "Car Vacuum", "Wrench Sets", "Screwdrivers", "Jump Starters", "Dash Cams"]
+                },
+                {
+                    id: "renewable",
+                    name: "Renewable Energy",
+                    items: ["Water Turbine", "Rechargeable Batteries", "Hydro Generator", "Wind Turbine", "Battery", "Solar Panels", "Solar Energy System", "Magnet Generator", "Solar Cells", "Solar Charger", "Solar Tracker", "Turbine Generator", "Solar Kits"]
+                },
+                {
+                    id: "electrical",
+                    name: "Electrical Supplies",
+                    items: ["Winding Wire", "Wall Socket", "Electrical Switch", "Transformers", "Cable Connector", "Welding Cable", "Gasoline Generators", "Bnc Connector", "Generator Parts", "Aluminum Box", "Fuse Box", "Electrical Equipment", "Gas Turbine Generators"]
+                },
+                {
+                    id: "safety",
+                    name: "Safety & Security",
+                    items: ["Work Clothing", "Parking Barrier", "Locksmith Tools", "Keys", "Locksmith Supplies", "Nvr", "Spy Camera", "Latch", "Smart Card Reader", "Rim Lock", "Military Supplies", "Reflective Fabric", "Lightning Rods"]
+                },
+                {
+                    id: "handling",
+                    name: "Material Handling",
+                    items: ["Dollies", "Conveyor Belt", "Hoists", "Wheelbarrows", "Rope", "Forklifts", "Shelves", "Forklift Truck", "Truck Lift", "Casters", "Anchor Winch", "Manipulator", "Stacker"]
+                },
+                {
+                    id: "testing",
+                    name: "Testing & Instruments",
+                    items: ["Data Logger", "Level Measuring Instruments", "Optics Instruments", "Gas Regulator", "Lab Equipment", "Flasks", "Thermostat", "Weighing Indicator", "Humidity Controller", "Temperature Instruments", "Soil Moisture Meter", "Humidity Sensor", "Lpg Regulator"]
+                },
+                {
+                    id: "power",
+                    name: "Power Transmission",
+                    items: ["Fan Motor", "Stepper Motors", "Motor", "Bearing", "Tubular Motor", "Micro Motor", "Housings", "Ebike Controller", "Hydraulic Fittings", "Hydraulic Motors", "Hydraulic Cylinders", "Bushing", "Hydraulic Power Pack"]
+                },
+                {
+                    id: "components",
+                    name: "Electronic Components",
+                    items: ["Buzzer", "Bluetooth Modules", "Terminals", "Fiber", "Sensor", "Onu", "LEDs", "WiFi Modules", "Porcelain Insulator", "Rain Sensor", "Microcontrollers", "Lora Module", "Electronic Data Systems"]
+                },
+                {
+                    id: "transport",
+                    name: "Vehicles & Transportation",
+                    items: ["Sport Car", "Pit Bike", "Used Motorcycles", "Motorcycle", "Trailers", "Electric Truck", "ATVs", "Suv Car", "Pick Up Truck", "Utility Trailer", "Dump Trailer", "Tow Truck", "Hybrid Car"]
+                },
+                {
+                    id: "food",
+                    name: "Agriculture & Food",
+                    items: ["Absinthe", "Dory", "Coconut Water", "Vanilla Beans", "Cardamom", "Cloves", "Saffron", "Mooncakes", "Mussel", "Ramune", "Condensed Milk", "Logs", "Betel Nuts"]
+                },
+                {
+                    id: "raw",
+                    name: "Raw Materials",
+                    items: ["Ammonium Nitrate", "Phosphoric Acid", "Rubber Feet", "Ramie Yarn", "PET", "Scented Oil", "Aluminum", "Bedding fabric", "Camphor Powder", "Sulphur", "Polyurethane Rubber", "Camphor", "Chlorine Tablets"]
+                },
+                {
+                    id: "fabrication",
+                    name: "Fabrication Services",
+                    items: ["Casting Services", "Concrete Blocks Molds", "Plastic Mold", "Sheet Metal Fabrication", "Machining Services", "Concrete Molds", "Moulds", "Steel Products", "Injection Mould", "Bottle Mold", "Forging Services", "Press Mold", "Plastic Model"]
+                },
+                {
+                    id: "service",
+                    name: "Service & Business",
+                    items: ["Fashion Design", "PC Games", "Quality Control", "Wix", "AI Chatbot", "Taobao Agent", "1688 Agent", "Mobile Games", "Supplier Search", "Other Goods", "Positive Material Identification", "Household items"]
+                }
+            ];
+
+            display.innerHTML = ''; // Clear loading spinner
+
+            sectors.forEach(sector => {
+                // Add to Sidebar
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="#${sector.id}">${sector.name}</a>`;
+                nav.appendChild(li);
+
+                // Add to main display
+                const section = document.createElement('section');
+                section.id = sector.id;
+                section.className = 'category-section';
+                
+                let subItemsHTML = '';
+                sector.items.forEach(item => {
+                    const encodedItem = encodeURIComponent(item);
+                    // Use a more reliable image source based on keywords
+                    const imgSrc = `https://source.unsplash.com/featured/400x300?${encodedItem}`;
+                    
+                    subItemsHTML += `
+                        <a href="javascript:void(0)" class="sub-category-card">
+                            <div class="sub-category-img">
+                                <img src="${imgSrc}" onerror="this.src='hero.png'; this.onerror=null;" alt="${item}">
+                            </div>
+                            <span class="sub-category-name">${item}</span>
+                        </a>
+                    `;
+                });
+
+                section.innerHTML = `
+                    <div class="category-header">
+                        <h3>${sector.name}</h3>
+                        <a href="javascript:void(0)" class="view-all">Browse all</a>
+                    </div>
+                    <div class="sub-category-grid">
+                        ${subItemsHTML}
+                    </div>
+                `;
+                display.appendChild(section);
+            });
+        });
+    </script>
 </body>
 </html>
-
-
-
-
-
-
