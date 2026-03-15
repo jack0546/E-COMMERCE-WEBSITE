@@ -121,27 +121,26 @@ for (let i = 1; i <= 800; i++) {
     const cat = categoryData[key];
     const keyword = cat.keywords[i % cat.keywords.length];
     
-    const localImg = `images/products/${key}_${i}.jpg`;
-    const fallbackImg = `${cat.fallbackImages[i % cat.fallbackImages.length]}?auto=format&fit=crop&q=80&w=400`;
+    // Create a more professional title without debugging IDs
+    const title = i % 3 === 0 ? 
+        `Premium Wholesale ${keyword} - Bulk Supply` : 
+        `High Quality ${keyword} for Global Export`;
+
+    // Ensure we have a high-quality fallback image query
+    const fallbackImg = `https://source.unsplash.com/featured/400x400?${encodeURIComponent(keyword)}`;
 
     catalog.push({
         id: i,
         category: key,
-        title: `Wholesale ${keyword} - High Quality Premium ${i}`,
+        title: title,
         price: `GHS ${(Math.random() * 500 + 50).toFixed(2)} - GHS ${(Math.random() * 1000 + 600).toFixed(2)}`,
         moq: `${Math.floor(Math.random() * 200 + 10)} ${cat.moqSuffix}`,
-        localImage: localImg,
-        fallbackImage: fallbackImg
+        image: fallbackImg // Using dynamic keyword-based images for better relevance
     });
 }
 
 
-// Function to check if an image exists locally (simulated for front-end)
-// In a real static app, we just set the src and let it fail to fallback using onerror
-function getImgHTML(product) {
-    return `<img src="${product.localImage}" onerror="this.src='${product.fallbackImage}'; this.onerror=null;" alt="${product.title}">`;
-}
-
+// Simplified product card rendering
 function renderProducts(filterCategory = null) {
     const grid = document.getElementById('productGrid');
     if (!grid) return;
@@ -157,12 +156,13 @@ function renderProducts(filterCategory = null) {
         card.className = 'product-card';
         card.innerHTML = `
             <div class="product-image">
-                ${getImgHTML(product)}
+                <img src="${product.image}" loading="lazy" alt="${product.title}" 
+                     onerror="this.src='https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=400'">
             </div>
             <div class="product-info">
-                <div class="product-title">${product.title}</div>
-                <div class="product-price">${product.price}</div>
-                <div class="product-moq">Min. Order: ${product.moq}</div>
+                <h3 class="product-title">${product.title}</h3>
+                <span class="product-price">${product.price}</span>
+                <span class="product-moq">${product.moq}</span>
             </div>
         `;
         grid.appendChild(card);
@@ -198,9 +198,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (titleElem) titleElem.innerText = product.title;
         if (priceElem) priceElem.innerText = product.price;
-        if (moqElem) moqElem.innerText = `Min. Order: ${product.moq}`;
+        if (moqElem) moqElem.innerText = product.moq;
         if (mainImgContainer) {
-            mainImgContainer.innerHTML = `<img id="mainImg" src="${product.localImage}" onerror="this.src='${product.fallbackImage}'; this.onerror=null;">`;
+            mainImgContainer.innerHTML = `<img id="mainImg" src="${product.image}" onerror="this.src='https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=400'; this.onerror=null;">`;
         }
     }
 });
