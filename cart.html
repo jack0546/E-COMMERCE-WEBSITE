@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - ALFRED PRODUCTS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF6600">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="1.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body style="background: var(--bg-light);">
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">
+                   <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a>
+                </div>
+                <div class="header-actions">
+                    <a href="index.html" class="action-item">
+                        <ion-icon name="home-outline"></ion-icon>
+                        <span>Home</span>
+                    </a>
+                    <a href="cart.html" class="action-item active">
+                        <ion-icon name="cart-outline"></ion-icon>
+                        <span id="cartCount">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding: 40px 0;">
+        <h2 style="margin-bottom: 30px;">Your Shopping Cart</h2>
+        
+        <div id="cartItemsContainer" style="display: flex; flex-direction: column; gap: 20px;">
+            <!-- Cart items will be loaded here -->
+        </div>
+
+        <div id="cartSummary" style="margin-top: 40px; background: white; padding: 30px; border-radius: 12px; border: 1px solid var(--border-color); display: none;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 18px; font-weight: 700;">
+                <span>Total Amount:</span>
+                <span id="cartTotalText">$0.00</span>
+            </div>
+            <button class="btn btn-primary" onclick="checkoutWithPaystack()" style="width: 100%; border-radius: 8px;">Proceed to Checkout</button>
+        </div>
+
+        <div id="emptyCartMessage" style="text-align: center; padding: 80px 0; display: none;">
+            <ion-icon name="cart-outline" style="font-size: 80px; color: #ddd;"></ion-icon>
+            <h3 style="margin-top: 20px; color: #999;">Your cart is empty</h3>
+            <a href="index.html" class="btn btn-primary" style="display: inline-block; margin-top: 20px; text-decoration: none;">Start Shopping</a>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCart();
+        });
+
+        function renderCart() {
+            const container = document.getElementById('cartItemsContainer');
+            const summary = document.getElementById('cartSummary');
+            const emptyMsg = document.getElementById('emptyCartMessage');
+            let cart = JSON.parse(localStorage.getItem('alfredCart')) || [];
+
+            if (cart.length === 0) {
+                container.innerHTML = '';
+                summary.style.display = 'none';
+                emptyMsg.style.display = 'block';
+                return;
+            }
+
+            emptyMsg.style.display = 'none';
+            summary.style.display = 'block';
+            container.innerHTML = '';
+
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const itemPrice = parseFloat(item.price.split('-')[0].replace('$', '').trim());
+                total += itemPrice * item.quantity;
+
+                const itemRow = document.createElement('div');
+                itemRow.className = 'order-card';
+                itemRow.style.alignItems = 'center';
+                itemRow.innerHTML = `
+                    <div class="order-info">
+                        <div class="order-img">
+                            <img src="${item.image}" alt="${item.title}">
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 5px;">${item.title}</h4>
+                            <p style="font-size: 13px; color: var(--text-muted);">Unit Price: ${item.price}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 5px;">
+                            <button onclick="updateQty(${index}, -1)" style="padding: 5px 10px; border: none; background: none; cursor: pointer;">-</button>
+                            <span style="padding: 0 10px;">${item.quantity}</span>
+                            <button onclick="updateQty(${index}, 1)" style="padding: 5px 10px; border: none; background: none; cursor: pointer;">+</button>
+                        </div>
+                        <p style="font-weight: 700;">$${(itemPrice * item.quantity).toFixed(2)}</p>
+                        <ion-icon name="trash-outline" onclick="removeItem(${index})" style="color: #ff4d4d; cursor: pointer; font-size: 20px;"></ion-icon>
+                    </div>
+                `;
+                container.appendChild(itemRow);
+            });
+
+            document.getElementById('cartTotalText').innerText = `$${total.toFixed(2)}`;
+            localStorage.setItem('cartTotal', total.toFixed(2));
+        }
+
+        function updateQty(index, delta) {
+            let cart = JSON.parse(localStorage.getItem('alfredCart')) || [];
+            cart[index].quantity += delta;
+            if (cart[index].quantity < 1) cart[index].quantity = 1;
+            localStorage.setItem('alfredCart', JSON.stringify(cart));
+            renderCart();
+            updateCartBadge();
+        }
+
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('alfredCart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('alfredCart', JSON.stringify(cart));
+            renderCart();
+            updateCartBadge();
+        }
+
+        function checkoutWithPaystack() {
+            const total = localStorage.getItem('cartTotal');
+            const amount = parseFloat(total) * 100;
+
+            let handler = PaystackPop.setup({
+                key: 'pk_live_6b9968065dc0bd4842c97ffa138e49127c862888',
+                email: 'customer@alfredproducts.com',
+                amount: amount,
+                currency: "USD",
+                ref: 'ORD_' + Math.floor((Math.random() * 1e9) + 1),
+                callback: function(res) {
+                    alert('Payment Successful! Reference: ' + res.reference);
+                    localStorage.removeItem('alfredCart');
+                    window.location.href = 'orders.html';
+                }
+            });
+            handler.openIframe();
+        }
+    </script>
+</body>
+</html>
+
