@@ -69,35 +69,45 @@
                 <div class="hero-content">
                     <aside class="categories-sidebar">
                         <h3>My Markets</h3>
-                        <ul style="list-style: none;">
-                            <li><a href="apparel.html">Apparel & Accessories</a></li>
-                            <li><a href="shoes.html">Shoes & Footwear</a></li>
-                            <li><a href="bags.html">Bags & Suitcases</a></li>
-                            <li><a href="electronics.html">Electronics</a></li>
-                            <li><a href="beauty.html">Beauty & Personal Care</a></li>
-                            <li><a href="home.html">Home & Garden</a></li>
-                            <li><a href="industrial.html">Industrial Machinery</a></li>
-                            <li><a href="medical.html">Health & Medical</a></li>
-                            <li><a href="sports.html">Sports & Entertainment</a></li>
-                            <li><a href="ready-to-ship.html">Ready to Ship</a></li>
-                            <li id="installAppBtn" style="display: none; background: #fff8f5; border: 1px dashed var(--primary-color); margin-top: 15px; border-radius: 8px;">
-                                <a href="javascript:void(0)" onclick="triggerInstall()" style="text-decoration: none; color: var(--primary-color); display: flex; align-items: center; gap: 10px; padding: 10px; font-weight: 700;">
-                                    <ion-icon name="download-outline"></ion-icon> Install App
-                                </a>
-                            </li>
+                        <ul id="sidebarList">
+                            <li><a href="apparel.html"><ion-icon name="shirt-outline"></ion-icon> Apparel</a></li>
+                            <li><a href="shoes.html"><ion-icon name="walk-outline"></ion-icon> Shoes</a></li>
+                            <li><a href="electronics.html"><ion-icon name="desktop-outline"></ion-icon> Electronics</a></li>
+                            <li><a href="beauty.html"><ion-icon name="sparkles-outline"></ion-icon> Beauty</a></li>
+                            <li><a href="home.html"><ion-icon name="home-outline"></ion-icon> Home & Garden</a></li>
+                            <li><a href="industrial.html"><ion-icon name="construct-outline"></ion-icon> Industrial</a></li>
+                            <li><a href="medical.html"><ion-icon name="medical-outline"></ion-icon> Health</a></li>
+                            <li><a href="sports.html"><ion-icon name="football-outline"></ion-icon> Sports</a></li>
+                            <li><a href="categories.html" style="color: var(--primary-color); font-weight: 700;">View All <ion-icon name="chevron-forward-outline"></ion-icon></a></li>
                         </ul>
+                        <div id="installAppBtn" style="display: none; background: #fff8f5; border: 1px dashed var(--primary-color); margin-top: auto; border-radius: 8px;">
+                            <a href="javascript:void(0)" onclick="triggerInstall()" style="text-decoration: none; color: var(--primary-color); display: flex; align-items: center; gap: 10px; padding: 10px; font-weight: 700; font-size: 13px;">
+                                <ion-icon name="download-outline"></ion-icon> Install App
+                            </a>
+                        </div>
                     </aside>
                     <div class="main-carousel">
-                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1200" alt="Special Offer">
+                        <div class="carousel-slide">
+                            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1200" alt="Special Offer">
+                            <div class="carousel-caption">
+                                <h2>Global Sourcing Day</h2>
+                                <p>Source direct from thousands of certified factories</p>
+                                <a href="categories.html" class="btn btn-primary">Source Now</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="side-banner">
-                        <div class="banner-card">
-                            <h4>Source from Top Factories</h4>
+                        <div class="banner-card factory-banner">
+                            <ion-icon name="business-outline" style="font-size: 32px; color: var(--primary-color); margin-bottom: 10px;"></ion-icon>
+                            <h4>Top Factories</h4>
                             <p>Direct from local manufacturers</p>
+                            <a href="trade.html" style="font-size: 12px; color: var(--primary-color); font-weight: 700; text-decoration: none; margin-top: 10px;">Source Direct →</a>
                         </div>
-                        <div class="banner-card">
+                        <div class="banner-card assurance-banner">
+                            <ion-icon name="shield-checkmark-outline" style="font-size: 32px; color: #28a745; margin-bottom: 10px;"></ion-icon>
                             <h4>Trade Assurance</h4>
-                            <p>Protect your orders from payment to delivery</p>
+                            <p>Payment to delivery protection</p>
+                            <a href="trade.html" style="font-size: 12px; color: #28a745; font-weight: 700; text-decoration: none; margin-top: 10px;">Learn More →</a>
                         </div>
                     </div>
                 </div>
