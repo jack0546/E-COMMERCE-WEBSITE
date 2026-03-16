@@ -5,159 +5,217 @@ const categoryData = {
     apparel: {
         name: "Apparel & Accessories",
         keywords: ["T-Shirt", "Jeans", "Jacket", "Hoodie", "Dress", "Skirt", "Shorts", "Sweater", "Graduation Cap", "Cheongsam", "Sequins", "Trimmings", "Ice Hockey", "Rhinestones", "Men's Sets", "Muslim Skirt", "Pirate Hat", "Dance Pants", "Tactical Clothes", "Fabric Belts", "Pilot Shirt"],
-        fallbackImages: ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518", "https://images.unsplash.com/photo-1551028719-00167b16eac5", "https://images.unsplash.com/photo-1556905055-8f358a7a47b2"],
         moqSuffix: "Pieces"
     },
     shoes: {
         name: "Shoes & Accessories",
         keywords: ["Sneakers", "Running Shoes", "Leather Boots", "Sandals", "Loafers", "Heels", "Home Slippers", "Fur Slippers", "Moccasin Slippers", "Moccasins", "Flats", "Slides Slippers", "Clogs Shoes", "Summer Sandals", "Beach Slippers", "Indoor Slippers", "Women Slides"],
-        fallbackImages: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff", "https://images.unsplash.com/photo-1560769629-975ec94e6a86", "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa"],
         moqSuffix: "Pairs"
     },
     electronics: {
         name: "Consumer Electronics",
         keywords: ["Smartphone", "Laptop", "Smart Watch", "Bluetooth Earbuds", "Drone", "VR Headset", "Gaming Console", "Speaker Driver", "Keyboard switches", "Tf Card", "Camera Accessories", "Smart Products", "Computer Accessories", "Software", "Ethernet Adapter", "Satellite Multiswitch", "Hd Camcorder", "Uv Filter", "Camera Filters", "Soldering Mat"],
-        fallbackImages: ["https://images.unsplash.com/photo-1546868871-7041f2a55e12", "https://images.unsplash.com/photo-1505740420928-5e560c06d30e", "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2"],
         moqSuffix: "Units"
     },
     bags: {
         name: "Luggage, Bags & Cases",
         keywords: ["Leather Backpack", "Luxury Handbag", "Travel Suitcase", "Tote Bag", "Messenger Bag", "Beauty Case", "College Bag", "Cosmetic Case", "Bag Accessories", "Wine Bag", "Shoulder Bag", "Backpack", "Bag Chain", "Shoulder Strap", "Lipstick Bags", "Luggage Scooter", "Lipstick Case", "Bag Handle"],
-        fallbackImages: ["https://images.unsplash.com/photo-1548036328-c9fa89d128fa", "https://images.unsplash.com/photo-1584917865442-de89df76afd3", "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3"],
         moqSuffix: "Pieces"
     },
     beauty: {
         name: "Beauty & Personal Care",
         keywords: ["Perfume Gift Sets", "Perfume Set", "Body Mist", "Women's Perfume", "Deodorant Spray", "Deodorant", "Men's Perfume", "Cosmetic", "Nail Equipments", "Hair Removal Machine", "Makeup Sets", "Antiperspirant", "Nail Supplies", "Feminine Hygiene Products", "Laundry Soap", "After Shave Cologne", "Hair Extension Tools", "Washing Powder", "Aftershave", "Perfume Oil", "Sea Salt", "Hair Relaxers", "Breath Fresheners", "Detergent Sheets", "Detangling Brush", "Hair Mousse"],
-        fallbackImages: ["https://images.unsplash.com/photo-1541643600914-78b084683601", "https://images.unsplash.com/photo-1560869713-7d0a29430803", "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9"],
         moqSuffix: "Units"
     },
     home: {
         name: "Home & Garden",
         keywords: ["Orthopedic Mattress", "Memory Foam Pillow", "Duvet Cover", "Bedding Set", "Luxury Sofa", "Snow Spray", "Blackout Curtain", "Smart Blinds", "Bouquet", "Curtains", "Bottle", "Roses", "Window Canopy", "Vertical Awning", "Automatic Curtain", "Blind Motor", "Valances", "Shade Cloth"],
-        fallbackImages: ["https://images.unsplash.com/photo-1616046229478-9901c5536a45", "https://images.unsplash.com/photo-1505673539012-ee21ffb70029", "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1"],
         moqSuffix: "Sets"
     },
     sports: {
         name: "Sports & Entertainment",
         keywords: ["Camping Gear", "Fishing Accessories", "Novelties", "Step Platforms", "Bows", "Diving Reel", "Shot Put", "Tennis Net", "Flying Car", "Suspension Trainers", "Amusement Park Products", "Volleyball Shoes", "Football Boots", "Hockey Skate", "Mtb Shoes", "Sports Gloves", "Sweatband", "Keeper Gloves"],
-        fallbackImages: ["https://images.unsplash.com/photo-1461896756913-c82ee49b5ae2", "https://images.unsplash.com/photo-1517649763962-0c623066013b"],
         moqSuffix: "Units"
     },
     industrial: {
         name: "Industrial & Commercial Machinery",
         keywords: ["Welding Machine", "Laser Welders", "Air Dryer", "Farm Trailers", "Agriculture Products", "Grinder Machine", "Gasoline Engine", "Crystallizers", "Air Curtain", "Plastic Welders", "TIG Welders", "Arc Welders", "Welding Robot", "Spot Welders", "Juice Dispenser", "Food Cart", "Food Trailer"],
-        fallbackImages: ["https://images.unsplash.com/photo-1581091226825-a6a2a5aee158", "https://images.unsplash.com/photo-1537462715879-360eeb61a0ad"],
         moqSuffix: "Units"
     },
     health: {
         name: "Health & Medical",
         keywords: ["Ecg Machine", "Insulin Syringe", "Medical Consumables", "Rehabilitation Equipment", "Veterinary Medicine", "Massage Products", "Stretcher", "Acupuncture Machine", "Scalpel Blade", "Sleeping Aid", "Pathological Analysis Equipments"],
-        fallbackImages: ["https://images.unsplash.com/photo-1505751172876-fa1923c5c528", "https://images.unsplash.com/photo-1584362917165-526a968579e8"],
         moqSuffix: "Units"
     },
     gifts: {
         name: "Gifts & Crafts",
         keywords: ["Name Tag", "Promotional Business Gifts", "Amethyst", "Key Chain", "Gift Sets", "Flags", "Metal Crafts", "Lucky Cat", "Crystal Stone", "Leather Crafts", "Jewelry Tools", "Acrylic beads", "Crystal Beads", "Charms", "Amber", "Hair Sticks", "Headpiece", "Tourmaline"],
-        fallbackImages: ["https://images.unsplash.com/photo-1513519245088-0e12902e35ca", "https://images.unsplash.com/photo-1549465220-1a8b9238cd48"],
         moqSuffix: "Pieces"
     },
     pet: {
         name: "Pet Supplies",
         keywords: ["Dog Food", "Hamster Cage", "Dog Kennel", "Aquarium Filter", "Cat Tree", "Pet Accessories", "Aquariums", "Saltwater Aquarium", "Dog Ramp", "Sponge Filter", "Cat Toy", "Dog Car Seat", "Dog Crate"],
-        fallbackImages: ["https://images.unsplash.com/photo-1516734212186-a967f81ad0d7", "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e"],
         moqSuffix: "Units"
     },
     school: {
         name: "School & Office Supplies",
         keywords: ["Water Color", "Paper Punch", "Bible Cover", "Cutting Plotter", "Art Supplies", "Erasers", "Medical Science", "World Globe", "Sketch Pad", "Watercolor Paper", "Id Badge Holder", "Binder Clips", "Cork Board"],
-        fallbackImages: ["https://images.unsplash.com/photo-1456735190827-d1262f71b8a3", "https://images.unsplash.com/photo-1503676260728-1c00da094a0b"],
         moqSuffix: "Units"
     },
     energy: {
         name: "Renewable Energy",
         keywords: ["Water Turbine", "Rechargeable Batteries", "Hydro Generator", "Wind Turbine", "Battery", "Solar Panels", "Solar Energy System", "Magnet Generator", "Solar Cells", "Solar Charger", "Solar Tracker", "Turbine Generator", "Solar Kits"],
-        fallbackImages: ["https://images.unsplash.com/photo-1509391366360-1e96230e7fa1", "https://images.unsplash.com/photo-1466611653911-954ff21b6748"],
         moqSuffix: "Units"
     },
     electrical: {
         name: "Electrical Equipment & Supplies",
         keywords: ["Winding Wire", "Wall Socket", "Electrical Switch", "Transformers", "Cable Connector", "Welding Cable", "Gasoline Generators", "Bnc Connector", "Generator Parts", "Aluminum Box", "Fuse Box"],
-        fallbackImages: ["https://images.unsplash.com/photo-1473341304170-971dccb5ac1e", "https://images.unsplash.com/photo-1517420704952-d9f39e95b43e"],
         moqSuffix: "Units"
     },
     safety: {
         name: "Safety & Security",
         keywords: ["Work Clothing", "Parking Barrier", "Locksmith Tools", "Keys", "Locksmith Supplies", "Nvr", "Spy Camera", "Latch", "Smart Card Reader", "Rim Lock", "Military Supplies", "Reflective Fabric", "Lightning Rods"],
-        fallbackImages: ["https://images.unsplash.com/photo-1557597774-9d2739f8ft19", "https://images.unsplash.com/photo-1614064641938-3bbee52942c7"],
         moqSuffix: "Units"
     },
     vehicles: {
         name: "Vehicles & Transportation",
         keywords: ["Sport Car", "Pit Bike", "Used Motorcycles", "Motorcycle", "Trailers", "Electric Truck", "ATVs", "Suv Car", "Pick Up Truck", "Utility Trailer", "Dump Trailer", "Tow Truck", "Hybrid Car"],
-        fallbackImages: ["https://images.unsplash.com/photo-1503376780353-7e6692767b70", "https://images.unsplash.com/photo-1558981403-c5f9899a28bc"],
         moqSuffix: "Units"
     },
     agriculture: {
         name: "Agriculture & Food",
         keywords: ["Absinthe", "Dory", "Coconut Water", "Vanilla Beans", "Cardamom", "Cloves", "Saffron", "Mooncakes", "Mussel", "Ramune", "Condensed Milk", "Logs", "Betel Nuts"],
-        fallbackImages: ["https://images.unsplash.com/photo-1500382017468-9049fee74a62", "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2"],
         moqSuffix: "kg"
     },
     service: {
         name: "Service & Business",
         keywords: ["Fashion Design", "PC Games", "Quality Control", "Wix", "AI Chatbot", "Taobao Agent", "1688 Agent"],
-        fallbackImages: ["https://images.unsplash.com/photo-1516321318423-f06f85e504b3", "https://images.unsplash.com/photo-1551836022-d5d88e9218df"],
         moqSuffix: "Service"
     }
 };
 
-// Generate 800 products to ensure all categories are represented
-const catalog = [];
-const catKeys = Object.keys(categoryData);
+// --- CATALOG MANAGEMENT ---
+// To update a specific product, find its ID below and change the values.
+// 1. To change an image: Replace the URL or use a local path like 'images/my-photo.jpg'
+// 2. To change price: Update the GHS string
+// 3. To change title: Edit the title text
 
-for (let i = 1; i <= 800; i++) {
-    const key = catKeys[i % catKeys.length];
+const manualCatalog = [
+    // --- APPAREL ---
+    { id: 1, category: "apparel", title: "Premium Men's Cotton Suit", price: "GHS 1,200.00", moq: "1 Set", image: "images/products/apparel/cotton_suit.jpg" },
+    { id: 2, category: "apparel", title: "Designer Summer Silk Dress", price: "GHS 450.00", moq: "5 Pieces", image: "images/products/apparel/silk_dress.jpg" },
+
+    // --- SHOES ---
+    { id: 3, category: "shoes", title: "Nike Air Jordan 1 Retro", price: "GHS 950.00", moq: "10 Pairs", image: "images/products/shoes/jordan_1.jpg" },
+    { id: 4, category: "shoes", title: "Luxury Leather Office Loafers", price: "GHS 600.00", moq: "5 Pairs", image: "images/products/shoes/loafers.jpg" },
+
+    // --- ELECTRONICS ---
+    { id: 5, category: "electronics", title: "Apple iPhone 15 Pro Max", price: "GHS 14.00", moq: "1 Unit", image: "images/products/electronics/iphone15.jpg" },
+    { id: 6, category: "electronics", title: "Samsung 65' 4K UHD Smart TV", price: "GHS 8.00", moq: "1 Unit", image: "images/products/electronics/samsung_tv.jpg" },
+
+    // --- BAGS ---
+    { id: 7, category: "bags", title: "Louis Vuitton Travel Suitcase", price: "GHS 5,400.00", moq: "2 Pieces", image: "images/products/bags/suitcase.jpg" },
+    { id: 8, category: "bags", title: "Waterproof Hiking Backpack", price: "GHS 350.00", moq: "20 Pieces", image: "images/products/bags/backpack.jpg" },
+
+    // --- BEAUTY ---
+    { id: 9, category: "beauty", title: "Chanel No.5 Luxury Perfume", price: "GHS 1,800.00", moq: "1 Unit", image: "images/products/beauty/chanel_no5.jpg" },
+    { id: 10, category: "beauty", title: "Organic Gold Skin Care Set", price: "GHS 550.00", moq: "10 Sets", image: "images/products/beauty/skin_care.jpg" }
+];
+
+// --- IMAGE MAPPING FOR CATEGORIES ---
+// Map each category to its available images in the images/categories/ folder
+const categoryImages = {
+    bags: [
+        'images/categories/bags/BAG1.jpg', 'images/categories/bags/BAG2.jpg', 'images/categories/bags/BAG3.jpg', 'images/categories/bags/BAG4.jpg',
+        'images/categories/bags/BAG5.jpg', 'images/categories/bags/BAG6.jpg', 'images/categories/bags/BAG7.jpg', 'images/categories/bags/BAG8.jpg',
+        'images/categories/bags/BAG9.jpg', 'images/categories/bags/BAG10.jpg', 'images/categories/bags/BAG11.jpg', 'images/categories/bags/BAG12.jpg',
+        'images/categories/bags/BAG14.jpg', 'images/categories/bags/BAG15.jpg', 'images/categories/bags/BAG16.jpg', 'images/categories/bags/BAG17.jpg',
+        'images/categories/bags/BAG18.jpg', 'images/categories/bags/BAG19.jpg', 'images/categories/bags/BAG20.jpg', 'images/categories/bags/BAG21.jpg',
+        'images/categories/bags/BAG22.jpg', 'images/categories/bags/BAG23.jpg', 'images/categories/bags/BAG24.jpg', 'images/categories/bags/BAG25.jpg',
+        'images/categories/bags/BAG26.jpg', 'images/categories/bags/BAG29.jpg', 'images/categories/bags/BAG30.jpg',
+        'images/categories/bags/BAGS26.jpg', 'images/categories/bags/BAGS27.jpg', 'images/categories/bags/BAGS28.jpg'
+    ],
+    shoes: [
+        'images/categories/shoes/SHOE1.jpg', 'images/categories/shoes/SHOE2.jpg', 'images/categories/shoes/SHOE3.jpg', 'images/categories/shoes/SHOE 4.jpg',
+        'images/categories/shoes/SHOE5.jpg', 'images/categories/shoes/SHOE6.jpg', 'images/categories/shoes/SHOE7.jpg', 'images/categories/shoes/SHOE8.jpg',
+        'images/categories/shoes/SHOE9.jpg', 'images/categories/shoes/SHOE10.jpg', 'images/categories/shoes/SHOE11.jpg', 'images/categories/shoes/SHOE12.jpg',
+        'images/categories/shoes/SHOE13.jpg', 'images/categories/shoes/SHOE14.jpg', 'images/categories/shoes/SHOE15.jpg', 'images/categories/shoes/SHOE16.jpg',
+        'images/categories/shoes/SHOE17.jpg', 'images/categories/shoes/SHOE18.jpg', 'images/categories/shoes/SHOE19.jpg', 'images/categories/shoes/SHOE20.jpg',
+        'images/categories/shoes/SHOE21.jpg', 'images/categories/shoes/SHOE22.jpg', 'images/categories/shoes/SHOE23.jpg', 'images/categories/shoes/SHOE24.jpg',
+        'images/categories/shoes/SHOE25.jpg', 'images/categories/shoes/SHOE26.jpg', 'images/categories/shoes/SHOE27.jpg', 'images/categories/shoes/SHOE28.jpg',
+        'images/categories/shoes/SHOE29.jpg', 'images/categories/shoes/SHOE30.jpg', 'images/categories/shoes/SHOE31.jpg', 'images/categories/shoes/SHOE32.jpg',
+        'images/categories/shoes/SHOE33.jpg', 'images/categories/shoes/SHOE34.jpg', 'images/categories/shoes/SHOE35.jpg', 'images/categories/shoes/SHOE36.jpg',
+        'images/categories/shoes/SHOE37.jpg', 'images/categories/shoes/SHOE38.jpg', 'images/categories/shoes/SHOE39.jpg', 'images/categories/shoes/SHOE40.jpg',
+        'images/categories/shoes/SHOE340#.jpg'
+    ],
+    electronics: [
+        'images/categories/electronics/SMART1.jpg', 'images/categories/electronics/SMART2.jpg', 'images/categories/electronics/SMART3.jpg', 'images/categories/electronics/SMAR4.jpg',
+        'images/categories/electronics/SMART5.jpg', 'images/categories/electronics/SMART6.jpg', 'images/categories/electronics/SMART7.jpg', 'images/categories/electronics/SMART8.jpg',
+        'images/categories/electronics/SMART9.jpg'
+    ],
+    beauty: [
+        'images/categories/beauty/SPRAY1.jpg', 'images/categories/beauty/SPRAY2.jpg', 'images/categories/beauty/SPRAY3.jpg'
+    ]
+};
+
+// This loop handles the remaining products automatically (Start from id 16)
+const generatedCatalog = [];
+const catKeysAvailable = Object.keys(categoryData);
+
+for (let i = 16; i <= 5000; i++) {
+    const key = catKeysAvailable[i % catKeysAvailable.length];
     const cat = categoryData[key];
-    const keyword = cat.keywords[i % cat.keywords.length];
-    
-    // Create a more professional title without debugging IDs
-    const title = i % 3 === 0 ? 
-        `Premium Wholesale ${keyword} - Bulk Supply` : 
-        `High Quality ${keyword} for Global Export`;
+    const itemKeyword = cat.keywords[i % cat.keywords.length];
+    const fileName = itemKeyword.replace(/\s+/g, '_').toLowerCase();
 
-    // Ensure we have a high-quality fallback image query
-    const fallbackImg = `https://source.unsplash.com/featured/400x400?${encodeURIComponent(keyword)}`;
+    // Get image from category mapping, cycle through available images
+    const catImages = categoryImages[key] || [];
+    const imageIndex = i % Math.max(catImages.length, 1);
+    const mappedImage = catImages.length > 0 ? catImages[imageIndex] : '';
 
-    catalog.push({
+    generatedCatalog.push({
         id: i,
         category: key,
-        title: title,
-        price: `GHS ${(Math.random() * 500 + 50).toFixed(2)} - GHS ${(Math.random() * 1000 + 600).toFixed(2)}`,
-        moq: `${Math.floor(Math.random() * 200 + 10)} ${cat.moqSuffix}`,
-        image: fallbackImg // Using dynamic keyword-based images for better relevance
+        title: `Wholesale ${itemKeyword} (Order #${i})`,
+        price: `GHS ${(Math.random() * 500 + 50).toFixed(2)}`,
+        moq: `${Math.floor(Math.random() * 200 + 10)} ${cat.moqSuffix || 'Units'}`,
+        // Use mapped local image if available, otherwise use the generated path
+        image: mappedImage || `images/products/${key}/${fileName}.jpg`,
+        stockImage: `https://images.unsplash.com/featured/400x400?${encodeURIComponent(itemKeyword)}&sig=${i}`
     });
 }
 
+const catalog = [...manualCatalog, ...generatedCatalog];
 
-// Simplified product card rendering
-function renderProducts(filterCategory = null) {
-    const grid = document.getElementById('productGrid');
+// Render Engine
+function renderProducts(filterCategory = null, keywordFilter = null, targetGridId = 'productGrid', limit = null) {
+    const grid = document.getElementById(targetGridId);
     if (!grid) return;
 
     grid.innerHTML = '';
-    let filtered = filterCategory 
-        ? catalog.filter(p => p.category === filterCategory) 
-        : catalog.slice(0, 48); // Show 48 on homepage
+    let filtered = catalog;
 
-    filtered.forEach(product => {
+    if (filterCategory) {
+        filtered = filtered.filter(p => p.category === filterCategory);
+    }
+
+    if (keywordFilter) {
+        filtered = filtered.filter(p => p.title.toLowerCase().includes(keywordFilter.toLowerCase()));
+    }
+
+    // Limit display for performance while still being a lot
+    const isHomePage = (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/'));
+    const defaultLimit = isHomePage ? 48 : filtered.length;
+    const finalLimit = limit || defaultLimit;
+
+    filtered.slice(0, finalLimit).forEach(product => {
         const card = document.createElement('a');
         card.href = `product.html?id=${product.id}`;
         card.className = 'product-card';
         card.innerHTML = `
             <div class="product-image">
                 <img src="${product.image}" loading="lazy" alt="${product.title}" 
-                     onerror="this.src='https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=400'">
+                     onerror="this.src='${product.stockImage || 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400'}'; this.onerror=null;">
             </div>
             <div class="product-info">
                 <h3 class="product-title">${product.title}</h3>
@@ -169,65 +227,89 @@ function renderProducts(filterCategory = null) {
     });
 }
 
-// Initialize based on Page
+// Global Init
 document.addEventListener('DOMContentLoaded', () => {
-    const path = window.location.pathname;
-    let activeCat = null;
-    
-    // Category Detection
-    if (path.includes('apparel.html')) activeCat = 'apparel';
-    else if (path.includes('shoes.html')) activeCat = 'shoes';
-    else if (path.includes('electronics.html')) activeCat = 'electronics';
-    else if (path.includes('bags.html')) activeCat = 'bags';
-    else if (path.includes('beauty.html')) activeCat = 'beauty';
-    else if (path.includes('home.html')) activeCat = 'home';
-    else if (path.includes('mobile.html')) activeCat = 'mobile';
-    
-    renderProducts(activeCat);
+    const path = window.location.pathname.toLowerCase();
+    const params = new URLSearchParams(window.location.search);
+    let activeCat = params.get('cat');
+    let keywordSubFilter = params.get('search');
 
-    // Dynamic Product Detail Page
+    if (!activeCat) {
+        if (path.includes('apparel')) activeCat = 'apparel';
+        else if (path.includes('shoes')) activeCat = 'shoes';
+        else if (path.includes('electronics')) activeCat = 'electronics';
+        else if (path.includes('bags')) activeCat = 'bags';
+        else if (path.includes('beauty')) activeCat = 'beauty';
+        else if (path.includes('home')) activeCat = 'home';
+        else if (path.includes('industrial')) activeCat = 'industrial';
+        else if (path.includes('medical')) activeCat = 'health';
+        else if (path.includes('sports')) activeCat = 'sports';
+        else if (path.includes('mobile')) {
+            activeCat = 'electronics';
+            keywordSubFilter = 'Smartphone';
+        }
+    }
+
+    renderProducts(activeCat, keywordSubFilter);
+
+    // Populate Deals if on Index
+    if (document.getElementById('dealsGrid')) {
+        renderProducts('electronics', null, 'dealsGrid', 6); // Show top 6 electronics
+    }
+
+    // Detail Page Logic
     if (path.includes('product.html')) {
         const params = new URLSearchParams(window.location.search);
         const prodId = parseInt(params.get('id'));
         const product = catalog.find(p => p.id === prodId) || catalog[0];
 
-        const titleElem = document.getElementById('productTitle');
-        const priceElem = document.getElementById('productPrice');
-        const mainImgContainer = document.querySelector('.main-image');
-        const moqElem = document.querySelector('.product-moq');
+        const t = document.getElementById('productTitle');
+        const p = document.getElementById('productPrice');
+        const im = document.querySelector('.main-image');
+        const m = document.querySelector('.product-moq');
 
-        if (titleElem) titleElem.innerText = product.title;
-        if (priceElem) priceElem.innerText = product.price;
-        if (moqElem) moqElem.innerText = product.moq;
-        if (mainImgContainer) {
-            mainImgContainer.innerHTML = `<img id="mainImg" src="${product.image}" onerror="this.src='https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=400'; this.onerror=null;">`;
-        }
+        if (t) t.innerText = product.title;
+        if (p) p.innerText = product.price;
+        if (m) m.innerText = product.moq;
+        if (im) im.innerHTML = `<img id="mainImg" src="${product.image}" onerror="this.src='${product.stockImage || 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400'}'; this.onerror=null;">`;
+    }
+
+    updateCartBadge();
+
+    // Search Bar Functionality
+    const searchInput = document.querySelector('.search-bar input');
+    const searchBtn = document.querySelector('.search-bar button');
+
+    if (searchBtn && searchInput) {
+        const handleSearch = () => {
+            const query = searchInput.value.trim();
+            if (query) {
+                renderProducts(null, query);
+                // Scroll to products
+                const grid = document.getElementById('productGrid');
+                if (grid) grid.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+        searchBtn.addEventListener('click', handleSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch();
+        });
     }
 });
 
-// Cart System Logic
+// Cart Logic
 function addToCart(productId) {
     const product = catalog.find(p => p.id === productId);
     if (!product) return;
 
     let cart = JSON.parse(localStorage.getItem('alfredCart')) || [];
-    const existingItem = cart.find(item => item.id === productId);
-
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        cart.push({
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            image: product.fallbackImage, // Use fallback for cart consistency
-            quantity: 1
-        });
-    }
+    const item = cart.find(i => i.id === productId);
+    if (item) item.quantity++;
+    else cart.push({ ...product, quantity: 1 });
 
     localStorage.setItem('alfredCart', JSON.stringify(cart));
     updateCartBadge();
-    
+
     // Feedback notification
     const btn = document.querySelector('#addCartBtn');
     if (btn) {
@@ -243,156 +325,113 @@ function addToCart(productId) {
 
 function updateCartBadge() {
     const cart = JSON.parse(localStorage.getItem('alfredCart')) || [];
-    const count = cart.reduce((acc, item) => acc + item.quantity, 0);
+    const count = cart.reduce((a, b) => a + b.quantity, 0);
     const badge = document.getElementById('cartCount');
     if (badge) badge.innerText = count;
 }
 
-// Initial calls
-document.addEventListener('DOMContentLoaded', () => {
-    updateCartBadge();
-});
+// Payment & Delivery Form Logic
+function validateAndPay() {
+    const form = document.getElementById('deliveryForm');
+    if (!form || !form.checkValidity()) {
+        form ? form.reportValidity() : alert('Please fill in all delivery details.');
+        return;
+    }
 
-// Paystack Payment Integration
+    const deliveryInfo = {
+        fullName: document.getElementById('fullName').value,
+        phoneNumber: document.getElementById('phoneNumber').value,
+        whatsappNumber: document.getElementById('whatsappNumber').value || 'N/A',
+        region: document.getElementById('region').value,
+        city: document.getElementById('city').value,
+        address: document.getElementById('address').value
+    };
+
+    localStorage.setItem('tempDeliveryInfo', JSON.stringify(deliveryInfo));
+    payWithPaystack();
+}
+
 function payWithPaystack() {
     const params = new URLSearchParams(window.location.search);
     const prodId = parseInt(params.get('id'));
     const product = catalog.find(p => p.id === prodId) || catalog[0];
-    
-    // Convert price string to number (simplified)
-    const priceStr = product.price.split('-')[0].replace('GHS', '').trim();
-    const amount = parseFloat(priceStr) * 100; // Paystack takes amount in kobo (NGN) or cents (USD)
+
+    const deliveryInfo = JSON.parse(localStorage.getItem('tempDeliveryInfo'));
+    if (!deliveryInfo) {
+        alert('Missing delivery information.');
+        return;
+    }
+
+    const priceNum = parseFloat(product.price.replace('GHS', '').trim());
+    const amount = priceNum * 100;
 
     let handler = PaystackPop.setup({
         key: 'pk_live_6b9968065dc0bd4842c97ffa138e49127c862888',
-        email: (auth.currentUser ? auth.currentUser.email : 'customer@example.com'),
-        amount: amount || 5000, 
+        email: (auth.currentUser ? auth.currentUser.email : 'customer@alfredproducts.com'),
+        amount: amount,
         currency: "GHS",
-        ref: 'ALFRED_' + Math.floor((Math.random() * 1000000000) + 1),
+        ref: 'ALF_' + Math.floor((Math.random() * 1e9) + 1),
         metadata: {
             custom_fields: [
-                {
-                    display_name: "Product Name",
-                    variable_name: "product_name",
-                    value: product.title
-                }
+                { display_name: "Customer", value: deliveryInfo.fullName },
+                { display_name: "Phone", value: deliveryInfo.phoneNumber },
+                { display_name: "Address", value: `${deliveryInfo.address}, ${deliveryInfo.city}` }
             ]
         },
-        callback: function(response){
-            alert('Payment Successful! Reference: ' + response.reference);
-            
-            // Save order to Firestore
+        callback: function (response) {
+            alert('Order Placed Successfully!');
             saveOrderToFirestore({
-                items: [{
-                    id: product.id,
-                    title: product.title,
-                    price: product.price,
-                    image: product.fallbackImage,
-                    quantity: 1
-                }],
-                total: priceStr,
-                reference: response.reference
+                items: [{ ...product, quantity: 1 }],
+                total: priceNum.toFixed(2),
+                reference: response.reference,
+                delivery: deliveryInfo,
+                status: 'pending'
             });
-
+            localStorage.removeItem('tempDeliveryInfo');
             window.location.href = 'orders.html';
-        },
-        onClose: function(){
-            alert('Transaction was not completed.');
         }
     });
-
     handler.openIframe();
 }
 
-// Tab Functionality
+// Tab and Gallery Logic
 function openTab(evt, tabName) {
     let i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tab-content");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].classList.remove("active");
-    }
+    for (i = 0; i < tabcontent.length; i++) tabcontent[i].classList.remove("active");
     tablinks = document.getElementsByClassName("tab-link");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active");
-    }
-    const target = document.getElementById(tabName);
-    if (target) target.classList.add("active");
-    if (evt) evt.currentTarget.classList.add("active");
+    for (i = 0; i < tablinks.length; i++) tablinks[i].classList.remove("active");
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
 }
 
-// Image Gallery
 function changeImage(type) {
     const mainImg = document.getElementById('mainImg');
     const thumbs = document.querySelectorAll('.thumb');
     thumbs.forEach(t => t.classList.remove('active'));
-
-    if (type === 'hero') {
-        thumbs[0].classList.add('active');
-        // Keep current product image
-    } else if (type === 'thumb1') {
+    if (type === 'hero') thumbs[0].classList.add('active');
+    else if (type === 'thumb1') {
         mainImg.src = 'thumb1.png';
         thumbs[1].classList.add('active');
     }
 }
 
-// Register Service Worker for PWA
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('Service Worker registered'))
-            .catch(err => console.log('Service Worker registration failed', err));
-    });
-}
-
-// Global Header User Sync
-function updateHeaderWithUser(user) {
-    const headerActions = document.querySelector('.header-actions');
-    if (!headerActions) return;
-
-    if (user) {
-        headerActions.innerHTML = `
-            <a href="orders.html" class="action-item">
-                <img src="${user.photoURL || 'https://via.placeholder.com/30'}" style="width: 24px; height: 24px; border-radius: 50%; margin-bottom: 2px;">
-                <span>${user.displayName.split(' ')[0]}</span>
-            </a>
-            <a href="messages.html" class="action-item">
-                <ion-icon name="mail-outline"></ion-icon>
-                <span>Messages</span>
-            </a>
-            <a href="cart.html" class="action-item">
-                <ion-icon name="cart-outline"></ion-icon>
-                <span id="cartCount">0</span>
-            </a>
-        `;
-        updateCartBadge();
-    }
-}
-
-// PWA Install Logic
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    const installBtn = document.getElementById('installAppBtn');
-    if (installBtn) installBtn.style.display = 'flex';
-});
-
-function triggerInstall() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-            }
-            deferredPrompt = null;
-        });
-    }
-}
-
-// Initial initialization
+// Auth Header Sync
 if (typeof auth !== 'undefined') {
     auth.onAuthStateChanged(user => {
-        updateHeaderWithUser(user);
+        const headerActions = document.querySelector('.header-actions');
+        if (!headerActions) return;
+
+        if (user) {
+            headerActions.innerHTML = `
+                <a href="orders.html" class="action-item">
+                    <img src="${user.photoURL || 'https://via.placeholder.com/30'}" style="width: 24px; height: 24px; border-radius: 50%; border: 1px solid #ddd;">
+                    <span>${user.displayName.split(' ')[0]}</span>
+                </a>
+                <a href="messages.html" class="action-item"><ion-icon name="mail-outline"></ion-icon><span>Messages</span></a>
+                <a href="cart.html" class="action-item"><ion-icon name="cart-outline"></ion-icon><span id="cartCount">0</span></a>
+            `;
+            updateCartBadge();
+        }
     });
 }
-
