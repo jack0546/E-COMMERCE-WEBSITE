@@ -26,14 +26,10 @@
         <div class="container">
             <div class="header-top">
                 <div class="logo">
-                   <a href="index.html"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a></a>
+                   <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a>
                 </div>
                 <div class="header-actions" id="userHeaderActions">
                     <!-- Dynamic User Header -->
-                    <a href="login.html" class="action-item">
-                        <ion-icon name="person-outline"></ion-icon>
-                        <span>Sign In</span>
-                    </a>
                 </div>
             </div>
         </div>
@@ -61,22 +57,21 @@
 
     <!-- Tracking Modal -->
     <div id="trackingModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; justify-content: center; align-items: center;">
-        <div style="background: white; width: 600px; border-radius: 12px; padding: 40px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+        <div style="background: white; width: 90%; max-width: 600px; border-radius: 12px; padding: 40px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 80vh; overflow-y: auto;">
             <span style="position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px;" onclick="closeTracking()">&times;</span>
-            <h3 style="margin-bottom: 30px;">Tracking Status - ID: <span id="trackIdDisplay"></span></h3>
-            <div class="timeline" style="border-left: 2px solid var(--primary-color); margin-left: 20px; padding-left: 30px;">
-                <div style="margin-bottom: 25px; position: relative;" id="step1">
-                    <div style="position: absolute; left: -36px; top: 0; width: 10px; height: 10px; background: var(--primary-color); border-radius: 50%;"></div>
-                    <p style="font-weight: 600; font-size: 14px;">Order Confirmed & Payment Verified</p>
-                    <p style="font-size: 12px; color: var(--text-muted);" id="orderTimeDisplay"></p>
-                </div>
-                <!-- Additional steps can be added here -->
+            <h3 style="margin-bottom: 20px; color: var(--primary-color);">Order Details</h3>
+            <div id="trackingContent">
+                <!-- Delivery Info will be injected here -->
             </div>
         </div>
     </div>
 
     <style>
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .order-detail-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .order-detail-group:last-child { border-bottom: none; }
+        .label { font-size: 11px; text-transform: uppercase; color: #999; font-weight: 700; margin-bottom: 5px; display: block; }
+        .value { font-size: 14px; color: #333; font-weight: 500; }
     </style>
 
     <script src="script.js"></script>
@@ -105,6 +100,7 @@
                     querySnapshot.forEach((doc) => {
                         const order = doc.data();
                         const date = order.timestamp ? order.timestamp.toDate().toLocaleDateString() : 'Just now';
+                        const firstItem = order.items[0];
                         
                         const orderDiv = document.createElement('div');
                         orderDiv.className = 'order-card';
@@ -112,7 +108,7 @@
                         orderDiv.innerHTML = `
                             <div class="order-info">
                                 <div class="order-img">
-                                    <img src="${order.items[0].image}" alt="Product">
+                                    <img src="${firstItem.image || 'https://via.placeholder.com/60'}" alt="Product">
                                 </div>
                                 <div>
                                     <h4 style="margin-bottom: 5px;">Order #${order.reference}</h4>
@@ -120,9 +116,9 @@
                                 </div>
                             </div>
                             <div style="text-align: right;">
-                                <span class="status-badge status-shipped" style="background: #e3f2fd; color: #1976d2;">Paid</span>
+                                <span class="status-badge" style="background: #e6ffed; color: #1e7e34; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;">Paid</span>
                                 <p style="font-size: 16px; font-weight: 700; margin-top: 10px;">GHS ${parseFloat(order.total).toFixed(2)}</p>
-                                <button class="btn btn-outline" style="padding: 8px 15px; font-size: 12px; margin-top: 10px;" onclick="showTracking('${order.reference}', '${date}')">Details</button>
+                                <button class="btn btn-outline" style="padding: 8px 15px; font-size: 12px; margin-top: 10px;" onclick="showTracking('${doc.id}')">View Details</button>
                             </div>
                         `;
                         container.appendChild(orderDiv);
@@ -134,10 +130,45 @@
                 });
         }
 
-        function showTracking(id, date) {
-            document.getElementById('trackingModal').style.display = 'flex';
-            document.getElementById('trackIdDisplay').innerText = id;
-            document.getElementById('orderTimeDisplay').innerText = date;
+        function showTracking(docId) {
+            const modal = document.getElementById('trackingModal');
+            const content = document.getElementById('trackingContent');
+            modal.style.display = 'flex';
+            content.innerHTML = '<p style="text-align:center;">Fetching details...</p>';
+
+            db.collection("orders").doc(docId).get().then(doc => {
+                if (doc.exists) {
+                    const order = doc.data();
+                    const delivery = order.delivery || {};
+                    const date = order.timestamp ? order.timestamp.toDate().toLocaleString() : 'Just now';
+                    
+                    content.innerHTML = `
+                        <div class="order-detail-group">
+                            <span class="label">Payment Status</span>
+                            <span class="value" style="color: #28a745; font-weight: 700;">Completed (Ref: ${order.reference})</span>
+                        </div>
+                        <div class="order-detail-group">
+                            <span class="label">Delivery Address</span>
+                            <span class="value">${delivery.fullName || 'N/A'}<br>
+                            ${delivery.address || 'No address'}<br>
+                            ${delivery.city || ''}, ${delivery.region || ''}</span>
+                        </div>
+                        <div class="order-detail-group">
+                            <span class="label">Contact Info</span>
+                            <span class="value">Phone: ${delivery.phoneNumber || 'N/A'}<br>
+                            WhatsApp: ${delivery.whatsappNumber || 'N/A'}</span>
+                        </div>
+                        <div class="order-detail-group">
+                            <span class="label">Ordered Items</span>
+                            <span class="value" style="font-size: 12px;">${order.items.map(item => `${item.title} (x${item.quantity})`).join('<br>')}</span>
+                        </div>
+                        <div class="order-detail-group" style="text-align: right;">
+                            <span class="label">Purchase Date</span>
+                            <span class="value" style="color: #999;">${date}</span>
+                        </div>
+                    `;
+                }
+            });
         }
 
         function closeTracking() {
@@ -146,5 +177,3 @@
     </script>
 </body>
 </html>
-
-
