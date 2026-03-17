@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
@@ -23,41 +23,145 @@
     <header>
         <div class="container">
             <div class="header-top">
-                <div class="logo"><a href="index.html"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a></a></div>
+                <div class="logo"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a></div>
+                <nav>
+                    <ul>
+                        <li><a href="categories.html">All Categories</a></li>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </header>
 
     <main>
-        <div style="background: #f5f5f5; padding: 80px 0; text-align: center;">
+        <div style="background: linear-gradient(135deg, #0abf53 0%, #089b4a 100%); padding: 100px 0; text-align: center; color: white;">
             <div class="container">
-                <h1 style="font-size: 48px; margin-bottom: 20px;">Empowering Businesses Worldwide</h1>
-                <p style="font-size: 20px; color: var(--text-muted); max-width: 800px; margin: 0 auto;">Alibaba.com is the leading platform for global wholesale trade. We serve millions of buyers and suppliers around the world.</p>
+                <h1 style="font-size: 52px; margin-bottom: 20px; font-weight: 800;">Empowering Businesses Worldwide</h1>
+                <p style="font-size: 20px; max-width: 800px; margin: 0 auto; opacity: 0.95;">Alfred Ali Store is the leading platform for global wholesale trade. We serve millions of buyers and suppliers around the world, making international commerce accessible to everyone.</p>
             </div>
         </div>
 
         <div class="container" style="padding: 80px 0;">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
                 <div>
-                    <h2 style="margin-bottom: 20px;">Our Mission</h2>
-                    <p style="font-size: 16px; line-height: 1.8; color: var(--text-muted);">As part of the Alibaba Group, our mission is to make it easy to do business anywhere. We do this by giving suppliers the tools necessary to reach a global audience for their products, and by helping buyers find products and suppliers quickly and efficiently.</p>
+                    <h2 style="margin-bottom: 20px; font-size: 32px;">Our Mission</h2>
+                    <p style="font-size: 16px; line-height: 1.8; color: var(--text-muted); margin-bottom: 20px;">As part of the Alfred Ali Store Group, our mission is to make it easy to do business anywhere. We do this by giving suppliers the tools necessary to reach a global audience for their products, and by helping buyers find products and suppliers quickly and efficiently.</p>
+                    <p style="font-size: 16px; line-height: 1.8; color: var(--text-muted);">We believe that technology should empower businesses of all sizes to compete on a level playing field. Whether you're a small artisan workshop or a large manufacturing facility, ALFRED PRODUCTS provides the platform you need to reach customers across Africa and beyond.</p>
                 </div>
-                <div style="background: var(--bg-light); height: 300px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                    <ion-icon name="globe-outline" style="font-size: 120px; color: var(--primary-color);"></ion-icon>
+                <div style="background: linear-gradient(135deg, #0abf53 0%, #089b4a 100%); height: 300px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;">
+                    <ion-icon name="globe-outline" style="font-size: 120px;"></ion-icon>
                 </div>
             </div>
+        </div>
+
+        <div style="background: #f9f9f9; padding: 80px 0;">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 50px; font-size: 36px;">Why Choose ALFRED PRODUCTS</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;">
+                    <div style="background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                        <ion-icon name="people-outline" style="font-size: 48px; color: #0abf53; margin-bottom: 20px;"></ion-icon>
+                        <h3 style="margin-bottom: 15px;">Global Network</h3>
+                        <p style="color: #666; line-height: 1.6;">Connect with verified suppliers and buyers from across Africa and around the world. Our extensive network ensures you find the right partners for your business.</p>
+                    </div>
+                    <div style="background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                        <ion-icon name="shield-checkmark-outline" style="font-size: 48px; color: #0abf53; margin-bottom: 20px;"></ion-icon>
+                        <h3 style="margin-bottom: 15px;">Secure Payments</h3>
+                        <p style="color: #666; line-height: 1.6;">Shop with confidence using our secure Paystack payment integration. Your transactions are protected with industry-standard encryption.</p>
+                    </div>
+                    <div style="background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                        <ion-icon name="truck-outline" style="font-size: 48px; color: #0abf53; margin-bottom: 20px;"></ion-icon>
+                        <h3 style="margin-bottom: 15px;">Reliable Delivery</h3>
+                        <p style="color: #666; line-height: 1.6;">We partner with trusted logistics providers to ensure your orders arrive safely and on time, no matter where you are located.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="padding: 80px 0;">
+            <h2 style="text-align: center; margin-bottom: 50px; font-size: 36px;">Our Product Categories</h2>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                <div style="text-align: center; padding: 30px; border: 1px solid #eee; border-radius: 12px;">
+                    <ion-icon name="shirt-outline" style="font-size: 36px; color: #0abf53; margin-bottom: 15px;"></ion-icon>
+                    <h4>Apparel & Fashion</h4>
+                </div>
+                <div style="text-align: center; padding: 30px; border: 1px solid #eee; border-radius: 12px;">
+                    <ion-icon name="phone-portrait-outline" style="font-size: 36px; color: #0abf53; margin-bottom: 15px;"></ion-icon>
+                    <h4>Electronics</h4>
+                </div>
+                <div style="text-align: center; padding: 30px; border: 1px solid #eee; border-radius: 12px;">
+                    <ion-icon name="flower-outline" style="font-size: 36px; color: #0abf53; margin-bottom: 15px;"></ion-icon>
+                    <h4>Beauty & Personal Care</h4>
+                </div>
+                <div style="text-align: center; padding: 30px; border: 1px solid #eee; border-radius: 12px;">
+                    <ion-icon name="bag-handle-outline" style="font-size: 36px; color: #0abf53; margin-bottom: 15px;"></ion-icon>
+                    <h4>Luggage & Bags</h4>
+                </div>
+                <div style="text-align: center; padding: 30px; border: 1px solid #eee; border-radius: 12px;">
+                    <ion-icon name="footsteps-outline" style="font-size: 36px; color: #0abf53; margin-bottom: 15px;"></ion-icon>
+                    <h4>Shoes & Footwear</h4>
+                </div>
+                <div style="text-align: center; padding: 30px; border: 1px solid #eee; border-radius: 12px;">
+                    <ion-icon name="fitness-outline" style="font-size: 36px; color: #0abf53; margin-bottom: 15px;"></ion-icon>
+                    <h4>Sports & Outdoors</h4>
+                </div>
+                <div style="text-align: center; padding: 30px; border: 1px solid #eee; border-radius: 12px;">
+                    <ion-icon name="construct-outline" style="font-size: 36px; color: #0abf53; margin-bottom: 15px;"></ion-icon>
+                    <h4>Industrial Machinery</h4>
+                </div>
+                <div style="text-align: center; padding: 30px; border: 1px solid #eee; border-radius: 12px;">
+                    <ion-icon name="apps-outline" style="font-size: 36px; color: #0abf53; margin-bottom: 15px;"></ion-icon>
+                    <h4>And More...</h4>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #1a1a1a; color: white; padding: 80px 0;">
+            <div class="container">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px;">
+                    <div>
+                        <h2 style="margin-bottom: 20px; font-size: 32px;">Join Our Community</h2>
+                        <p style="font-size: 16px; line-height: 1.8; opacity: 0.8; margin-bottom: 30px;">ALFRED PRODUCTS is more than just a marketplace – we're a community of entrepreneurs, manufacturers, and retailers working together to transform African commerce. Our platform has already helped thousands of businesses reach new markets and grow their operations.</p>
+                        <p style="font-size: 16px; line-height: 1.8; opacity: 0.8;">Whether you're looking to source products at competitive wholesale prices or expand your reach to new markets, ALFRED PRODUCTS is your trusted partner in success. Join us today and experience the future of B2B trading.</p>
+                    </div>
+                    <div style="display: flex; flex-direction: column; justify-content: center; gap: 20px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <ion-icon name="checkmark-circle" style="font-size: 24px; color: #0abf53;"></ion-icon>
+                            <span style="font-size: 16px;">Over 50,000 verified suppliers</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <ion-icon name="checkmark-circle" style="font-size: 24px; color: #0abf53;"></ion-icon>
+                            <span style="font-size: 16px;">100,000+ products across multiple categories</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <ion-icon name="checkmark-circle" style="font-size: 24px; color: #0abf53;"></ion-icon>
+                            <span style="font-size: 16px;">Secure payment processing</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <ion-icon name="checkmark-circle" style="font-size: 24px; color: #0abf53;"></ion-icon>
+                            <span style="font-size: 16px;">Fast and reliable shipping</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <ion-icon name="checkmark-circle" style="font-size: 24px; color: #0abf53;"></ion-icon>
+                            <span style="font-size: 16px;">24/7 customer support</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="padding: 80px 0; text-align: center;">
+            <h2 style="margin-bottom: 20px; font-size: 36px;">Start Trading Today</h2>
+            <p style="font-size: 18px; color: #666; max-width: 600px; margin: 0 auto 30px;">Join thousands of businesses already using ALFRED PRODUCTS to grow their trade network.</p>
+            <a href="register.html" style="display: inline-block; background: #0abf53; color: white; padding: 15px 40px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none;">Create Free Account</a>
         </div>
     </main>
 
     <footer>
         <div class="container" style="text-align: center; color: #999; padding: 40px 0; border-top: 1px solid var(--border-color);">
-            <p>&copy; 1999-2026 Alfred Products.com. All rights reserved.</p>
+            <p>&copy; 2015-2026 Alfred Products.com. All rights reserved.</p>
         </div>
     </footer>
 </body>
 </html>
-
-
-
-
-
