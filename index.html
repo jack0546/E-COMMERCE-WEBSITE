@@ -1,177 +1,928 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALFRED PRODUCTS - Global Trade Starts Here</title>
+    <title>ALFRED - Global Trade Marketplace</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#FF6600">
+    <meta name="theme-color" content="#0abf53">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="1.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
 </head>
-<body>
-    <header>
-        <div class="container">
-            <div class="top-bar">
-                <a href="trade.html">Buyer Central</a>
-                <a href="help.html">Help Center</a>
-                <a href="#">App & extension</a>
-                <a href="trade.html">Sell on ALFRED</a>
-            </div>
-            <div class="header-top">
-                <div class="logo">
-                    <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a>
-                </div>
-                <div class="header-actions">
-                    <a href="#" class="action-item"><ion-icon name="globe-outline"></ion-icon></a>
-                    <a href="cart.html" class="action-item"><ion-icon name="cart-outline"></ion-icon></a>
-                    <a href="login.html" class="action-item">
-                        <ion-icon name="person-outline"></ion-icon>
-                        <span>Sign In</span>
-                    </a>
-                    <a href="register.html" class="btn btn-primary" style="padding: 8px 20px; font-size: 14px; border-radius: 20px;">Create account</a>
-                </div>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="categories.html" style="font-weight: 700;"><ion-icon name="menu-outline"></ion-icon> All categories</a></li>
-                    <li><a href="trade.html">Find factories</a></li>
-                    <li><a href="trade.html">Order protections</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
-    <main>
-        <section class="hero-v2">
-            <div class="container">
-                <div class="search-tabs">
-                    <div class="search-tab">AI Mode <span class="ai-badge">✦</span></div>
-                    <div class="search-tab active">Products</div>
-                    <div class="search-tab">Manufacturers</div>
-                    <div class="search-tab">Worldwide</div>
-                </div>
-                <div class="main-search-container">
-                    <input type="text" placeholder="What are you looking for...">
-                    <button class="search-btn">
+<body>
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-header">
+            <div class="navbar-brand">
+                <img src="1.png" alt="ALFRED" style="height: 28px;">
+                <span class="brand-text">ALFRED</span>
+            </div>
+            <button class="mobile-nav-close" onclick="toggleMobileMenu()">
+                <ion-icon name="close-outline"></ion-icon>
+            </button>
+        </div>
+        <ul>
+            <li><a href="categories.html"><ion-icon name="grid-outline"></ion-icon> All Categories</a></li>
+            <li><a href="suppliers.html"><ion-icon name="business-outline"></ion-icon> Find Suppliers</a></li>
+            <li><a href="product.html"><ion-icon name="cube-outline"></ion-icon> Featured Products</a></li>
+            <li><a href="cart.html"><ion-icon name="cart-outline"></ion-icon> Shopping Cart</a></li>
+            <li><a href="login.html"><ion-icon name="person-outline"></ion-icon> Sign In</a></li>
+            <li><a href="register.html"><ion-icon name="person-add-outline"></ion-icon> Create Account</a></li>
+            <li><a href="orders.html"><ion-icon name="receipt-outline"></ion-icon> My Orders</a></li>
+            <li><a href="help.html"><ion-icon name="help-circle-outline"></ion-icon> Help Center</a></li>
+        </ul>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <ion-icon name="menu-outline"></ion-icon>
+            </button>
+
+            <div class="navbar-brand">
+                <a href="index.html">
+                    <img src="1.png" alt="ALFRED">
+                </a>
+            </div>
+
+            <div class="navbar-search">
+                <div class="search-wrapper">
+                    <input type="text" placeholder="Search products, suppliers, categories...">
+                    <button type="submit">
                         <ion-icon name="search-outline"></ion-icon>
                         Search
                     </button>
                 </div>
-                <div class="search-extras">
-                    <a href="#"><ion-icon name="camera-outline"></ion-icon> Image Search</a>
-                    <span>|</span>
-                    <a href="#">Black Afghan Perfume</a>
-                    <a href="#">Roller Blind Fabric</a>
-                    <a href="#">Original Arabic Perfumes</a>
+            </div>
+
+            <div class="navbar-actions">
+                <a href="#" class="navbar-action">
+                    <ion-icon name="globe-outline"></ion-icon>
+                    <span class="action-label">EN</span>
+                </a>
+                <a href="cart.html" class="navbar-action">
+                    <ion-icon name="cart-outline"></ion-icon>
+                    <span class="action-label">Cart</span>
+                    <span class="badge" id="cartBadge">0</span>
+                </a>
+                <a href="orders.html" class="navbar-action">
+                    <ion-icon name="receipt-outline"></ion-icon>
+                    <span class="action-label">Orders</span>
+                </a>
+                <a href="messages.html" class="navbar-action">
+                    <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+                    <span class="action-label">Messages</span>
+                </a>
+                <a href="login.html" class="navbar-action" id="userAction">
+                    <ion-icon name="person-outline"></ion-icon>
+                    <span class="action-label">Sign In</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Category Menu -->
+    <div class="navbar-menu">
+        <div class="container">
+            <a href="categories.html" class="navbar-menu-item" style="font-weight: 700;">
+                <ion-icon name="grid-outline"></ion-icon> All Categories
+            </a>
+            <a href="suppliers.html" class="navbar-menu-item">Find Suppliers</a>
+            <a href="product.html" class="navbar-menu-item">Featured Products</a>
+            <a href="ready-to-ship.html" class="navbar-menu-item">Ready to Ship</a>
+            <a href="trade.html" class="navbar-menu-item">Trade Assurance</a>
+            <a href="help.html" class="navbar-menu-item">Help Center</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-layout">
+            <!-- Category Sidebar -->
+            <aside class="category-sidebar">
+                <div class="category-header">
+                    <ion-icon name="grid-outline"></ion-icon>
+                    Categories
+                </div>
+                <ul class="category-list">
+                    <li class="category-item">
+                        <a href="apparel.html" class="category-link">
+                            <span class="category-name">
+                                <img src="images/SHOE1.jpg" style="width: 24px; height: 24px; border-radius: 4px; object-fit: cover; margin-right: 8px;" onclick="openDeliveryForm('Apparel & Fashion', 'Premium Cotton T-Shirt', 45.00, 'High-quality cotton t-shirts from verified manufacturers', 'images/SHOE1.jpg'); event.stopPropagation();">
+                                Apparel & Fashion
+                            </span>
+                            <ion-icon name="chevron-forward-outline"></ion-icon>
+                        </a>
+                        <div class="category-dropdown">
+                            <div class="dropdown-column">
+                                <h4>Men's Clothing</h4>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'T-Shirts', 35.00, 'Premium cotton t-shirts', 'images/SHOE1.jpg'); return false;">T-Shirts</a>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Jackets', 85.00, 'Quality jackets', 'images/SHOE2.jpg'); return false;">Jackets</a>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Jeans', 65.00, 'Denim jeans', 'images/SHOE3.jpg'); return false;">Jeans</a>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Suits', 150.00, 'Formal suits', 'images/SHOE4.jpg'); return false;">Suits</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Women's Clothing</h4>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Dresses', 75.00, 'Beautiful dresses', 'images/SHOE5.jpg'); return false;">Dresses</a>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Blouses', 45.00, 'Elegant blouses', 'images/SHOE6.jpg'); return false;">Blouses</a>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Skirts', 55.00, 'Trendy skirts', 'images/SHOE7.jpg'); return false;">Skirts</a>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Pants', 60.00, 'Casual pants', 'images/SHOE8.jpg'); return false;">Pants</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Baby & Kids</h4>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Baby Clothing', 25.00, 'Soft baby clothes', 'images/SHOE9.jpg'); return false;">Baby Clothing</a>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Kids Wear', 35.00, 'Colorful kids wear', 'images/SHOE10.jpg'); return false;">Kids Wear</a>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'School Uniforms', 45.00, 'Quality school uniforms', 'images/SHOE11.jpg'); return false;">School Uniforms</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Accessories</h4>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Hats', 15.00, 'Fashion hats', 'images/SHOE12.jpg'); return false;">Hats</a>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Scarves', 20.00, 'Designer scarves', 'images/SHOE13.jpg'); return false;">Scarves</a>
+                                <a href="#" onclick="openDeliveryForm('Apparel', 'Gloves', 18.00, 'Quality gloves', 'images/SHOE14.jpg'); return false;">Gloves</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="category-item">
+                        <a href="electronics.html" class="category-link">
+                            <span class="category-name">
+                                <img src="images/SMART1.jpg" style="width: 24px; height: 24px; border-radius: 4px; object-fit: cover; margin-right: 8px;" onclick="openDeliveryForm('Electronics', 'Smartphone', 120.00, 'Latest smartphones and gadgets', 'images/SMART1.jpg'); event.stopPropagation();">
+                                Electronics
+                            </span>
+                            <ion-icon name="chevron-forward-outline"></ion-icon>
+                        </a>
+                        <div class="category-dropdown">
+                            <div class="dropdown-column">
+                                <h4>Mobile Phones</h4>
+                                <a href="#">Smartphones</a>
+                                <a href="#">Feature Phones</a>
+                                <a href="#">Phone Accessories</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Computers</h4>
+                                <a href="#">Laptops</a>
+                                <a href="#">Desktops</a>
+                                <a href="#">Tablets</a>
+                            </div>
+                            <div class="dropdown-column">
+                                <h4>Audio & Video</h4>
+                                <a href="#">Headphones</a>
+                                <a href="#">Speakers</a>
+                                <a href="#">Cameras</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="category-item">
+                        <a href="beauty.html" class="category-link">
+                            <span class="category-name">
+                                <img src="images/image1.jpg" style="width: 24px; height: 24px; border-radius: 4px; object-fit: cover; margin-right: 8px;" onclick="openDeliveryForm('Beauty & Personal Care', 'Skincare Set', 85.00, 'Premium skincare and cosmetics', 'images/image1.jpg'); event.stopPropagation();">
+                                Beauty & Personal Care
+                            </span>
+                            <ion-icon name="chevron-forward-outline"></ion-icon>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="bags.html" class="category-link">
+                            <span class="category-name">
+                                <img src="images/BAG1.jpg" style="width: 24px; height: 24px; border-radius: 4px; object-fit: cover; margin-right: 8px;" onclick="openDeliveryForm('Bags', 'Designer Bag', 150.00, 'Luxury bags and luggage', 'images/BAG1.jpg'); event.stopPropagation();">
+                                Luggage & Bags
+                            </span>
+                            <ion-icon name="chevron-forward-outline"></ion-icon>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="shoes.html" class="category-link">
+                            <span class="category-name">
+                                <img src="images/SHOE5.jpg" style="width: 24px; height: 24px; border-radius: 4px; object-fit: cover; margin-right: 8px;" onclick="openDeliveryForm('Shoes', 'Sports Shoes', 95.00, 'Quality footwear', 'images/SHOE5.jpg'); event.stopPropagation();">
+                                Shoes & Footwear
+                            </span>
+                            <ion-icon name="chevron-forward-outline"></ion-icon>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="sports.html" class="category-link">
+                            <span class="category-name">
+                                <img src="images/image5.jpg" style="width: 24px; height: 24px; border-radius: 4px; object-fit: cover; margin-right: 8px;" onclick="openDeliveryForm('Sports', 'Fitness Equipment', 48.00, 'Sports and outdoor gear', 'images/image5.jpg'); event.stopPropagation();">
+                                Sports & Outdoors
+                            </span>
+                            <ion-icon name="chevron-forward-outline"></ion-icon>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="industrial.html" class="category-link">
+                            <span class="category-name">
+                                <img src="images/banners/industrial.jpg" style="width: 24px; height: 24px; border-radius: 4px; object-fit: cover; margin-right: 8px;" onclick="openDeliveryForm('Industrial', 'Industrial Equipment', 250.00, 'Industrial machinery and equipment', 'images/banners/industrial.jpg'); event.stopPropagation();">
+                                Industrial Machinery
+                            </span>
+                            <ion-icon name="chevron-forward-outline"></ion-icon>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="categories.html" class="category-link"
+                            style="color: var(--primary-color); font-weight: 600;">
+                            View All Categories
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Main Banner -->
+            <div class="hero-banner">
+                <img src="images/banners/home.jpg" alt="Trade Global">
+                <div class="hero-banner-content">
+                    <h2>Connect With Global Suppliers</h2>
+                    <p>Find millions of products from verified manufacturers</p>
+                    <a href="categories.html" class="btn btn-primary">Explore Now</a>
                 </div>
             </div>
-        </section>
 
-        <div class="container">
-            <div class="main-layout">
-                <aside class="sidebar-v2">
-                    <h3>Explore Categories</h3>
-                    <ul>
-                        <li><a href="apparel.html">Apparel & Accessories <ion-icon name="chevron-forward-outline"></ion-icon></a></li>
-                        <li><a href="electronics.html">Consumer Electronics <ion-icon name="chevron-forward-outline"></ion-icon></a></li>
-                        <li><a href="sports.html">Sports & Entertainment <ion-icon name="chevron-forward-outline"></ion-icon></a></li>
-                        <li><a href="beauty.html">Beauty <ion-icon name="chevron-forward-outline"></ion-icon></a></li>
-                        <li><a href="bags.html">Luggage, Bags & Cases <ion-icon name="chevron-forward-outline"></ion-icon></a></li>
-                        <li><a href="shoes.html">Shoes & Accessories <ion-icon name="chevron-forward-outline"></ion-icon></a></li>
-                        <li><a href="home.html">Home & Garden <ion-icon name="chevron-forward-outline"></ion-icon></a></li>
-                        <li><a href="categories.html" style="color: var(--primary-color); font-weight: 700;">View all categories</a></li>
-                    </ul>
-                </aside>
-
-                <div class="main-content">
-                    <section class="products" style="padding: 0;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                            <h2 style="font-size: 20px; font-weight: 800;">Recommended for your business</h2>
-                        </div>
-                        <div class="product-grid" id="productGrid">
-                            <!-- Populated by JS -->
-                        </div>
-                    </section>
+            <!-- Side Banners -->
+            <div class="hero-banners-grid">
+                <div class="hero-mini-banner"
+                    onclick="openDeliveryForm('Apparel & Fashion', 'Premium Cotton T-Shirt', 45.00, 'High-quality cotton t-shirts, hoodies, and sweatshirts from verified manufacturers', 'images/SHOE1.jpg')"
+                    style="cursor: pointer;">
+                    <img src="images/SHOE1.jpg" alt="Apparel">
+                    <div class="hero-mini-banner-content">
+                        <h4>Apparel & Fashion</h4>
+                        <p>T-Shirts, Dresses, Hoodies</p>
+                    </div>
+                </div>
+                <div class="hero-mini-banner"
+                    onclick="openDeliveryForm('Industrial Machinery', 'Industrial Equipment', 250.00, 'Industrial machinery and equipment from verified manufacturers', 'images/banners/industrial.jpg')"
+                    style="cursor: pointer;">
+                    <img src="images/banners/industrial.jpg" alt="Factory">
+                    <div class="hero-mini-banner-content">
+                        <h4>Industrial Machinery</h4>
+                        <p>Factory Equipment</p>
+                    </div>
+                </div>
+                <div class="hero-mini-banner"
+                    onclick="openDeliveryForm('Electronics', 'Smartphone & Gadgets', 120.00, 'Latest smartphones, tablets, and electronic accessories', 'images/SMART1.jpg')"
+                    style="cursor: pointer;">
+                    <img src="images/SMART1.jpg" alt="Electronics">
+                    <div class="hero-mini-banner-content">
+                        <h4>Electronics</h4>
+                        <p>Phones, Tablets, Gadgets</p>
+                    </div>
+                </div>
+                <div class="hero-mini-banner"
+                    onclick="openDeliveryForm('Beauty & Personal Care', 'Skincare & Cosmetics', 35.00, 'Premium skincare, cosmetics and beauty products', 'images/image1.jpg')"
+                    style="cursor: pointer;">
+                    <img src="images/image1.jpg" alt="Beauty">
+                    <div class="hero-mini-banner-content">
+                        <h4>Beauty & Personal Care</h4>
+                        <p>Skincare, Cosmetics</p>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <section class="container" style="margin-top: 50px; margin-bottom: 50px;">
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
-                <div style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200'); background-size: cover; padding: 60px; border-radius: 12px; color: white;">
-                    <h2 style="font-size: 32px; margin-bottom: 10px;">March Expo</h2>
-                    <p style="font-size: 18px; margin-bottom: 30px; opacity: 0.9;">Up to 20% off 8M+ deals</p>
-                    <a href="featured.html" class="btn btn-primary">View more</a>
+    <!-- Apparel & Fashion Products -->
+    <section class="container" style="padding: 20px 24px;">
+        <h2 style="font-size: 24px; margin-bottom: 20px;">Apparel & Fashion</h2>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Apparel', 'Premium Cotton T-Shirt', 45.00, '100% organic cotton, available in 12 colors, perfect for branding', 'images/SHOE1.jpg')">
+                <img src="images/SHOE1.jpg" alt="T-Shirt" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Premium Cotton T-Shirt</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 45.00</p>
                 </div>
-                <div style="background: #e8f5e9; padding: 40px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center;">
-                    <h3 style="color: var(--primary-color); margin-bottom: 15px;">Fast Customization</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 25px;">Source products with your own logo and custom packaging.</p>
-                    <a href="trade.html" style="font-weight: 700; color: var(--text-color); text-decoration: none;">Get started →</a>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Apparel', 'Designer Hoodie', 85.00, 'Warm and cozy hoodie with custom logo printing', 'images/SHOE2.jpg')">
+                <img src="images/SHOE2.jpg" alt="Hoodie" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Designer Hoodie</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 85.00</p>
                 </div>
             </div>
-        </section>
-    </main>
-
-    <div class="floating-side">
-        <a href="messages.html" class="float-item">
-            <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-            <span>Messenger</span>
-        </a>
-        <a href="#" class="float-item">
-            <ion-icon name="scan-outline"></ion-icon>
-            <span>Alfred Lens</span>
-        </a>
-        <a href="help.html" class="float-item">
-            <ion-icon name="help-circle-outline"></ion-icon>
-            <span>Survey</span>
-        </a>
-    </div>
-
-    <footer>
-        <div class="container footer-grid">
-            <div class="footer-col">
-                <h4>Get Support</h4>
-                <ul>
-                    <li><a href="help.html">Help Center</a></li>
-                    <li><a href="messages.html">Live Chat</a></li>
-                    <li><a href="orders.html">Check Order Status</a></li>
-                </ul>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Apparel', 'Casual Sweatshirt', 55.00, 'Comfortable casual sweatshirt for everyday wear', 'images/SHOE3.jpg')">
+                <img src="images/SHOE3.jpg" alt="Sweatshirt" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Casual Sweatshirt</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 55.00</p>
+                </div>
             </div>
-            <div class="footer-col">
-                <h4>Trade Services</h4>
-                <ul>
-                    <li><a href="trade.html">Trade Assurance</a></li>
-                    <li><a href="logistics.html">Logistics Service</a></li>
-                </ul>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Apparel', 'Classic Polo Shirt', 50.00, 'Elegant polo shirt for formal and casual occasions', 'images/SHOE4.jpg')">
+                <img src="images/SHOE4.jpg" alt="Polo Shirt" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Classic Polo Shirt</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 50.00</p>
+                </div>
             </div>
-            <div class="footer-col">
-                <h4>About Us</h4>
-                <ul>
-                    <li><a href="about.html">About ALFRED</a></li>
-                    <li><a href="categories.html">Sitemap</a></li>
-                </ul>
+        </div>
+    </section>
+
+    <!-- Electronics Products -->
+    <section class="container" style="padding: 20px 24px; background: #f8f9fa; margin: 20px 0;">
+        <h2 style="font-size: 24px; margin-bottom: 20px;">Electronics</h2>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5; background: white;"
+                onclick="openDeliveryForm('Electronics', 'Wireless Earbuds', 120.00, 'High-quality sound, long battery life, Bluetooth 5.0', 'images/SMART1.jpg')">
+                <img src="images/SMART1.jpg" alt="Earbuds" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Wireless Earbuds</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 120.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5; background: white;"
+                onclick="openDeliveryForm('Electronics', 'Smart Watch', 280.00, 'Fitness tracking, notifications, water resistant', 'images/SMART2.jpg')">
+                <img src="images/SMART2.jpg" alt="Smart Watch" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Smart Watch</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 280.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5; background: white;"
+                onclick="openDeliveryForm('Electronics', 'Power Bank 20000mAh', 65.00, 'Fast charging, multiple ports, portable', 'images/SMART3.jpg')">
+                <img src="images/SMART3.jpg" alt="Power Bank" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Power Bank</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 65.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5; background: white;"
+                onclick="openDeliveryForm('Electronics', 'USB Charger', 35.00, 'Fast charging USB charger for all devices', 'images/SMART5.jpg')">
+                <img src="images/SMART5.jpg" alt="USB Charger" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">USB Charger</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 35.00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Categories Grid -->
+    <section class="container" style="padding: 20px 24px;">
+        <h2 style="font-size: 24px; margin-bottom: 20px;">Luggage & Bags</h2>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Bags', 'Designer Leather Bag', 150.00, 'Genuine leather, multiple compartments', 'images/BAG1.jpg')">
+                <img src="images/BAG1.jpg" alt="Leather Bag" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Designer Leather Bag</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 150.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Bags', 'Travel Backpack', 85.00, 'Durable, waterproof, with USB port', 'images/BAG2.jpg')">
+                <img src="images/BAG2.jpg" alt="Backpack" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Travel Backpack</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 85.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Bags', 'Fashion Handbag', 95.00, 'Elegant handbag for women', 'images/BAG3.jpg')">
+                <img src="images/BAG3.jpg" alt="Handbag" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Fashion Handbag</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Bags', 'Gym Bag', 55.00, 'Sports bag with shoe compartment', 'images/BAG4.jpg')">
+                <img src="images/BAG4.jpg" alt="Gym Bag" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Gym Bag</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 55.00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shoes Section -->
+    <section class="container" style="padding: 20px 24px; background: #f8f9fa; margin: 20px 0;">
+        <h2 style="font-size: 24px; margin-bottom: 20px;">Shoes & Footwear</h2>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5; background: white;"
+                onclick="openDeliveryForm('Shoes', 'Running Sports Shoes', 95.00, 'Comfortable and durable for daily use', 'images/SHOE5.jpg')">
+                <img src="images/SHOE5.jpg" alt="Running Shoes" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Running Sports Shoes</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5; background: white;"
+                onclick="openDeliveryForm('Shoes', 'Casual Loafers', 75.00, 'Comfortable casual shoes for men', 'images/SHOE6.jpg')">
+                <img src="images/SHOE6.jpg" alt="Loafers" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Casual Loafers</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 75.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5; background: white;"
+                onclick="openDeliveryForm('Shoes', 'Formal Dress Shoes', 120.00, 'Elegant formal shoes for business', 'images/SHOE7.jpg')">
+                <img src="images/SHOE7.jpg" alt="Dress Shoes" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Formal Dress Shoes</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 120.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5; background: white;"
+                onclick="openDeliveryForm('Shoes', 'Canvas Sneakers', 45.00, 'Lightweight canvas sneakers', 'images/SHOE8.jpg')">
+                <img src="images/SHOE8.jpg" alt="Sneakers" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Canvas Sneakers</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 45.00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beauty Section -->
+    <section class="container" style="padding: 20px 24px;">
+        <h2 style="font-size: 24px; margin-bottom: 20px;">Beauty & Personal Care</h2>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Beauty', 'Skincare Set', 85.00, 'Complete skincare routine set', 'images/image1.jpg')">
+                <img src="images/image1.jpg" alt="Skincare" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Skincare Set</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 85.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Beauty', 'Makeup Kit', 120.00, 'Professional makeup kit', 'images/image2.jpg')">
+                <img src="images/image2.jpg" alt="Makeup" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Makeup Kit</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 120.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Beauty', 'Hair Care Products', 65.00, 'Premium hair care products', 'images/image3.jpg')">
+                <img src="images/image3.jpg" alt="Hair Care" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Hair Care Products</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 65.00</p>
+                </div>
+            </div>
+            <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                onclick="openDeliveryForm('Beauty', 'Perfume Set', 95.00, 'Luxury fragrance set', 'images/image4.jpg')">
+                <img src="images/image4.jpg" alt="Perfume" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 13px; margin-bottom: 5px;">Perfume Set</h4>
+                    <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container" style="padding: 20px 24px;">
+        <h2 style="font-size: 24px; margin-bottom: 20px;">More Categories</h2>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+            <div class="hero-mini-banner"
+                onclick="openDeliveryForm('Industrial', 'Industrial Equipment', 250.00, 'Industrial machinery and equipment from verified manufacturers', 'images/banners/industrial.jpg')"
+                style="cursor: pointer; border-radius: 12px; overflow: hidden; position: relative; height: 180px;">
+                <img src="images/banners/industrial.jpg" alt="Industrial" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="hero-mini-banner-content"
+                    style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 30px 15px 15px;">
+                    <h4 style="color: white;">Industrial</h4>
+                    <p style="color: rgba(255,255,255,0.8);">Machinery, Equipment</p>
+                </div>
+            </div>
+            <div class="hero-mini-banner"
+                onclick="openDeliveryForm('Sports & Outdoors', 'Fitness Equipment', 48.00, 'Fitness equipment, outdoor gear, and sports accessories', 'images/image5.jpg')"
+                style="cursor: pointer; border-radius: 12px; overflow: hidden; position: relative; height: 180px;">
+                <img src="images/image5.jpg" alt="Sports" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="hero-mini-banner-content"
+                    style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 30px 15px 15px;">
+                    <h4 style="color: white;">Sports & Outdoors</h4>
+                    <p style="color: rgba(255,255,255,0.8);">Fitness, Camping, Gear</p>
+                </div>
+            </div>
+            <div class="hero-mini-banner"
+                onclick="openDeliveryForm('Home & Living', 'Home Decor', 75.00, 'Home decor, furniture, and living essentials', 'images/banners/home.jpg')"
+                style="cursor: pointer; border-radius: 12px; overflow: hidden; position: relative; height: 180px;">
+                <img src="images/banners/home.jpg" alt="Home" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="hero-mini-banner-content"
+                    style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 30px 15px 15px;">
+                    <h4 style="color: white;">Home & Living</h4>
+                    <p style="color: rgba(255,255,255,0.8);">Decor, Furniture</p>
+                </div>
+            </div>
+            <div class="hero-mini-banner"
+                onclick="openDeliveryForm('Apparel', 'Wholesale Apparel', 35.00, 'Bulk apparel and fashion items at factory prices', 'images/SHOE10.jpg')"
+                style="cursor: pointer; border-radius: 12px; overflow: hidden; position: relative; height: 180px;">
+                <img src="images/SHOE10.jpg" alt="Wholesale" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="hero-mini-banner-content"
+                    style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 30px 15px 15px;">
+                    <h4 style="color: white;">Wholesale</h4>
+                    <p style="color: rgba(255,255,255,0.8);">Bulk Orders</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="container" style="padding: 48px 24px;">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Featured Products</h2>
+                <p class="section-subtitle">Handpicked selections from top suppliers</p>
+            </div>
+            <a href="product.html" class="btn btn-outline">View All</a>
+        </div>
+
+        <div class="product-grid" id="featuredProducts">
+            <!-- Products will be loaded by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Popular Suppliers Section -->
+    <section class="container"
+        style="padding: 48px 24px; background: var(--bg-secondary); border-radius: 16px; margin: 24px;">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Popular Suppliers</h2>
+                <p class="section-subtitle">Verified manufacturers and traders</p>
+            </div>
+            <a href="suppliers.html" class="btn btn-outline">View All Suppliers</a>
+        </div>
+
+        <div class="product-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));"
+            id="popularSuppliers">
+            <!-- Suppliers will be loaded by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Recommended Products Section -->
+    <section class="container" style="padding: 48px 24px;">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Recommended For You</h2>
+                <p class="section-subtitle">Personalized picks based on your interests</p>
+            </div>
+        </div>
+
+        <div class="product-grid" id="recommendedProducts">
+            <!-- Products will be loaded by JavaScript -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="pagination-btn" disabled>
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">4</button>
+            <button class="pagination-btn">5</button>
+            <button class="pagination-btn">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+            </button>
+        </div>
+    </section>
+
+    <!-- Trust Badges Section -->
+    <section class="container" style="padding: 48px 24px;">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+            <div style="text-align: center; padding: 24px;">
+                <div
+                    style="width: 60px; height: 60px; background: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <ion-icon name="shield-checkmark-outline"
+                        style="font-size: 28px; color: var(--primary-color);"></ion-icon>
+                </div>
+                <h4 style="font-weight: 600; margin-bottom: 8px;">Trade Assurance</h4>
+                <p style="font-size: 14px; color: var(--text-muted);">Protection on every order</p>
+            </div>
+            <div style="text-align: center; padding: 24px;">
+                <div
+                    style="width: 60px; height: 60px; background: #e0f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <ion-icon name="airplane-outline" style="font-size: 28px; color: #0284c7;"></ion-icon>
+                </div>
+                <h4 style="font-weight: 600; margin-bottom: 8px;">Fast Shipping</h4>
+                <p style="font-size: 14px; color: var(--text-muted);">Global logistics network</p>
+            </div>
+            <div style="text-align: center; padding: 24px;">
+                <div
+                    style="width: 60px; height: 60px; background: #fef3c7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <ion-icon name="headset-outline" style="font-size: 28px; color: #d97706;"></ion-icon>
+                </div>
+                <h4 style="font-weight: 600; margin-bottom: 8px;">24/7 Support</h4>
+                <p style="font-size: 14px; color: var(--text-muted);">Dedicated customer service</p>
+            </div>
+            <div style="text-align: center; padding: 24px;">
+                <div
+                    style="width: 60px; height: 60px; background: #fce7f3; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <ion-icon name="wallet-outline" style="font-size: 28px; color: #db2777;"></ion-icon>
+                </div>
+                <h4 style="font-weight: 600; margin-bottom: 8px;">Secure Payments</h4>
+                <p style="font-size: 14px; color: var(--text-muted);">Multiple payment options</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Get Support</h4>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="messages.html">Live Chat</a></li>
+                        <li><a href="orders.html">Check Order Status</a></li>
+                        <li><a href="product.html">Product Disputes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Trade Services</h4>
+                    <ul>
+                        <li><a href="trade.html">Trade Assurance</a></li>
+                        <li><a href="logistics.html">Logistics Service</a></li>
+                        <li><a href="production.html">Production Monitoring</a></li>
+                        <li><a href="inspection.html">Inspection Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>For Buyers</h4>
+                    <ul>
+                        <li><a href="suppliers.html">Find Suppliers</a></li>
+                        <li><a href="categories.html">Browse Categories</a></li>
+                        <li><a href="product.html">Product Alerts</a></li>
+                        <li><a href="ready-to-ship.html">Ready to Ship</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>For Suppliers</h4>
+                    <ul>
+                        <li><a href="register.html">Become a Supplier</a></li>
+                        <li><a href="trade.html">Supplier Membership</a></li>
+                        <li><a href="learning.html">Learning Center</a></li>
+                        <li><a href="messages.html">Community</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>About ALFRED</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="press.html">Press Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-social">
+                    <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
+                </div>
+                <p>&copy; 2024 ALFRED. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const nav = document.getElementById('mobileNav');
+            nav.classList.toggle('active');
+        }
+
+        // Load products on homepage
+        document.addEventListener('DOMContentLoaded', function () {
+            // Load featured products
+            if (document.getElementById('featuredProducts')) {
+                renderProductsModern(null, null, 'featuredProducts', 16);
+            }
+
+            // Load recommended products
+            if (document.getElementById('recommendedProducts')) {
+                renderProductsModern(null, null, 'recommendedProducts', 16);
+            }
+
+            // Load popular suppliers
+            if (document.getElementById('popularSuppliers')) {
+                renderSuppliers('popularSuppliers', 8);
+            }
+        });
+
+        // Check auth state
+        firebase.auth().onAuthStateChanged((user) => {
+            const userAction = document.getElementById('userAction');
+            if (user) {
+                userAction.innerHTML = `
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                    <span class="action-label">${user.displayName || 'My Account'}</span>
+                `;
+                userAction.href = 'orders.html';
+            }
+        });
+
+        // Current product for payment
+        let currentProduct = null;
+
+        // Open delivery form modal
+        function openDeliveryForm(category, title, price, desc, image) {
+            currentProduct = { category, title, price, desc, image };
+
+            document.getElementById('modalProductImg').src = image;
+            document.getElementById('modalProductTitle').textContent = title + ' - ' + category;
+            document.getElementById('modalProductPrice').textContent = 'GHS ' + price.toFixed(2);
+            document.getElementById('modalProductDesc').textContent = desc;
+
+            document.getElementById('deliveryModal').classList.add('active');
+        }
+
+        // Close delivery form modal
+        function closeDeliveryForm() {
+            document.getElementById('deliveryModal').classList.remove('active');
+            currentProduct = null;
+        }
+
+        // Process payment with Paystack
+        function processPayment() {
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phoneNumber').value;
+            const region = document.getElementById('region').value;
+            const city = document.getElementById('city').value;
+            const address = document.getElementById('address').value;
+            const quantity = document.getElementById('quantity').value;
+
+            if (!fullName || !phone || !region || !city || !address) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (!currentProduct) {
+                alert('No product selected');
+                return;
+            }
+
+            const totalAmount = currentProduct.price * quantity;
+
+            const paystack = new PaystackPop();
+            paystack.newTransaction({
+                key: 'pk_test_1234567890abcdefghijklmnopqrstuvwxyz',
+                amount: totalAmount * 100,
+                email: 'customer@email.com',
+                currency: 'GHS',
+                callback: function (response) {
+                    alert('Payment successful! Transaction reference: ' + response.reference);
+                    saveOrderToFirestore(fullName, phone, region, city, address, quantity);
+                    closeDeliveryForm();
+                },
+                onClose: function () {
+                    alert('Payment cancelled');
+                }
+            });
+        }
+
+        // Save order to Firestore
+        function saveOrderToFirestore(fullName, phone, region, city, address, quantity) {
+            if (typeof firebase !== 'undefined' && firebase.firestore) {
+                const db = firebase.firestore();
+                db.collection('orders').add({
+                    productTitle: currentProduct.title,
+                    category: currentProduct.category,
+                    productPrice: currentProduct.price,
+                    quantity: parseInt(quantity),
+                    totalPrice: currentProduct.price * quantity,
+                    customerName: fullName,
+                    phone: phone,
+                    region: region,
+                    city: city,
+                    address: address,
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    console.log('Order saved successfully');
+                }).catch((error) => {
+                    console.error('Error saving order: ', error);
+                });
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('deliveryModal')?.addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeDeliveryForm();
+            }
+        });
+    </script>
+
+    <!-- Delivery Form Modal -->
+    <div class="modal-overlay" id="deliveryModal"
+        style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+        <div
+            style="background: white; border-radius: 16px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease;">
+            <div
+                style="padding: 20px; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 18px; color: #1a1a1a;">Complete Your Order</h3>
+                <button onclick="closeDeliveryForm()"
+                    style="background: none; border: none; font-size: 24px; cursor: pointer; color: #8e8e8e;">&times;</button>
+            </div>
+            <div style="padding: 20px;">
+                <div
+                    style="display: flex; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #e5e5e5;">
+                    <img id="modalProductImg" src="" alt="Product"
+                        style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                    <div>
+                        <h4 id="modalProductTitle" style="font-size: 14px; margin-bottom: 5px;">Product Title</h4>
+                        <div id="modalProductPrice" style="font-size: 18px; font-weight: 700; color: #0abf53;">GHS 0.00
+                        </div>
+                        <p id="modalProductDesc" style="font-size: 12px; color: #8e8e8e; margin-top: 5px;">Description
+                        </p>
+                    </div>
+                </div>
+                <form id="deliveryForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px;">Full
+                                Name *</label>
+                            <input type="text" id="fullName" required placeholder="Your full name"
+                                style="width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px;">Phone
+                                Number *</label>
+                            <input type="tel" id="phoneNumber" required placeholder="0500000000"
+                                style="width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px;">WhatsApp
+                            Number (Optional)</label>
+                        <input type="tel" id="whatsappNumber" placeholder="WhatsApp number"
+                            style="width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px;">Region
+                                *</label>
+                            <select id="region" required
+                                style="width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px; background: white;">
+                                <option value="">Select Region</option>
+                                <option value="Greater Accra">Greater Accra</option>
+                                <option value="Ashanti">Ashanti</option>
+                                <option value="Central">Central</option>
+                                <option value="Eastern">Eastern</option>
+                                <option value="Western">Western</option>
+                                <option value="Volta">Volta</option>
+                                <option value="Northern">Northern</option>
+                                <option value="Upper East">Upper East</option>
+                                <option value="Upper West">Upper West</option>
+                                <option value="Bono">Bono</option>
+                                <option value="Bono East">Bono East</option>
+                                <option value="Ahafo">Ahafo</option>
+                                <option value="Savannah">Savannah</option>
+                                <option value="North East">North East</option>
+                                <option value="Oti">Oti</option>
+                                <option value="Western North">Western North</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label
+                                style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px;">City/Town
+                                *</label>
+                            <input type="text" id="city" required placeholder="Accra"
+                                style="width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px;">Delivery
+                            Address *</label>
+                        <textarea id="address" required placeholder="Street name, landmark" rows="2"
+                            style="width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px;"></textarea>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label
+                            style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px;">Quantity</label>
+                        <input type="number" id="quantity" value="1" min="1"
+                            style="width: 100px; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px;">
+                    </div>
+                </form>
+            </div>
+            <div style="padding: 20px; border-top: 1px solid #e5e5e5;">
+                <button onclick="processPayment()"
+                    style="width: 100%; padding: 15px; background: #0abf53; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">Pay
+                    Now</button>
+            </div>
+        </div>
+    </div>
 </body>
-</html>/html>
 
-
-
-
-
-
+</html>
