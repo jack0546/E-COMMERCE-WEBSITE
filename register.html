@@ -1,90 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Free - ALFRED PRODUCTS</title>
+    <title>Create Account - ALFRED</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#FF6600">
+    <meta name="theme-color" content="#0abf53">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="1.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
-    <meta name="google-signin-client_id" content="856741060528-u5vr34fu5sppbbhbd75it3p93nthk65r.apps.googleusercontent.com">
 </head>
-<body style="background: var(--bg-light);">
-    <div class="container" style="text-align: center; margin-top: 40px;">
-        <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo" style="height: 40px;"></a>
+
+<body>
+    <!-- Auth Page -->
+    <div class="auth-page">
+        <div class="auth-card" style="max-width: 500px;">
+            <div class="auth-header">
+                <a href="index.html" style="display: inline-block; margin-bottom: 24px;">
+                    <img src="1.png" alt="ALFRED" style="height: 40px;">
+                </a>
+                <h1>Create your account</h1>
+                <p>Join ALFRED and start trading globally</p>
+            </div>
+
+            <button class="btn btn-outline" onclick="signInWithGoogle()"
+                style="width: 100%; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px;">
+                <ion-icon name="logo-google" style="font-size: 20px; color: #4285F4;"></ion-icon> Sign up with Google
+            </button>
+
+            <div style="text-align: center; position: relative; margin: 24px 0;">
+                <hr style="border: none; border-top: 1px solid var(--border-color);">
+                <span
+                    style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--bg-primary); padding: 0 12px; font-size: 12px; color: var(--text-muted);">or
+                    sign up with email</span>
+            </div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" id="firstName" class="form-input" placeholder="First name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" id="lastName" class="form-input" placeholder="Last name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Business Email</label>
+                    <input type="email" id="regEmail" class="form-input" placeholder="your@company.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="regPassword" class="form-input"
+                        placeholder="Create a password (min 6 characters)" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Company Name (Optional)</label>
+                    <input type="text" id="companyName" class="form-input" placeholder="Your business name">
+                </div>
+                <div style="margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px;">
+                    <input type="checkbox" id="terms" style="margin-top: 4px; width: 18px; height: 18px;" required>
+                    <label for="terms" style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+                        I agree to the <a href="#" style="color: var(--primary-color);">Membership Agreement</a> and <a
+                            href="#" style="color: var(--primary-color);">Privacy Policy</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; border-radius: 8px; padding: 14px;">Create Account</button>
+            </form>
+
+            <div class="auth-footer" style="margin-top: 24px;">
+                Already have an account? <a href="login.html">Sign in</a>
+            </div>
+        </div>
     </div>
 
-    <main class="auth-container" style="max-width: 550px;">
-        <div class="auth-header">
-            <h2>Join Free</h2>
-            <p style="color: var(--text-muted); font-size: 14px; margin-top: 5px;">Expand your business possibilities with ALFRED PRODUCTS</p>
-        </div>
+    <script>
+        // Get redirect URL from query params
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect') || 'index.html';
+        const productId = urlParams.get('productId');
+        
+        // Register with email and password
+        function handleRegister(event) {
+            event.preventDefault();
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
 
-        <button class="btn btn-outline" onclick="signInWithGoogle()" style="width: 100%; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px;">
-            <ion-icon name="logo-google" style="font-size: 20px; color: #4285F4;"></ion-icon> Sign Up with Google
-        </button>
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Update user profile
+                    return userCredential.user.updateProfile({
+                        displayName: firstName + ' ' + lastName
+                    }).then(() => {
+                        // If there's a productId, add to cart first
+                        if (productId) {
+                            sessionStorage.setItem('pendingProductId', productId);
+                        }
+                        window.location.href = redirectUrl;
+                    });
+                })
+                .catch((error) => {
+                    alert('Registration failed: ' + error.message);
+                });
+        }
 
-        <div style="text-align: center; position: relative; margin: 20px 0;">
-            <hr style="border: none; border-top: 1px solid var(--border-color);">
-            <span style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--white); padding: 0 10px; font-size: 12px; color: var(--text-muted);">OR REGISTER WITH EMAIL</span>
-        </div>
-
-        <form action="#">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="form-group">
-                    <label>First Name</label>
-                    <input type="text" placeholder="First Name" required>
-                </div>
-                <div class="form-group">
-                    <label>Last Name</label>
-                    <input type="text" placeholder="Last Name" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Company Name</label>
-                <input type="text" placeholder="Your business name" required>
-            </div>
-            <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" placeholder="example@business.com" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" placeholder="Create a password" required>
-            </div>
-            <div style="margin-bottom: 25px; display: flex; align-items: flex-start; gap: 10px;">
-                <input type="checkbox" id="terms" style="margin-top: 4px;" required>
-                <label for="terms" style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
-                    I agree to the <a href="#" style="color: var(--primary-color);">Free Membership Agreement</a> and <a href="#" style="color: var(--primary-color);">Privacy Policy</a>.
-                </label>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 8px;">Create Account</button>
-        </form>
-
-        <div class="auth-footer">
-            Already have an account? <a href="login.html">Sign In</a>
-        </div>
-    </main>
-
-    <footer style="margin-top: 80px; padding-bottom: 40px;">
-        <div class="container" style="text-align: center; color: #999; font-size: 12px;">
-            <p>&copy; 2026 ALFRED PRODUCTS. All rights reserved.</p>
-        </div>
-    </footer>
+        // Sign in with Google
+        function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider)
+                .then((result) => {
+                    // If there's a productId, add to cart first
+                    if (productId) {
+                        sessionStorage.setItem('pendingProductId', productId);
+                    }
+                    window.location.href = redirectUrl;
+                })
+                .catch((error) => {
+                    alert('Google sign-in failed: ' + error.message);
+                });
+        }
+    </script>
 </body>
+
 </html>
-
-
