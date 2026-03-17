@@ -325,6 +325,10 @@
                     <button>Search</button>
                 </div>
                 <div class="header-actions" id="headerActions">
+                    <a href="#" class="action-item" onclick="viewCart(); return false;">
+                        <ion-icon name="wallet-outline"></ion-icon>
+                        <span>Checkout</span>
+                    </a>
                     <a href="login.html" class="action-item">
                         <ion-icon name="person-outline"></ion-icon>
                         <span>Sign In</span>
@@ -690,11 +694,15 @@
                     const stockSrc = `https://images.unsplash.com/featured/400x300?${encodedItem},${sector.id}&sig=${globalImgIndex}`;
 
                     subItemsHTML += `
-                        <div class="sub-category-card" onclick="openDeliveryForm('${item}', '${sector.name}', ${Math.floor(Math.random() * 200) + 20}, 'High-quality ${item.toLowerCase()} from verified suppliers', '${localSrc}')" style="cursor: pointer;">
+                        <div class="sub-category-card" onclick="openDeliveryForm('${sector.name}', '${item}', ${Math.floor(Math.random() * 200) + 20}, 'High-quality ${item.toLowerCase()} from verified suppliers', '${localSrc}')" style="cursor: pointer;">
                             <div class="sub-category-img">
-                                <img src="${localSrc}" loading="lazy" onerror="this.src='${stockSrc}'; this.onerror=null;" alt="${item}">
+                                <img src="${localSrc}" alt="${item}" onerror="this.src='https://via.placeholder.com/150?text=Product'; this.onerror=null;">
                             </div>
-                            <span class="sub-category-name">${item}</span>
+                            <div class="sub-category-info">
+                                <span class="sub-category-name">${item}</span>
+                                <span style="color: #0abf53; font-weight: bold;">GHS ${Math.floor(Math.random() * 200) + 20}</span>
+                                <button onclick="event.stopPropagation(); addProductToCart('${sector.name}', '${item}', ${Math.floor(Math.random() * 200) + 20}, 'High-quality ${item.toLowerCase()} from verified suppliers', '${localSrc}')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
+                            </div>
                         </div>
                     `;
                 });
@@ -883,6 +891,57 @@
             }
         });
     </script>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
+        <div style="background-color:#fefefe;margin:5% auto;padding:20px;border:1px solid #888;width:90%;max-width:600px;border-radius:10px;max-height:80vh;overflow-y:auto;">
+            <span onclick="closeCartModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
+            <h2>Your Cart</h2>
+            <div id="cartItems"></div>
+            <div style="margin-top:20px;border-top:2px solid #eee;padding-top:15px;">
+                <h3>Total: GHS <span id="cartTotal">0.00</span></h3>
+                <p style="color:#666;">Delivery Fee: GHS <span id="deliveryFee">0.00</span></p>
+                <p style="font-weight:bold;color:#0abf53;">Grand Total: GHS <span id="grandTotal">0.00</span></p>
+            </div>
+            <button onclick="checkoutCart()" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:15px;">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Delivery Form Modal -->
+    <div id="deliveryModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
+        <div style="background-color:#fefefe;margin:5% auto;padding:25px;border:1px solid #888;width:90%;max-width:500px;border-radius:10px;">
+            <span onclick="closeDeliveryModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
+            <h2>Delivery Information</h2>
+            <form id="deliveryForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="productCategory">
+                <input type="hidden" id="productTitle">
+                <input type="hidden" id="productPrice">
+                <input type="hidden" id="productDescription">
+                <input type="hidden" id="productImage">
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Full Name</label>
+                    <input type="text" id="fullName" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Phone Number</label>
+                    <input type="tel" id="phoneNumber" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Delivery Address</label>
+                    <textarea id="deliveryAddress" required rows="3" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;"></textarea>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Quantity</label>
+                    <input type="number" id="quantity" value="1" min="1" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Product</label>
+                    <div id="modalProductInfo" style="background:#f9f9f9;padding:10px;border-radius:5px;"></div>
+                </div>
+                <button type="submit" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">Make Payment</button>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>
