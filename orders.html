@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,19 +15,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
 </head>
+
 <body>
     <header>
         <div class="container">
             <div class="header-top">
                 <div class="logo">
-                   <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a>
+                    <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a>
                 </div>
                 <div class="header-actions" id="userHeaderActions">
                     <!-- Dynamic User Header -->
@@ -38,9 +40,10 @@
     <main class="container dashboard-container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
             <h2>Your Purchase History</h2>
-            <button class="btn btn-outline" onclick="auth.signOut().then(() => window.location.reload())" id="logoutBtn" style="display: none;">Logout</button>
+            <button class="btn btn-outline" onclick="auth.signOut().then(() => window.location.reload())" id="logoutBtn"
+                style="display: none;">Logout</button>
         </div>
-        
+
         <div id="ordersContainer">
             <div style="text-align: center; padding: 40px; color: var(--text-muted);">
                 <ion-icon name="sync-outline" style="font-size: 40px; animation: rotate 2s linear infinite;"></ion-icon>
@@ -51,14 +54,18 @@
         <div id="noOrdersMessage" style="display: none; text-align: center; padding: 60px 0;">
             <ion-icon name="bag-handle-outline" style="font-size: 80px; color: #eee;"></ion-icon>
             <h3 style="color: #999; margin-top: 20px;">No orders found yet.</h3>
-            <a href="index.html" class="btn btn-primary" style="display: inline-block; margin-top: 20px; text-decoration: none;">Explore Products</a>
+            <a href="index.html" class="btn btn-primary"
+                style="display: inline-block; margin-top: 20px; text-decoration: none;">Explore Products</a>
         </div>
     </main>
 
     <!-- Tracking Modal -->
-    <div id="trackingModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; justify-content: center; align-items: center;">
-        <div style="background: white; width: 90%; max-width: 600px; border-radius: 12px; padding: 40px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 80vh; overflow-y: auto;">
-            <span style="position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px;" onclick="closeTracking()">&times;</span>
+    <div id="trackingModal"
+        style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; justify-content: center; align-items: center;">
+        <div
+            style="background: white; width: 90%; max-width: 600px; border-radius: 12px; padding: 40px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 80vh; overflow-y: auto;">
+            <span style="position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px;"
+                onclick="closeTracking()">&times;</span>
             <h3 style="margin-bottom: 20px; color: var(--primary-color);">Order Details</h3>
             <div id="trackingContent">
                 <!-- Delivery Info will be injected here -->
@@ -67,11 +74,40 @@
     </div>
 
     <style>
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .order-detail-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .order-detail-group:last-child { border-bottom: none; }
-        .label { font-size: 11px; text-transform: uppercase; color: #999; font-weight: 700; margin-bottom: 5px; display: block; }
-        .value { font-size: 14px; color: #333; font-weight: 500; }
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .order-detail-group {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .order-detail-group:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #999;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .value {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
     </style>
 
     <script src="script.js"></script>
@@ -101,7 +137,7 @@
                         const order = doc.data();
                         const date = order.timestamp ? order.timestamp.toDate().toLocaleDateString() : 'Just now';
                         const firstItem = order.items[0];
-                        
+
                         const orderDiv = document.createElement('div');
                         orderDiv.className = 'order-card';
                         orderDiv.style.marginBottom = '20px';
@@ -141,7 +177,7 @@
                     const order = doc.data();
                     const delivery = order.delivery || {};
                     const date = order.timestamp ? order.timestamp.toDate().toLocaleString() : 'Just now';
-                    
+
                     content.innerHTML = `
                         <div class="order-detail-group">
                             <span class="label">Payment Status</span>
@@ -176,4 +212,5 @@
         }
     </script>
 </body>
+
 </html>
