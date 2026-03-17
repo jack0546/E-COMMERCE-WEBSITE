@@ -18,12 +18,13 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
 </head>
 <body>
     <header>
         <div class="container">
             <div class="header-top">
-                <div class="logo"><a href="index.html"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a></a></div>
+                <div class="logo"><a href="index.html"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a></a></div>
             </div>
             <nav>
                 <ul>
@@ -36,7 +37,7 @@
 
     <main class="container">
         <div style="margin-top: 20px; border-radius: 12px; overflow: hidden; position: relative; height: 350px;">
-            <img src="images/banners/shoes.jpg" onerror="this.src='https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200'; this.onerror=null;" alt="Shoes Banner" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="images/SHOE1.jpg" alt="Shoes Banner" style="width: 100%; height: 100%; object-fit: cover;">
             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: center; padding: 60px; color: white;">
                 <h1 style="font-size: 48px; margin-bottom: 10px;">Shoes & Footwear</h1>
                 <p style="font-size: 20px;">Step up your inventory with global footwear trends.</p>
@@ -45,10 +46,79 @@
 
         <section class="products">
             <h2 class="section-title">Latest Footwear</h2>
+            
+            <!-- Shoes Products Grid -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Running Shoes', 'Shoes', 95.00, 'Comfortable running shoes', 'images/SHOE5.jpg')">
+                    <img src="images/SHOE5.jpg" alt="Running" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Running Sports Shoes</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
+                    </div>
+                </div>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Casual Loafers', 'Shoes', 75.00, 'Comfortable casual loafers', 'images/SHOE6.jpg')">
+                    <img src="images/SHOE6.jpg" alt="Loafers" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Casual Loafers</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 75.00</p>
+                    </div>
+                </div>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Formal Shoes', 'Shoes', 120.00, 'Elegant formal shoes', 'images/SHOE7.jpg')">
+                    <img src="images/SHOE7.jpg" alt="Formal" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Formal Dress Shoes</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 120.00</p>
+                    </div>
+                </div>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Sneakers', 'Shoes', 45.00, 'Lightweight canvas sneakers', 'images/SHOE8.jpg')">
+                    <img src="images/SHOE8.jpg" alt="Sneakers" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Canvas Sneakers</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 45.00</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="product-grid" id="productGrid"></div>
         </section>
     </main>
     <script src="script.js"></script>
+    <script>
+        let currentProduct = null;
+        function openDeliveryForm(title, category, price, desc, image) {
+            currentProduct = { title, category, price, desc, image };
+            document.getElementById('modalProductImg').src = image;
+            document.getElementById('modalProductTitle').textContent = title;
+            document.getElementById('modalProductPrice').textContent = 'GHS ' + price.toFixed(2);
+            document.getElementById('modalProductDesc').textContent = desc;
+            document.getElementById('deliveryModal').classList.add('active');
+        }
+        function closeDeliveryForm() {
+            document.getElementById('deliveryModal').classList.remove('active');
+        }
+        function processPayment() {
+            alert('Thank you! Your order has been placed.');
+            closeDeliveryForm();
+        }
+    </script>
+
+    <!-- Delivery Modal -->
+    <div id="deliveryModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:1000; padding:20px;">
+        <div style="background:white; border-radius:16px; max-width:500px; margin:50px auto; padding:20px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                <h3>Complete Order</h3>
+                <button onclick="closeDeliveryForm()" style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+            </div>
+            <img id="modalProductImg" src="" style="width:100px; height:100px; object-fit:cover; border-radius:8px;">
+            <h4 id="modalProductTitle" style="margin:10px 0;"></h4>
+            <p id="modalProductPrice" style="font-size:20px; font-weight:bold; color:#0abf53;"></p>
+            <p id="modalProductDesc" style="font-size:12px; color:#666; margin:10px 0;"></p>
+            <input type="text" id="fullName" placeholder="Full Name" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
+            <input type="tel" id="phoneNumber" placeholder="Phone Number" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
+            <input type="text" id="address" placeholder="Delivery Address" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
+            <button onclick="processPayment()" style="width:100%; padding:15px; background:#0abf53; color:white; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer;">Pay Now</button>
+        </div>
+    </div>
 </body>
 </html>
 
