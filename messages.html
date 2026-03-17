@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,17 +15,86 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
+    <style>
+        /* AI Agent Styles */
+        .ai-agent-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .ai-agent-badge ion-icon {
+            font-size: 12px;
+        }
+
+        .ai-response-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 500;
+            width: fit-content;
+        }
+
+        .ai-response-indicator .dot {
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .message .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 9px;
+            padding: 1px 5px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .message .ai-badge ion-icon {
+            font-size: 10px;
+        }
+    </style>
 </head>
-<body style="background: var(--bg-light);">
+
+<body style="background: #f0f2f5;">
     <header>
         <div class="container">
             <div class="header-top">
                 <div class="logo">
-                   <a href="index.html"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a></a>
+                    <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a>
                 </div>
                 <div class="header-actions">
                     <a href="login.html" class="action-item">
@@ -44,53 +114,266 @@
         </div>
     </header>
 
-    <main class="container">
+    <main class="container" style="padding-top: 24px; padding-bottom: 24px;">
         <div class="messages-container">
+            <!-- Chat List Sidebar -->
             <div class="chat-list">
-                <div class="chat-item active">
-                    <h4 style="font-size: 14px;">Apparel Direct Co.</h4>
-                    <p style="font-size: 12px; color: var(--text-muted);">Yes, we can provide samples...</p>
-                    <span style="font-size: 10px; color: #999;">2h ago</span>
+                <div class="chat-list-header">
+                    <h3>Messages</h3>
                 </div>
-                <div class="chat-item">
-                    <h4 style="font-size: 14px;">TechSource Global</h4>
-                    <p style="font-size: 12px; color: var(--text-muted);">The tracking number is...</p>
-                    <span style="font-size: 10px; color: #999;">Yesterday</span>
+                <div class="chat-search">
+                    <input type="text" placeholder="Search conversations...">
                 </div>
-                <div class="chat-item">
-                    <h4 style="font-size: 14px;">Logistics Support</h4>
-                    <p style="font-size: 12px; color: var(--text-muted);">Your cargo has reached...</p>
-                    <span style="font-size: 10px; color: #999;">3 days ago</span>
+                <div class="chat-item active" data-supplier="apparel">
+                    <h4>Apparel Direct Co. <span class="unread-badge">2</span></h4>
+                    <p>Yes, we can provide samples...</p>
+                    <div class="chat-meta">
+                        <span>2h ago</span>
+                        <span class="online-status">Online</span>
+                    </div>
+                </div>
+                <div class="chat-item" data-supplier="tech">
+                    <h4>TechSource Global</h4>
+                    <p>The tracking number is...</p>
+                    <div class="chat-meta"><span>Yesterday</span></div>
+                </div>
+                <div class="chat-item" data-supplier="logistics">
+                    <h4>Logistics Support</h4>
+                    <p>Your cargo has reached...</p>
+                    <div class="chat-meta"><span>3 days ago</span></div>
+                </div>
+                <div class="chat-item" data-supplier="quality">
+                    <h4>Quality Assurance Ltd.</h4>
+                    <p>Inspection report is ready...</p>
+                    <div class="chat-meta"><span>1 week ago</span></div>
                 </div>
             </div>
-            
+
+            <!-- Chat Window -->
             <div class="chat-window">
                 <div class="chat-header">
-                    Apparel Direct Co.
+                    <div class="chat-header-info">
+                        <div class="chat-avatar">AD</div>
+                        <div class="chat-header-text">
+                            <h4 id="supplierName">Apparel Direct Co. <span class="ai-agent-badge"><ion-icon
+                                        name="sparkles"></ion-icon>AI</span></h4>
+                            <p>Online - AI replies instantly</p>
+                        </div>
+                    </div>
+                    <div class="chat-header-actions">
+                        <button title="Voice Call"><ion-icon name="call-outline"></ion-icon></button>
+                        <button title="Video Call"><ion-icon name="videocam-outline"></ion-icon></button>
+                        <button title="More Options"><ion-icon name="ellipsis-vertical-outline"></ion-icon></button>
+                    </div>
                 </div>
-                <div class="chat-history">
+
+                <div class="chat-history" id="chatHistory">
+                    <div class="chat-date-divider"><span>Today</span></div>
                     <div class="message message-in">
-                        Hello, I'm interested in your oversized cotton t-shirts. What is the MOQ for custom logos?
+                        Hello, I am interested in your oversized cotton t-shirts. What is the MOQ for custom logos?
+                        <div class="message-time">10:30 AM</div>
                     </div>
                     <div class="message message-out">
-                        Hi! Our standard MOQ for custom logos is 80 pieces per color.
+                        Hi! Our standard MOQ for custom logos is 80 pieces per color. We also offer sample production.
+                        <div class="message-time">10:32 AM <ion-icon name="checkmark-done-outline"></ion-icon></div>
+                    </div>
+                    <div class="message message-in">
+                        That sounds great! Can you also provide information about the fabric quality?
+                        <div class="message-time">10:35 AM</div>
+                    </div>
+                    <div class="message message-out">
+                        Absolutely! We use 100% organic cotton (180gsm). Available colors include white, black, navy,
+                        gray.
+                        <div class="message-time">10:38 AM <ion-icon name="checkmark-done-outline"></ion-icon></div>
                     </div>
                     <div class="message message-in">
                         Yes, we can provide samples. It will take about 5-7 days for shipping.
+                        <div class="message-time">10:45 AM</div>
                     </div>
                 </div>
+
                 <div class="chat-input">
-                    <input type="text" placeholder="Write a message...">
-                    <button class="btn btn-primary" style="padding: 10px 25px; border-radius: 20px;">Send</button>
+                    <div class="chat-input-wrapper">
+                        <button title="Attach File"><ion-icon name="attach-outline"></ion-icon></button>
+                        <input type="text" id="messageInput" placeholder="Write a message..." autocomplete="off">
+                        <button title="Emoji"><ion-icon name="happy-outline"></ion-icon></button>
+                    </div>
+                    <button class="chat-send-btn" id="sendBtn" title="Send Message">
+                        <ion-icon name="send-outline"></ion-icon>
+                    </button>
                 </div>
             </div>
         </div>
     </main>
+
+    <script>
+        // AI Agent Response System
+        var suppliers = {
+            apparel: {
+                name: "Apparel Direct Co.",
+                responses: {
+                    default: [
+                        "Thank you for your interest! I would be happy to help you with your inquiry about our products.",
+                        "Great question! Let me provide you with all the details you need.",
+                        "We appreciate your message. Here is what I can tell you..."
+                    ],
+                    moq: [
+                        "Our minimum order quantity (MOQ) is 80 pieces per color for custom logo printing. We also offer sample orders of 10-20 pieces.",
+                        "For custom branded apparel, the MOQ is typically 80 pieces per design/color. Bulk orders of 500+ qualify for discounted pricing."
+                    ],
+                    price: [
+                        "Our pricing depends on quantity, fabric, and customization. For 100+ pieces, prices start at $8.50 per unit.",
+                        "I would be happy to provide a custom quote! Could you please share your estimated quantity and preferred fabric?"
+                    ],
+                    sample: [
+                        "Yes, we offer sample production! Samples typically take 5-7 days and cost $15-25 per piece.",
+                        "We can definitely provide samples. The sample fee is refundable on orders of 100+ pieces."
+                    ],
+                    shipping: [
+                        "We offer worldwide shipping. Express delivery takes 3-5 days ($25/kg), standard takes 15-25 days ($8/kg).",
+                        "Shipping times vary by destination: Express (3-5 days), Standard (15-25 days). We ship to over 200 countries."
+                    ],
+                    quality: [
+                        "All our products undergo strict quality control. We use 100% organic cotton (GOTS certified).",
+                        "Quality is our priority. All items are inspected before shipping and we can provide QC reports upon request."
+                    ],
+                    colors: [
+                        "We offer 20+ standard colors including white, black, navy, gray, red, blue, green, and more.",
+                        "Our color catalog includes popular shades. Custom color matching is available for bulk orders."
+                    ],
+                    payment: [
+                        "We accept T/T, L/C, PayPal, and Western Union. For first orders, we require 30% deposit with balance before shipping.",
+                        "Payment terms: 30% deposit, 70% before shipment."
+                    ],
+                    custom: [
+                        "Absolutely! We specialize in custom manufacturing. Please share your design specifications.",
+                        "Yes, we do custom work all the time! We need: 1) Your design, 2) Quantity, 3) Fabric preference, 4) Timeline."
+                    ]
+                }
+            },
+            tech: {
+                name: "TechSource Global",
+                responses: {
+                    default: ["Thank you for contacting TechSource Global. How can I assist you today?"],
+                    shipping: ["Your order has been tracked. Expected delivery: 3-5 business days."],
+                    warranty: ["All our products come with a 1-year manufacturer warranty."]
+                }
+            },
+            logistics: {
+                name: "Logistics Support",
+                responses: {
+                    default: ["Logistics Support is here to help track and manage your shipments."],
+                    tracking: ["Your cargo is currently in transit. Expected delivery: 3-5 business days."]
+                }
+            },
+            quality: {
+                name: "Quality Assurance Ltd.",
+                responses: {
+                    default: ["Quality Assurance Ltd. is here to ensure your products meet international standards."],
+                    inspection: ["Our inspection services include pre-shipment, during production, and container loading inspection."]
+                }
+            }
+        };
+
+        var currentSupplier = 'apparel';
+        var isTyping = false;
+
+        function analyzeMessage(message) {
+            var msg = message.toLowerCase();
+            if (msg.indexOf('moq') !== -1 || msg.indexOf('minimum') !== -1 || msg.indexOf('quantity') !== -1) return 'moq';
+            if (msg.indexOf('price') !== -1 || msg.indexOf('cost') !== -1 || msg.indexOf('pricing') !== -1) return 'price';
+            if (msg.indexOf('sample') !== -1 || msg.indexOf('prototype') !== -1 || msg.indexOf('tech pack') !== -1) return 'sample';
+            if (msg.indexOf('ship') !== -1 || msg.indexOf('delivery') !== -1 || msg.indexOf('track') !== -1) return 'shipping';
+            if (msg.indexOf('quality') !== -1 || msg.indexOf('fabric') !== -1 || msg.indexOf('material') !== -1 || msg.indexOf('cotton') !== -1) return 'quality';
+            if (msg.indexOf('color') !== -1) return 'colors';
+            if (msg.indexOf('payment') !== -1 || msg.indexOf('pay') !== -1 || msg.indexOf('credit') !== -1) return 'payment';
+            if (msg.indexOf('custom') !== -1 || msg.indexOf('brand') !== -1 || msg.indexOf('logo') !== -1 || msg.indexOf('design') !== -1) return 'custom';
+            if (msg.indexOf('warranty') !== -1 || msg.indexOf('guarantee') !== -1) return 'warranty';
+            if (msg.indexOf('inspection') !== -1 || msg.indexOf('qc') !== -1) return 'inspection';
+            if (msg.indexOf('track') !== -1) return 'tracking';
+            return 'default';
+        }
+
+        function generateResponse(message) {
+            var supplier = suppliers[currentSupplier];
+            var category = analyzeMessage(message);
+            var responses = supplier.responses[category] || supplier.responses['default'];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function addMessage(text, type) {
+            var chatHistory = document.getElementById('chatHistory');
+            var time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+            var messageDiv = document.createElement('div');
+            messageDiv.className = 'message message-' + type;
+            messageDiv.innerHTML = text + '<div class="message-time">' + time + (type === 'out' ? ' <ion-icon name="checkmark-done-outline"></ion-icon>' : '<span class="ai-badge"><ion-icon name="sparkles"></ion-icon>AI</span>') + '</div>';
+
+            chatHistory.appendChild(messageDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function showTyping() {
+            var chatHistory = document.getElementById('chatHistory');
+            isTyping = true;
+
+            var typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-response-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<span class="dot"></span><span>AI is thinking...</span>';
+
+            chatHistory.appendChild(typingDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function hideTyping() {
+            var indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+            isTyping = false;
+        }
+
+        function sendMessage() {
+            var input = document.getElementById('messageInput');
+            var message = input.value.trim();
+            if (message && !isTyping) {
+                addMessage(message, 'out');
+                input.value = '';
+                showTyping();
+
+                setTimeout(function () {
+                    hideTyping();
+                    addMessage(generateResponse(message), 'in');
+                }, 1500);
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        document.getElementById('messageInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Chat item click handlers
+        var chatItems = document.querySelectorAll('.chat-item');
+        for (var i = 0; i < chatItems.length; i++) {
+            chatItems[i].addEventListener('click', function () {
+                var items = document.querySelectorAll('.chat-item');
+                for (var j = 0; j < items.length; j++) {
+                    items[j].classList.remove('active');
+                }
+                this.classList.add('active');
+
+                currentSupplier = this.getAttribute('data-supplier');
+                var supplier = suppliers[currentSupplier];
+                document.querySelector('.chat-avatar').textContent = supplier.name.substring(0, 2).toUpperCase();
+                document.getElementById('supplierName').innerHTML = supplier.name + ' <span class="ai-agent-badge"><ion-icon name="sparkles"></ion-icon>AI</span>';
+
+                var chatHistory = document.getElementById('chatHistory');
+                var time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                chatHistory.innerHTML = '<div class="chat-date-divider"><span>Today</span></div><div class="message message-in">Hello! Welcome to ' + supplier.name + '. How can I assist you today?<div class="message-time">' + time + '</div></div>';
+            });
+        }
+    </script>
 </body>
+
 </html>
-
-
-
-
-
-
