@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Featured Products - ALFRED</title>
+    <title>Featured Products - ALFRED PRODUCTS</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0abf53">
+    <meta name="theme-color" content="#FF6600">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="1.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -21,264 +21,7 @@
     <script src="firebase-config.js"></script>
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
-        /* Weekly Page Specific Styles */
-        .weekly-header {
-            background: linear-gradient(135deg, #FF6600 0%, #FF9900 100%);
-            padding: 40px;
-            border-radius: 16px;
-            color: white;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .weekly-header h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .weekly-header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        /* Navigation Tabs with Images */
-        .nav-tabs-container {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .nav-tab-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 80px;
-            padding: 15px 10px;
-            border-radius: 12px;
-            background: var(--bg-primary);
-            border: 2px solid var(--border-color);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .nav-tab-item:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .nav-tab-item.active {
-            border-color: var(--primary-color);
-            background: var(--primary-light);
-        }
-
-        .nav-tab-item .tab-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-            font-size: 20px;
-        }
-
-        .nav-tab-item .tab-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .nav-tab-item .tab-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-primary);
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        /* Color variations for tabs */
-        .nav-tab-item:nth-child(1) .tab-icon {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .nav-tab-item:nth-child(2) .tab-icon {
-            background: #fff3e0;
-            color: #f57c00;
-        }
-
-        .nav-tab-item:nth-child(3) .tab-icon {
-            background: #e8f5e9;
-            color: #388e3c;
-        }
-
-        .nav-tab-item:nth-child(4) .tab-icon {
-            background: #fce4ec;
-            color: #c2185b;
-        }
-
-        .nav-tab-item:nth-child(5) .tab-icon {
-            background: #fff8e1;
-            color: #ffa000;
-        }
-
-        .nav-tab-item:nth-child(6) .tab-icon {
-            background: #e0f7fa;
-            color: #0097a7;
-        }
-
-        .nav-tab-item:nth-child(7) .tab-icon {
-            background: #f3e5f5;
-            color: #7b1fa2;
-        }
-
-        .nav-tab-item:nth-child(8) .tab-icon {
-            background: #efebe9;
-            color: #5d4037;
-        }
-
-        /* Product Grid */
-        .weekly-product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .weekly-product-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .weekly-product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .weekly-product-card .product-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: #f5f5f5;
-        }
-
-        .weekly-product-card .product-details {
-            padding: 15px;
-        }
-
-        .weekly-product-card .product-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .weekly-product-card .product-price {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 8px;
-        }
-
-        .weekly-product-card .product-desc {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .weekly-product-card .product-btn {
-            width: 100%;
-            padding: 10px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .weekly-product-card .product-btn:hover {
-            background: var(--primary-hover);
-        }
-
-        /* Market Categories Section */
-        .market-categories {
-            margin-top: 40px;
-        }
-
-        .market-categories h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-
-        .market-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-        }
-
-        .market-card {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            aspect-ratio: 1;
-            background: #f5f5f5;
-        }
-
-        .market-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .market-card:hover img {
-            transform: scale(1.1);
-        }
-
-        .market-card .market-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-            padding: 30px 15px 15px;
-            color: white;
-        }
-
-        .market-card .market-title {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .market-card .market-desc {
-            font-size: 11px;
-            opacity: 0.8;
-        }
-
-        /* Delivery Form Modal */
+        /* Modal Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -312,7 +55,6 @@
                 transform: translateY(50px);
                 opacity: 0;
             }
-
             to {
                 transform: translateY(0);
                 opacity: 1;
@@ -328,53 +70,48 @@
         }
 
         .modal-header h3 {
-            font-size: 18px;
-            color: var(--text-primary);
+            margin: 0;
+            font-size: 20px;
         }
 
         .modal-close {
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
-            color: var(--text-muted);
+            color: #666;
+            line-height: 1;
         }
 
         .modal-body {
             padding: 20px;
         }
 
-        .modal-product-info {
+        .product-info {
             display: flex;
             gap: 15px;
             margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
         }
 
-        .modal-product-img {
+        .product-info img {
             width: 80px;
             height: 80px;
             object-fit: cover;
             border-radius: 8px;
         }
 
-        .modal-product-details h4 {
-            font-size: 14px;
-            margin-bottom: 5px;
+        .product-info-details h4 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
         }
 
-        .modal-product-details .price {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
+        .product-info-details p {
+            margin: 0;
+            color: #0abf53;
+            font-weight: bold;
         }
 
         .form-group {
@@ -383,373 +120,119 @@
 
         .form-group label {
             display: block;
-            font-size: 12px;
-            font-weight: 600;
             margin-bottom: 5px;
-            color: var(--text-primary);
+            font-weight: 600;
+            color: #333;
         }
 
         .form-group input,
-        .form-group select,
         .form-group textarea {
             width: 100%;
             padding: 12px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 14px;
-            transition: border-color 0.3s ease;
+            box-sizing: border-box;
         }
 
         .form-group input:focus,
-        .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: #FF6600;
         }
 
-        .modal-footer {
-            padding: 20px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .payment-btn {
+        .submit-btn {
             width: 100%;
             padding: 15px;
-            background: var(--primary-color);
+            background: #0abf53;
             color: white;
             border: none;
             border-radius: 8px;
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background 0.3s;
         }
 
-        .payment-btn:hover {
-            background: var(--primary-hover);
-        }
-
-        /* Loading state */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-        }
-
-        /* No products message */
-        .no-products {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-muted);
-        }
-
-        .no-products ion-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
+        .submit-btn:hover {
+            background: #089e47;
         }
     </style>
 </head>
 
 <body>
-    <!-- Mobile Navigation -->
-    <div class="mobile-nav" id="mobileNav">
-        <div class="mobile-nav-header">
-            <div class="navbar-brand">
-                <img src="1.png" alt="ALFRED" style="height: 28px;">
-                <span class="brand-text">ALFRED</span>
-            </div>
-            <button class="mobile-nav-close" onclick="toggleMobileMenu()">
-                <ion-icon name="close-outline"></ion-icon>
-            </button>
-        </div>
-        <ul>
-            <li><a href="categories.html"><ion-icon name="grid-outline"></ion-icon> All Categories</a></li>
-            <li><a href="suppliers.html"><ion-icon name="business-outline"></ion-icon> Find Suppliers</a></li>
-            <li><a href="product.html"><ion-icon name="cube-outline"></ion-icon> Featured Products</a></li>
-            <li><a href="cart.html"><ion-icon name="cart-outline"></ion-icon> Shopping Cart</a></li>
-            <li><a href="login.html"><ion-icon name="person-outline"></ion-icon> Sign In</a></li>
-            <li><a href="register.html"><ion-icon name="person-add-outline"></ion-icon> Create Account</a></li>
-            <li><a href="orders.html"><ion-icon name="receipt-outline"></ion-icon> My Orders</a></li>
-            <li><a href="help.html"><ion-icon name="help-circle-outline"></ion-icon> Help Center</a></li>
-        </ul>
-    </div>
-
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container navbar-container">
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                <ion-icon name="menu-outline"></ion-icon>
-            </button>
-
-            <div class="navbar-brand">
-                <a href="index.html">
-                    <img src="1.png" alt="ALFRED">
-                </a>
-            </div>
-
-            <div class="navbar-search">
-                <div class="search-wrapper">
-                    <input type="text" placeholder="Search products, suppliers, categories...">
-                    <button type="submit">
-                        <ion-icon name="search-outline"></ion-icon>
-                        Search
-                    </button>
-                </div>
-            </div>
-
-            <div class="navbar-actions">
-                <a href="#" class="navbar-action">
-                    <ion-icon name="globe-outline"></ion-icon>
-                    <span class="action-label">EN</span>
-                </a>
-                <a href="cart.html" class="navbar-action">
-                    <ion-icon name="cart-outline"></ion-icon>
-                    <span class="action-label">Cart</span>
-                    <span class="badge" id="cartBadge">0</span>
-                </a>
-                <a href="orders.html" class="navbar-action">
-                    <ion-icon name="receipt-outline"></ion-icon>
-                    <span class="action-label">Orders</span>
-                </a>
-                <a href="messages.html" class="navbar-action">
-                    <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-                    <span class="action-label">Messages</span>
-                </a>
-                <a href="login.html" class="navbar-action" id="userAction">
-                    <ion-icon name="person-outline"></ion-icon>
-                    <span class="action-label">Sign In</span>
-                </a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Category Menu -->
-    <div class="navbar-menu">
+    <header>
         <div class="container">
-            <a href="categories.html" class="navbar-menu-item" style="font-weight: 700;">
-                <ion-icon name="grid-outline"></ion-icon> All Categories
-            </a>
-            <a href="suppliers.html" class="navbar-menu-item">Find Suppliers</a>
-            <a href="featured.html" class="navbar-menu-item" style="color: var(--primary-color);">Featured Products</a>
-            <a href="ready-to-ship.html" class="navbar-menu-item">Ready to Ship</a>
-            <a href="trade.html" class="navbar-menu-item">Trade Assurance</a>
-            <a href="help.html" class="navbar-menu-item">Help Center</a>
+            <div class="header-top">
+                <div class="logo"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a></div>
+                <div class="header-actions">
+                    <a href="login.html" class="action-item"><ion-icon name="person-outline"></ion-icon><span>Sign In</span></a>
+                    <a href="messages.html" class="action-item"><ion-icon name="mail-outline"></ion-icon><span>Messages</span></a>
+                    <a href="orders.html" class="action-item"><ion-icon name="cart-outline"></ion-icon><span>Orders</span></a>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="categories.html">All Categories</a></li>
+                    <li><a href="featured.html" class="active">Featured Products</a></li>
+                    <li><a href="trade.html">Trade Assurance</a></li>
+                    <li><a href="logistics.html">Logistics Services</a></li>
+                    <li><a href="help.html">Help Center</a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <!-- Main Content -->
-    <main class="container" style="padding: 30px 0;">
-        <!-- Weekly Header -->
-        <div class="weekly-header">
-            <h1>Weekly Featured Products</h1>
-            <p>Handpicked premium quality items from verified suppliers - Updated weekly</p>
-        </div>
-
-        <!-- Navigation Tabs -->
-        <div class="nav-tabs-container">
-            <a href="login.html" class="nav-tab-item">
-                <div class="tab-icon">
-                    <ion-icon name="person-outline"></ion-icon>
-                </div>
-                <span class="tab-label">Sign In</span>
-            </a>
-            <a href="messages.html" class="nav-tab-item">
-                <div class="tab-icon">
-                    <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-                </div>
-                <span class="tab-label">Messages</span>
-            </a>
-            <a href="orders.html" class="nav-tab-item">
-                <div class="tab-icon">
-                    <ion-icon name="receipt-outline"></ion-icon>
-                </div>
-                <span class="tab-label">Orders</span>
-            </a>
-            <a href="categories.html" class="nav-tab-item">
-                <div class="tab-icon">
-                    <ion-icon name="grid-outline"></ion-icon>
-                </div>
-                <span class="tab-label">All Categories</span>
-            </a>
-            <a href="featured.html" class="nav-tab-item active">
-                <div class="tab-icon">
-                    <ion-icon name="star-outline"></ion-icon>
-                </div>
-                <span class="tab-label">Featured Products</span>
-            </a>
-            <a href="trade.html" class="nav-tab-item">
-                <div class="tab-icon">
-                    <ion-icon name="shield-checkmark-outline"></ion-icon>
-                </div>
-                <span class="tab-label">Trade Assurance</span>
-            </a>
-            <a href="logistics.html" class="nav-tab-item">
-                <div class="tab-icon">
-                    <ion-icon name="airplane-outline"></ion-icon>
-                </div>
-                <span class="tab-label">Logistics</span>
-            </a>
-            <a href="help.html" class="nav-tab-item">
-                <div class="tab-icon">
-                    <ion-icon name="help-circle-outline"></ion-icon>
-                </div>
-                <span class="tab-label">Help Center</span>
-            </a>
-        </div>
-
-        <!-- Products Grid -->
-        <div class="weekly-product-grid" id="productGrid">
-            <div class="loading">
-                <ion-icon name="hourglass-outline" style="font-size: 40px; margin-bottom: 10px;"></ion-icon>
-                <p>Loading products...</p>
+    <main class="container">
+        <div style="margin-top: 20px; border-radius: 12px; overflow: hidden; position: relative; height: 350px;">
+            <img src="images/banners/home.jpg" alt="Featured Banner" style="width: 100%; height: 100%; object-fit: cover;">
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: center; padding: 60px; color: white;">
+                <h1 style="font-size: 48px; margin-bottom: 10px;">Featured Products</h1>
+                <p style="font-size: 20px;">Discover our handpicked selection of premium products</p>
             </div>
         </div>
 
-        <!-- Market Categories -->
-        <div class="market-categories">
-            <h2>All Categories</h2>
-            <div class="market-grid">
-                <div class="market-card"
-                    onclick="openDeliveryForm(1, 'Premium Apparel Collection', 45.00, 'High-quality cotton t-shirts, hoodies, and sweatshirts from verified manufacturers', 'images/SHOE1.jpg')">
-                    <img src="images/SHOE1.jpg" alt="Apparel">
-                    <div class="market-overlay">
-                        <div class="market-title">Apparel & Fashion</div>
-                        <div class="market-desc">T-shirts, Hoodies, Dresses</div>
-                    </div>
-                </div>
-                <div class="market-card"
-                    onclick="openDeliveryForm(2, 'Electronics & Gadgets', 120.00, 'Latest smartphones, tablets, and accessories', 'images/SMART1.jpg')">
-                    <img src="images/SMART1.jpg" alt="Electronics">
-                    <div class="market-overlay">
-                        <div class="market-title">Electronics</div>
-                        <div class="market-desc">Phones, Tablets, Accessories</div>
-                    </div>
-                </div>
-                <div class="market-card"
-                    onclick="openDeliveryForm(3, 'Beauty & Personal Care', 35.00, 'Skincare, cosmetics, and beauty products', 'images/image1.jpg')">
-                    <img src="images/image1.jpg" alt="Beauty">
-                    <div class="market-overlay">
-                        <div class="market-title">Beauty & Care</div>
-                        <div class="market-desc">Skincare, Cosmetics</div>
-                    </div>
-                </div>
-                <div class="market-card"
-                    onclick="openDeliveryForm(4, 'Luggage & Bags Collection', 55.00, 'Travel bags, backpacks, and fashion bags', 'images/BAG1.jpg')">
-                    <img src="images/BAG1.jpg" alt="Bags">
-                    <div class="market-overlay">
-                        <div class="market-title">Luggage & Bags</div>
-                        <div class="market-desc">Backpacks, Travel Bags</div>
-                    </div>
-                </div>
-                <div class="market-card"
-                    onclick="openDeliveryForm(5, 'Shoes & Footwear', 65.00, 'Sports shoes, formal shoes, and sandals', 'images/SHOE5.jpg')">
-                    <img src="images/SHOE5.jpg" alt="Shoes">
-                    <div class="market-overlay">
-                        <div class="market-title">Shoes & Footwear</div>
-                        <div class="market-desc">Sports, Formal, Casuals</div>
-                    </div>
-                </div>
-                <div class="market-card"
-                    onclick="openDeliveryForm(6, 'Sports & Outdoors', 48.00, 'Fitness equipment, outdoor gear, and sports accessories', 'images/image5.jpg')">
-                    <img src="images/image5.jpg" alt="Sports">
-                    <div class="market-overlay">
-                        <div class="market-title">Sports & Outdoors</div>
-                        <div class="market-desc">Fitness, Camping, Gear</div>
-                    </div>
-                </div>
-                <div class="market-card"
-                    onclick="openDeliveryForm(7, 'Industrial Machinery', 250.00, 'Industrial equipment and machinery parts', 'images/banners/industrial.jpg')">
-                    <img src="images/banners/industrial.jpg" alt="Industrial">
-                    <div class="market-overlay">
-                        <div class="market-title">Industrial</div>
-                        <div class="market-desc">Machinery, Equipment</div>
-                    </div>
-                </div>
-                <div class="market-card"
-                    onclick="openDeliveryForm(8, 'Home & Living', 75.00, 'Home decor, furniture, and living essentials', 'images/banners/home.jpg')">
-                    <img src="images/banners/home.jpg" alt="Home">
-                    <div class="market-overlay">
-                        <div class="market-title">Home & Living</div>
-                        <div class="market-desc">Decor, Furniture</div>
-                    </div>
-                </div>
+        <section class="products">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="product-grid" id="productGrid">
+                <!-- Products will be loaded here by script.js -->
             </div>
-        </div>
+        </section>
     </main>
 
     <!-- Delivery Form Modal -->
-    <div class="modal-overlay" id="deliveryModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Complete Your Order</h3>
-                <button class="modal-close" onclick="closeDeliveryForm()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-product-info">
-                    <img src="" alt="Product" class="modal-product-img" id="modalProductImg">
-                    <div class="modal-product-details">
-                        <h4 id="modalProductTitle">Product Title</h4>
-                        <div class="price" id="modalProductPrice">GHS 0.00</div>
-                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;" id="modalProductDesc">
-                            Description</p>
-                    </div>
+    <div id="deliveryModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
+        <div style="background-color:#fefefe;margin:5% auto;padding:25px;border:1px solid #888;width:90%;max-width:500px;border-radius:10px;">
+            <span onclick="closeDeliveryModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
+            <h2>Delivery Information</h2>
+            <form id="deliveryForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="productCategory">
+                <input type="hidden" id="productTitle">
+                <input type="hidden" id="productPrice">
+                <input type="hidden" id="productDescription">
+                <input type="hidden" id="productImage">
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Full Name</label>
+                    <input type="text" id="fullName" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
                 </div>
-                <form id="deliveryForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Full Name *</label>
-                            <input type="text" id="fullName" required placeholder="Your full name">
-                        </div>
-                        <div class="form-group">
-                            <label>Phone Number *</label>
-                            <input type="tel" id="phoneNumber" required placeholder="0500000000">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>WhatsApp Number (Optional)</label>
-                        <input type="tel" id="whatsappNumber" placeholder="WhatsApp number">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Region *</label>
-                            <select id="region" required>
-                                <option value="">Select Region</option>
-                                <option value="Greater Accra">Greater Accra</option>
-                                <option value="Ashanti">Ashanti</option>
-                                <option value="Central">Central</option>
-                                <option value="Eastern">Eastern</option>
-                                <option value="Western">Western</option>
-                                <option value="Volta">Volta</option>
-                                <option value="Northern">Northern</option>
-                                <option value="Upper East">Upper East</option>
-                                <option value="Upper West">Upper West</option>
-                                <option value="Bono">Bono</option>
-                                <option value="Bono East">Bono East</option>
-                                <option value="Ahafo">Ahafo</option>
-                                <option value="Savannah">Savannah</option>
-                                <option value="North East">North East</option>
-                                <option value="Oti">Oti</option>
-                                <option value="Western North">Western North</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>City/Town *</label>
-                            <input type="text" id="city" required placeholder="Accra">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Delivery Address *</label>
-                        <textarea id="address" required placeholder="Street name, landmark" rows="2"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Quantity</label>
-                        <input type="number" id="quantity" value="1" min="1" style="width: 100px;">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="payment-btn" onclick="processPayment()">Pay Now</button>
-            </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Phone Number</label>
+                    <input type="tel" id="phoneNumber" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Delivery Address</label>
+                    <textarea id="deliveryAddress" required rows="3" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;"></textarea>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Quantity</label>
+                    <input type="number" id="quantity" value="1" min="1" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Product</label>
+                    <div id="modalProductInfo" style="background:#f9f9f9;padding:10px;border-radius:5px;"></div>
+                </div>
+                <button type="submit" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">Make Payment</button>
+            </form>
         </div>
     </div>
 
@@ -757,142 +240,105 @@
     <script>
         // Current product for payment
         let currentProduct = null;
-
-        // Sample product data for the weekly page
-        const weeklyProducts = [
-            { id: 1, title: "Premium Cotton T-Shirt - Custom Logo", price: "GHS 45.00", desc: "100% organic cotton, available in 12 colors, perfect for branding", image: "images/SHOE1.jpg" },
-            { id: 2, title: "Wireless Bluetooth Earbuds", price: "GHS 120.00", desc: "High-quality sound, long battery life", image: "images/SMART1.jpg" },
-            { id: 3, title: "Luxury Skincare Set", price: "GHS 85.00", desc: "Premium skincare products for all skin types", image: "images/image1.jpg" },
-            { id: 4, title: "Designer Leather Bag", price: "GHS 150.00", desc: "Genuine leather, multiple compartments", image: "images/BAG1.jpg" },
-            { id: 5, title: "Running Sports Shoes", price: "GHS 95.00", desc: "Comfortable and durable for daily use", image: "images/SHOE5.jpg" },
-            { id: 6, title: "Fitness Yoga Mat", price: "GHS 35.00", desc: "Non-slip, eco-friendly material", image: "images/image5.jpg" },
-            { id: 7, title: "Smart Watch Series 5", price: "GHS 280.00", desc: "Fitness tracking, notifications, water resistant", image: "images/SMART2.jpg" },
-            { id: 8, title: "Portable Power Bank 20000mAh", price: "GHS 65.00", desc: "Fast charging, multiple ports", image: "images/SMART3.jpg" },
-        ];
-
-        // Load products on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            renderWeeklyProducts();
-        });
-
-        // Render weekly products
-        function renderWeeklyProducts() {
-            const grid = document.getElementById('productGrid');
-
-            if (weeklyProducts.length === 0) {
-                grid.innerHTML = `
-                    <div class="no-products">
-                        <ion-icon name="cube-outline"></ion-icon>
-                        <h3>No products available</h3>
-                        <p>Check back later for new products</p>
+        
+        function openDeliveryForm(category, title, price, desc, image) {
+            currentProduct = { category, title, price, desc, image };
+            
+            const modal = document.getElementById('deliveryModal');
+            if (modal) {
+                document.getElementById('modalProductImg').src = image;
+                document.getElementById('modalProductTitle').textContent = title + ' - ' + category;
+                document.getElementById('modalProductPrice').textContent = 'GHS ' + parseFloat(price).toFixed(2);
+            }
+            
+            // Set hidden form values
+            document.getElementById('productCategory').value = category;
+            document.getElementById('productTitle').value = title;
+            document.getElementById('productPrice').value = price;
+            document.getElementById('productDescription').value = desc;
+            document.getElementById('productImage').value = image;
+            
+            const modalProductInfo = document.getElementById('modalProductInfo');
+            if (modalProductInfo) {
+                modalProductInfo.innerHTML = `
+                    <img src="${image}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;float:left;margin-right:10px;">
+                    <div>
+                        <strong>${title}</strong><br>
+                        <span style="color:#0abf53;">GHS ${parseFloat(price).toFixed(2)}</span>
                     </div>
                 `;
-                return;
             }
-
-            grid.innerHTML = weeklyProducts.map(product => `
-                <div class="weekly-product-card" onclick="openDeliveryForm(${product.id}, '${product.title}', ${parseFloat(product.price.replace('GHS ', ''))}, '${product.desc}', '${product.image}')">
-                    <img src="${product.image}" alt="${product.title}" class="product-img" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTIeMmUzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSI+SW1hZ2UgTm90IEF2YWlsYWJsZTwvdGV4dD48L3N2Zz4=';">
-                    <div class="product-details">
-                        <h3 class="product-title">${product.title}</h3>
-                        <div class="product-price">${product.price}</div>
-                        <p class="product-desc">${product.desc}</p>
-                        <button class="product-btn">Buy Now</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Open delivery form modal
-        function openDeliveryForm(id, title, price, desc, image) {
-            currentProduct = { id, title, price, desc, image };
-
-            document.getElementById('modalProductImg').src = image;
-            document.getElementById('modalProductTitle').textContent = title;
-            document.getElementById('modalProductPrice').textContent = 'GHS ' + price.toFixed(2);
-            document.getElementById('modalProductDesc').textContent = desc;
-
-            document.getElementById('deliveryModal').classList.add('active');
-        }
-
-        // Close delivery form modal
-        function closeDeliveryForm() {
-            document.getElementById('deliveryModal').classList.remove('active');
-            currentProduct = null;
-        }
-
-        // Process payment with Paystack
-        function processPayment() {
-            const fullName = document.getElementById('fullName').value;
-            const phone = document.getElementById('phoneNumber').value;
-            const region = document.getElementById('region').value;
-            const city = document.getElementById('city').value;
-            const address = document.getElementById('address').value;
-            const quantity = document.getElementById('quantity').value;
-
-            // Validate form
-            if (!fullName || !phone || !region || !city || !address) {
-                alert('Please fill in all required fields');
-                return;
+            
+            const modalEl = document.getElementById('deliveryModal');
+            if (modalEl) {
+                modalEl.style.display = 'block';
             }
-
-            if (!currentProduct) {
-                alert('No product selected');
-                return;
-            }
-
-            const totalAmount = currentProduct.price * quantity;
-
-            // Paystack payment integration
-            const paystack = new PaystackPop();
-            paystack.newTransaction({
-                key: 'pk_test_1234567890abcdefghijklmnopqrstuvwxyz', // Replace with actual key
-                amount: totalAmount * 100, // Convert to kobo
-                email: 'customer@email.com',
-                currency: 'GHS',
-                callback: function (response) {
-                    // Payment successful
-                    alert('Payment successful! Transaction reference: ' + response.reference);
-                    saveOrderToFirestore(fullName, phone, region, city, address, quantity);
-                    closeDeliveryForm();
-                },
-                onClose: function () {
-                    alert('Payment cancelled');
-                }
-            });
         }
 
-        // Save order to Firestore
-        function saveOrderToFirestore(fullName, phone, region, city, address, quantity) {
-            if (typeof firebase !== 'undefined' && firebase.firestore) {
-                const db = firebase.firestore();
-                db.collection('orders').add({
-                    productId: currentProduct.id,
-                    productTitle: currentProduct.title,
-                    productPrice: currentProduct.price,
-                    quantity: parseInt(quantity),
-                    totalPrice: currentProduct.price * quantity,
-                    customerName: fullName,
-                    phone: phone,
-                    region: region,
-                    city: city,
-                    address: address,
-                    status: 'pending',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    console.log('Order saved successfully');
-                }).catch((error) => {
-                    console.error('Error saving order: ', error);
-                });
+        function closeDeliveryModal() {
+            const modalEl = document.getElementById('deliveryModal');
+            if (modalEl) {
+                modalEl.style.display = 'none';
             }
         }
 
         // Close modal when clicking outside
-        document.getElementById('deliveryModal').addEventListener('click', function (e) {
-            if (e.target === this) {
-                closeDeliveryForm();
+        window.onclick = function(event) {
+            const modalEl = document.getElementById('deliveryModal');
+            if (event.target == modalEl) {
+                modalEl.style.display = 'none';
             }
-        });
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phoneNumber').value;
+            const address = document.getElementById('deliveryAddress').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const total = price * quantity;
+            
+            // Store order in localStorage
+            const order = {
+                id: Date.now(),
+                product: currentProduct,
+                customer: { fullName, phone, address },
+                quantity,
+                total,
+                date: new Date().toISOString(),
+                status: 'pending'
+            };
+            
+            const orders = JSON.parse(localStorage.getItem('alfred_orders') || '[]');
+            orders.push(order);
+            localStorage.setItem('alfred_orders', JSON.stringify(orders));
+            
+            // Initialize Paystack payment
+            if (typeof PaystackPop !== 'undefined') {
+                const handler = PaystackPop.setup({
+                    key: 'pk_test_1234567890', // Replace with actual key
+                    email: 'customer@example.com',
+                    amount: total * 100, // Convert to kobo
+                    currency: 'GHS',
+                    ref: 'ALF_' + Date.now(),
+                    callback: function(response) {
+                        alert('Payment successful! Reference: ' + response.reference);
+                        closeDeliveryModal();
+                        document.getElementById('deliveryForm').reset();
+                    },
+                    onClose: function() {
+                        alert('Payment window closed');
+                    }
+                });
+                handler.openIframe();
+            } else {
+                alert('Order placed successfully! Order ID: ' + order.id);
+                closeDeliveryModal();
+                document.getElementById('deliveryForm').reset();
+            }
+        }
     </script>
 </body>
 
