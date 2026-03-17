@@ -25,7 +25,7 @@
         <div class="container">
             <div class="header-top">
                 <div class="logo">
-                   <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"></a>
+                   <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a>
                 </div>
                 <div class="header-actions">
                     <a href="index.html" class="action-item">
@@ -104,6 +104,13 @@
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Check for pending product from login redirect
+            const pendingProductId = sessionStorage.getItem('pendingProductId');
+            if (pendingProductId) {
+                sessionStorage.removeItem('pendingProductId');
+                // Add the product to cart
+                addToCart(parseInt(pendingProductId));
+            }
             renderCart();
         });
 
