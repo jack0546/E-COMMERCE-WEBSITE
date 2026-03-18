@@ -1,308 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports & Entertainment - ALFRED</title>
+    <title>Sports & Outdoors - ALFRED PRODUCTS</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="1.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF6600">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="1.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="script.js"></script>
 </head>
+
 <body>
-    <!-- Header -->
-    <header class="main-header">
+    <header>
         <div class="container">
-            <div class="header-content">
-                <a href="index.html" class="logo">
-                    <img src="1.png" alt="ALFRED">
-                    <span>ALFRED</span>
-                </a>
-                <nav class="main-nav">
-                    <a href="index.html">Home</a>
-                    <a href="categories.html">Categories</a>
-                    <a href="featured.html">Featured</a>
-                    <a href="suppliers.html">Suppliers</a>
-                    <a href="messages.html">Messages</a>
-                </nav>
+            <div class="header-top">
+                <div class="logo"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a></div>
                 <div class="header-actions">
-                    <a href="cart.html" class="cart-icon">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span id="cartCount">0</span>
-                    </a>
-                    <a href="#" class="btn" onclick="viewCart(); return false;" style="background:#0abf53;color:white;padding:8px 15px;border-radius:5px;margin-right:5px;">Checkout</a>
-                    <a href="login.html" class="btn btn-outline">Login</a>
-                    <a href="register.html" class="btn btn-primary">Register</a>
+                    <a href="login.html" class="action-item"><ion-icon name="person-outline"></ion-icon><span>Sign In</span></a>
+                    <a href="messages.html" class="action-item"><ion-icon name="mail-outline"></ion-icon><span>Messages</span></a>
+                    <a href="orders.html" class="action-item"><ion-icon name="cart-outline"></ion-icon><span>Orders</span></a>
                 </div>
             </div>
+            <nav>
+                <ul>
+                    <li><a href="categories.html">All Categories</a></li>
+                    <li><a href="sports.html" class="active">Sports</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-        <div class="container">
-            <a href="index.html">Home</a>
-            <span>/</span>
-            <a href="categories.html">Categories</a>
-            <span>/</span>
-            <span>Sports & Entertainment</span>
+    <main class="container">
+        <div style="margin-top: 20px; border-radius: 12px; overflow: hidden; position: relative; height: 350px;">
+            <img src="images/banners/apparel.jpg" alt="Sports Banner" style="width: 100%; height: 100%; object-fit: cover;">
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: center; padding: 60px; color: white;">
+                <h1 style="font-size: 48px; margin-bottom: 10px;">Sports & Outdoors</h1>
+                <p style="font-size: 20px;">Premium sports equipment and outdoor gear</p>
+            </div>
         </div>
-    </div>
 
-    <!-- Category Banner -->
-    <section class="category-banner" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 40px 20px; text-align: center; color: white;">
-        <h1 style="margin: 0 0 10px 0; font-size: 36px;">Sports & Entertainment</h1>
-        <p style="margin: 0; font-size: 18px; opacity: 0.9;">Premium sports equipment from verified manufacturers</p>
-    </section>
-
-    <!-- Products -->
-    <main class="container" style="padding: 40px 20px;">
-        <section>
-            <h2 style="margin-bottom: 20px;">Fitness Equipment</h2>
-            <div class="product-grid modern-grid" style="margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Fitness Equipment', 48.00, 'Fitness equipment for home gym', 'images/image5.jpg')">
-                    <img src="images/image5.jpg" alt="Fitness" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Fitness Equipment</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$48.00</p>
+        <section class="products">
+            <h2 class="section-title">Sports Equipment</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Sports', 'Football', 85.00, 'Professional quality football', 'images/banners/apparel.jpg')">
+                    <img src="images/banners/apparel.jpg" alt="Football" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Professional Football</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 85.00</p>
+                        <button onclick="event.stopPropagation(); addProductToCart('Sports', 'Football', 85.00, 'Professional quality football', 'images/banners/apparel.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Yoga Mat', 35.00, 'Non-slip eco-friendly yoga mat', 'images/image6.jpg')">
-                    <img src="images/image6.jpg" alt="Yoga" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Yoga Mat</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$35.00</p>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Sports', 'Basketball', 95.00, 'Official size basketball', 'images/banners/apparel.jpg')">
+                    <img src="images/banners/apparel.jpg" alt="Basketball" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Basketball</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
+                        <button onclick="event.stopPropagation(); addProductToCart('Sports', 'Basketball', 95.00, 'Official size basketball', 'images/banners/apparel.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Camping Gear', 120.00, 'Complete camping set', 'images/image7.jpg')">
-                    <img src="images/image7.jpg" alt="Camping" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Camping Gear</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$120.00</p>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Sports', 'Tennis Racket', 120.00, 'Professional tennis racket', 'images/banners/apparel.jpg')">
+                    <img src="images/banners/apparel.jpg" alt="Tennis Racket" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Tennis Racket</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 120.00</p>
+                        <button onclick="event.stopPropagation(); addProductToCart('Sports', 'Tennis Racket', 120.00, 'Professional tennis racket', 'images/banners/apparel.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Sports Accessories', 25.00, 'Various sports accessories', 'images/image8.jpg')">
-                    <img src="images/image8.jpg" alt="Accessories" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Sports Accessories</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$25.00</p>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Sports', 'Yoga Mat', 45.00, 'Premium non-slip yoga mat', 'images/banners/apparel.jpg')">
+                    <img src="images/banners/apparel.jpg" alt="Yoga Mat" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Yoga Mat</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 45.00</p>
+                        <button onclick="event.stopPropagation(); addProductToCart('Sports', 'Yoga Mat', 45.00, 'Premium non-slip yoga mat', 'images/banners/apparel.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section>
-            <h2 style="margin-bottom: 20px;">Sports Shoes</h2>
-            <div class="product-grid modern-grid" style="margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Running Shoes Pro', 85.00, 'Professional running shoes with cushioning', 'images/SHOE1.jpg')">
-                    <img src="images/SHOE1.jpg" alt="Running Shoes" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Running Shoes Pro</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$85.00</p>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Sports', 'Dumbbells Set', 250.00, 'Adjustable dumbbells set', 'images/banners/apparel.jpg')">
+                    <img src="images/banners/apparel.jpg" alt="Dumbbells" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Dumbbells Set</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 250.00</p>
+                        <button onclick="event.stopPropagation(); addProductToCart('Sports', 'Dumbbells Set', 250.00, 'Adjustable dumbbells set', 'images/banners/apparel.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Training Sneakers', 72.00, 'Versatile training sneakers', 'images/SHOE2.jpg')">
-                    <img src="images/SHOE2.jpg" alt="Training Sneakers" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Training Sneakers</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$72.00</p>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Sports', 'Camping Tent', 320.00, '4-person camping tent', 'images/banners/apparel.jpg')">
+                    <img src="images/banners/apparel.jpg" alt="Camping Tent" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Camping Tent</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 320.00</p>
+                        <button onclick="event.stopPropagation(); addProductToCart('Sports', 'Camping Tent', 320.00, '4-person camping tent', 'images/banners/apparel.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Outdoor Hiking Boots', 150.00, 'Durable hiking boots for outdoor adventures', 'images/SHOE3.jpg')">
-                    <img src="images/SHOE3.jpg" alt="Hiking Boots" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Outdoor Hiking Boots</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$150.00</p>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Sports', 'Bicycle', 450.00, 'Mountain bike', 'images/banners/apparel.jpg')">
+                    <img src="images/banners/apparel.jpg" alt="Bicycle" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Mountain Bicycle</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 450.00</p>
+                        <button onclick="event.stopPropagation(); addProductToCart('Sports', 'Bicycle', 450.00, 'Mountain bike', 'images/banners/apparel.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Basketball Shoes', 95.00, 'Professional basketball shoes', 'images/SHOE6.jpg')">
-                    <img src="images/SHOE6.jpg" alt="Basketball Shoes" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Basketball Shoes</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$95.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Football Boots', 88.00, 'Professional football boots', 'images/SHOE7.jpg')">
-                    <img src="images/SHOE7.jpg" alt="Football Boots" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Football Boots</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$88.00</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <h2 style="margin-bottom: 20px;">Sports Balls & Equipment</h2>
-            <div class="product-grid modern-grid" style="margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Basketball', 38.00, 'Official size basketball', 'images/image9.jpg')">
-                    <img src="images/image9.jpg" alt="Basketball" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Basketball</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$38.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Football', 32.00, 'Professional football', 'images/image10.jpg')">
-                    <img src="images/image10.jpg" alt="Football" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Football</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$32.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Cycling Helmet', 48.00, 'Safety cycling helmet', 'images/image11.jpg')">
-                    <img src="images/image11.jpg" alt="Cycling Helmet" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Cycling Helmet</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$48.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Swimming Goggles', 28.00, 'Anti-fog swimming goggles', 'images/image12.jpg')">
-                    <img src="images/image12.jpg" alt="Swimming Goggles" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Swimming Goggles</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$28.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Tennis Racket Set', 95.00, 'Professional tennis racket with balls', 'images/BAG4.jpg')">
-                    <img src="images/BAG4.jpg" alt="Tennis Racket" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Tennis Racket Set</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$95.00</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <h2 style="margin-bottom: 20px;">Outdoor & Adventure</h2>
-            <div class="product-grid modern-grid" style="margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Gym Duffel Bag', 55.00, 'Spacious gym duffel bag', 'images/BAG1.jpg')">
-                    <img src="images/BAG1.jpg" alt="Gym Bag" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Gym Duffel Bag</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$55.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Travel Sports Bag', 68.00, 'Large travel bag for sports equipment', 'images/BAG2.jpg')">
-                    <img src="images/BAG2.jpg" alt="Travel Bag" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Travel Sports Bag</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$68.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Boxing Equipment Set', 180.00, 'Professional boxing equipment', 'images/SHOE18.jpg')">
-                    <img src="images/SHOE18.jpg" alt="Boxing Equipment" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Boxing Equipment Set</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$180.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports', 'Golf Equipment', 280.00, 'Golf clubs and bag', 'images/SHOE26.jpg')">
-                    <img src="images/SHOE26.jpg" alt="Golf Equipment" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 12px;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Golf Equipment</h4>
-                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$280.00</p>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;" onclick="openDeliveryForm('Sports', 'Swimming Goggles', 35.00, 'Professional swimming goggles', 'images/banners/apparel.jpg')">
+                    <img src="images/banners/apparel.jpg" alt="Swimming Goggles" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 10px;">
+                        <h4 style="font-size: 13px; margin-bottom: 5px;">Swimming Goggles</h4>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 35.00</p>
+                        <button onclick="event.stopPropagation(); addProductToCart('Sports', 'Swimming Goggles', 35.00, 'Professional swimming goggles', 'images/banners/apparel.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>ALFRED</h4>
-                    <p>Your trusted B2B marketplace for global trade.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <a href="about.html">About Us</a>
-                    <a href="help.html">Help Center</a>
-                    <a href="trade.html">Trade Assurance</a>
-                </div>
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <p>Email: support@alfred.com</p>
-                    <p>Phone: +1 234 567 890</p>
-                </div>
+    <!-- Delivery Form Modal -->
+    <div class="modal-overlay" id="deliveryModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: white; border-radius: 16px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto;">
+            <div style="padding: 20px; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 18px; color: #1a1a1a;">Complete Your Order</h3>
+                <button onclick="closeDeliveryForm()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #8e8e8e;">&times;</button>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 ALFRED. All rights reserved.</p>
+            <div style="padding: 20px;">
+                <div style="display: flex; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #e5e5e5;">
+                    <img id="modalProductImg" src="" alt="Product" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                    <div>
+                        <h4 id="modalProductTitle" style="font-size: 14px; margin-bottom: 5px;">Product Title</h4>
+                        <div id="modalProductPrice" style="font-size: 18px; font-weight: 700; color: #0abf53;">GHS 0.00</div>
+                        <p id="modalProductDesc" style="font-size: 12px; color: #8e8e8e; margin-top: 5px;">Description</p>
+                    </div>
+                </div>
+                <form>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px;">Full Name *</label>
+                        <input type="text" id="fullName" required placeholder="Your full name" style="width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px;">Phone Number *</label>
+                        <input type="tel" id="phoneNumber" required placeholder="0500000000" style="width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px;">Delivery Address *</label>
+                        <input type="text" id="address" required placeholder="Your delivery address" style="width: 100%; padding: 12px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <button type="button" onclick="alert('Order placed successfully!'); closeDeliveryForm();" style="width: 100%; padding: 15px; background: #0abf53; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">Place Order</button>
+                </form>
             </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProduct = null;
+        
+        function openDeliveryForm(category, title, price, desc, image) {
+            currentProduct = { category, title, price, desc, image };
+            const modal = document.getElementById('deliveryModal');
+            if (modal) {
+                document.getElementById('modalProductImg').src = image;
+                document.getElementById('modalProductTitle').textContent = title + ' - ' + category;
+                document.getElementById('modalProductPrice').textContent = 'GHS ' + parseFloat(price).toFixed(2);
+                document.getElementById('modalProductDesc').textContent = desc;
+                modal.style.display = 'flex';
+            }
+        }
+        
+        function closeDeliveryForm() {
+            const modal = document.getElementById('deliveryModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            currentProduct = null;
+        }
+
+        function addProductToCart(category, title, price, desc, image) {
+            alert('Product added to cart!');
+        }
+    </script>
+
+    <footer>
+        <div class="container" style="text-align: center; color: #999; padding: 40px 0; border-top: 1px solid var(--border-color);">
+            <p>&copy; 2015-2026 Alfred Products.com. All rights reserved.</p>
         </div>
     </footer>
-
-    <script src="script.js"></script>
-
-    <!-- Cart Modal -->
-    <div id="cartModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
-        <div style="background-color:#fefefe;margin:5% auto;padding:20px;border:1px solid #888;width:90%;max-width:600px;border-radius:10px;max-height:80vh;overflow-y:auto;">
-            <span onclick="closeCartModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
-            <h2>Your Cart</h2>
-            <div id="cartItems"></div>
-            <div style="margin-top:20px;border-top:2px solid #eee;padding-top:15px;">
-                <h3>Total: GHS <span id="cartTotal">0.00</span></h3>
-                <p style="color:#666;">Delivery Fee: GHS <span id="deliveryFee">0.00</span></p>
-                <p style="font-weight:bold;color:#0abf53;">Grand Total: GHS <span id="grandTotal">0.00</span></p>
-            </div>
-            <button onclick="checkoutCart()" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:15px;">Proceed to Checkout</button>
-        </div>
-    </div>
-
-    <!-- Delivery Form Modal -->
-    <div id="deliveryModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
-        <div style="background-color:#fefefe;margin:5% auto;padding:25px;border:1px solid #888;width:90%;max-width:500px;border-radius:10px;">
-            <span onclick="closeDeliveryModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
-            <h2>Delivery Information</h2>
-            <form id="deliveryForm" onsubmit="handleFormSubmit(event)">
-                <input type="hidden" id="productCategory">
-                <input type="hidden" id="productTitle">
-                <input type="hidden" id="productPrice">
-                <input type="hidden" id="productDescription">
-                <input type="hidden" id="productImage">
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Full Name</label>
-                    <input type="text" id="fullName" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Phone Number</label>
-                    <input type="tel" id="phoneNumber" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Delivery Address</label>
-                    <textarea id="deliveryAddress" required rows="3" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;"></textarea>
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Quantity</label>
-                    <input type="number" id="quantity" value="1" min="1" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Product</label>
-                    <div id="modalProductInfo" style="background:#f9f9f9;padding:10px;border-radius:5px;"></div>
-                </div>
-                <button type="submit" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">Make Payment</button>
-            </form>
-        </div>
-    </div>
 </body>
+
 </html>
