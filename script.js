@@ -1357,6 +1357,9 @@ function renderProducts(filterCategory = null, keywordFilter = null, targetGridI
                      onclick="event.preventDefault(); event.stopPropagation(); handleProductClick(${product.id})"
                      style="cursor: pointer;"
                      title="Click to buy now">
+                <button class="add-to-cart-btn" onclick="event.preventDefault(); event.stopPropagation(); addToCart(${product.id});" title="Add to Cart">
+                    <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                </button>
             </div>
             <div class="product-info">
                 <h3 class="product-title">${product.title}</h3>
