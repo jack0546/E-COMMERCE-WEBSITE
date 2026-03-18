@@ -270,6 +270,91 @@
             alert('Product added to cart!');
         }
     </script>
+    <!-- Install App Banner for New Users -->
+    <div id="installBanner" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(135deg, #0b6d34 0%, #ff8533 100%); padding: 15px 20px; z-index: 9999; box-shadow: 0 -4px 20px rgba(0,0,0,0.15);">
+        <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <img src="1.png" alt="ALFRED" style="width: 40px; height: 40px; border-radius: 8px; background: white; padding: 5px;">
+                <div>
+                    <h4 style="color: white; margin: 0; font-size: 16px;">Install ALFRED PRODUCTS App</h4>
+                    <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0 0; font-size: 13px;">Get the full experience - Install now for easy access!</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button id="installBtn" style="background: white; color: #FF6600; border: none; padding: 10px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; font-size: 14px; transition: transform 0.2s;">Install App</button>
+                <button onclick="dismissInstallBanner()" style="background: transparent; color: white; border: 2px solid white; padding: 8px 20px; border-radius: 25px; cursor: pointer; font-size: 14px;">Not now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deferredPrompt;
+        const installBanner = document.getElementById('installBanner');
+        const installBtn = document.getElementById('installBtn');
+        
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registered: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+        
+        // Check if user has dismissed the banner before
+        const installDismissed = localStorage.getItem('installDismissed');
+        
+        // Listen for the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+            
+            // Show our custom install banner if not dismissed before
+            if (!installDismissed) {
+                setTimeout(() => {
+                    installBanner.style.display = 'block';
+                }, 3000); // Show after 3 seconds for new users
+            }
+        });
+        
+        // Handle install button click
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                // Show the install prompt
+                deferredPrompt.prompt();
+                
+                // Wait for the user to respond to the prompt
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                // Clear the deferred prompt
+                deferredPrompt = null;
+                
+                // Hide the banner
+                installBanner.style.display = 'none';
+                
+                console.log('Install prompt outcome:', outcome);
+            }
+        });
+        
+        // Dismiss the install banner
+        function dismissInstallBanner() {
+            installBanner.style.display = 'none';
+            // Remember that user dismissed the banner
+            localStorage.setItem('installDismissed', 'true');
+        }
+        
+        // Listen for successful app installation
+        window.addEventListener('appinstalled', (evt) => {
+            installBanner.style.display = 'none';
+            console.log('App installed successfully');
+        });
+    </script>
 </body>
 
 </html>
