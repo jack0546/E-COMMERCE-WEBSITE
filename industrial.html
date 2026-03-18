@@ -16,6 +16,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="script.js"></script>
 </head>
 
 <body>
@@ -31,6 +33,9 @@
                         <li><a href="index.html">Home</a></li>
                     </ul>
                 </nav>
+                <div class="header-actions">
+                    <a href="#" onclick="viewCart(); return false;" style="background:#0abf53;color:white;padding:8px 15px;border-radius:5px;margin-right:10px;text-decoration:none;">Checkout</a>
+                </div>
             </div>
         </div>
     </header>
@@ -66,7 +71,7 @@
             <!-- Industrial Machinery Products -->
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial Generator', 'Industrial', 2500.00, 'High-power industrial generator 5000W', 'images/BAG8.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Industrial Generator', 2500.00, 'High-power industrial generator 5000W', 'images/BAG8.jpg')">
                     <img src="images/BAG8.jpg" alt="Generator" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Generator</h4>
@@ -74,7 +79,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Power Drill Set', 'Industrial', 180.00, 'Professional power drill set', 'images/BAG9.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Power Drill Set', 180.00, 'Professional power drill set', 'images/BAG9.jpg')">
                     <img src="images/BAG9.jpg" alt="Power Drill" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Power Drill Set</h4>
@@ -82,7 +87,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial Air Compressor', 'Industrial', 890.00, 'Heavy-duty air compressor', 'images/BAG10.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Industrial Air Compressor', 890.00, 'Heavy-duty air compressor', 'images/BAG10.jpg')">
                     <img src="images/BAG10.jpg" alt="Air Compressor"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -91,7 +96,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Welding Machine', 'Industrial', 1200.00, 'Professional welding machine', 'images/BAG11.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Welding Machine', 1200.00, 'Professional welding machine', 'images/BAG11.jpg')">
                     <img src="images/BAG11.jpg" alt="Welding Machine"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -103,7 +108,7 @@
 
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Circular Saw', 'Industrial', 145.00, 'Industrial circular saw', 'images/BAG12.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Circular Saw', 145.00, 'Industrial circular saw', 'images/BAG12.jpg')">
                     <img src="images/BAG12.jpg" alt="Circular Saw"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -112,7 +117,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Hydraulic Jack', 'Industrial', 220.00, 'Heavy-duty hydraulic jack', 'images/BAG14.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Hydraulic Jack', 220.00, 'Heavy-duty hydraulic jack', 'images/BAG14.jpg')">
                     <img src="images/BAG14.jpg" alt="Hydraulic Jack"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -121,7 +126,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial Pump', 'Industrial', 380.00, 'Water pump for industrial use', 'images/BAG15.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Industrial Pump', 380.00, 'Water pump for industrial use', 'images/BAG15.jpg')">
                     <img src="images/BAG15.jpg" alt="Industrial Pump"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -130,7 +135,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Electric Motor', 'Industrial', 450.00, 'Industrial electric motor', 'images/BAG16.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Electric Motor', 450.00, 'Industrial electric motor', 'images/BAG16.jpg')">
                     <img src="images/BAG16.jpg" alt="Electric Motor"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -142,7 +147,7 @@
 
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Safety Equipment Kit', 'Industrial', 95.00, 'Complete industrial safety kit', 'images/BAG17.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Safety Equipment Kit', 95.00, 'Complete industrial safety kit', 'images/BAG17.jpg')">
                     <img src="images/BAG17.jpg" alt="Safety Kit" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Safety Equipment Kit</h4>
@@ -150,7 +155,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Measuring Tools Set', 'Industrial', 75.00, 'Precision measuring tools', 'images/BAG18.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Measuring Tools Set', 75.00, 'Precision measuring tools', 'images/BAG18.jpg')">
                     <img src="images/BAG18.jpg" alt="Measuring Tools"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -159,7 +164,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial Conveyor Belt', 'Industrial', 1800.00, 'Heavy-duty conveyor belt system', 'images/BAG19.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Industrial Conveyor Belt', 1800.00, 'Heavy-duty conveyor belt system', 'images/BAG19.jpg')">
                     <img src="images/BAG19.jpg" alt="Conveyor Belt"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -168,7 +173,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Storage Container', 'Industrial', 120.00, 'Large industrial storage container', 'images/BAG20.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Storage Container', 120.00, 'Large industrial storage container', 'images/BAG20.jpg')">
                     <img src="images/BAG20.jpg" alt="Storage Container"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -181,7 +186,7 @@
             <h2 style="font-size: 20px; font-weight: 800; margin-top: 30px; margin-bottom: 20px;">Tools & Equipment</h2>
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial Tool Box', 'Industrial', 85.00, 'Heavy-duty tool box', 'images/BAG21.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Industrial Tool Box', 85.00, 'Heavy-duty tool box', 'images/BAG21.jpg')">
                     <img src="images/BAG21.jpg" alt="Tool Box" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Tool Box</h4>
@@ -189,7 +194,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Angle Grinder', 'Industrial', 95.00, 'Power angle grinder', 'images/BAG22.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Angle Grinder', 95.00, 'Power angle grinder', 'images/BAG22.jpg')">
                     <img src="images/BAG22.jpg" alt="Angle Grinder"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -198,7 +203,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Jigsaw', 'Industrial', 110.00, 'Electric jigsaw saw', 'images/BAG23.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Jigsaw', 110.00, 'Electric jigsaw saw', 'images/BAG23.jpg')">
                     <img src="images/BAG23.jpg" alt="Jigsaw" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Jigsaw</h4>
@@ -206,7 +211,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Orbital Sander', 'Industrial', 78.00, 'Power orbital sander', 'images/BAG24.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Orbital Sander', 78.00, 'Power orbital sander', 'images/BAG24.jpg')">
                     <img src="images/BAG24.jpg" alt="Orbital Sander"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -218,7 +223,7 @@
 
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Bench Grinder', 'Industrial', 145.00, 'Industrial bench grinder', 'images/BAG25.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Bench Grinder', 145.00, 'Industrial bench grinder', 'images/BAG25.jpg')">
                     <img src="images/BAG25.jpg" alt="Bench Grinder"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -227,7 +232,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Table Saw', 'Industrial', 380.00, 'Professional table saw', 'images/BAG26.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Table Saw', 380.00, 'Professional table saw', 'images/BAG26.jpg')">
                     <img src="images/BAG26.jpg" alt="Table Saw" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Table Saw</h4>
@@ -235,7 +240,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Bandsaw', 'Industrial', 450.00, 'Metal cutting bandsaw', 'images/BAG29.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Bandsaw', 450.00, 'Metal cutting bandsaw', 'images/BAG29.jpg')">
                     <img src="images/BAG29.jpg" alt="Bandsaw" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Bandsaw</h4>
@@ -243,7 +248,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Drill Press', 'Industrial', 520.00, 'Floor standing drill press', 'images/BAG30.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Drill Press', 520.00, 'Floor standing drill press', 'images/BAG30.jpg')">
                     <img src="images/BAG30.jpg" alt="Drill Press"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -257,7 +262,7 @@
                 Supplies</h2>
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial Shelving', 'Industrial', 280.00, 'Heavy-duty warehouse shelving', 'images/BAGS26.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Industrial Shelving', 280.00, 'Heavy-duty warehouse shelving', 'images/BAGS26.jpg')">
                     <img src="images/BAGS26.jpg" alt="Industrial Shelving"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -266,7 +271,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Pallet Jack', 'Industrial', 350.00, 'Manual pallet jack', 'images/BAGS27.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Pallet Jack', 350.00, 'Manual pallet jack', 'images/BAGS27.jpg')">
                     <img src="images/BAGS27.jpg" alt="Pallet Jack"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -275,7 +280,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Forklift', 'Industrial', 4500.00, 'Electric forklift', 'images/BAGS28.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Forklift', 4500.00, 'Electric forklift', 'images/BAGS28.jpg')">
                     <img src="images/BAGS28.jpg" alt="Forklift" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Forklift</h4>
@@ -283,7 +288,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Workbench', 'Industrial', 180.00, 'Steel workbench', 'images/image1.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Workbench', 180.00, 'Steel workbench', 'images/image1.jpg')">
                     <img src="images/image1.jpg" alt="Workbench" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Workbench</h4>
@@ -294,7 +299,7 @@
 
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial Fan', 'Industrial', 95.00, 'High-power industrial fan', 'images/image2.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Industrial Fan', 95.00, 'High-power industrial fan', 'images/image2.jpg')">
                     <img src="images/image2.jpg" alt="Industrial Fan"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -303,7 +308,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial Heater', 'Industrial', 220.00, 'Space heater for warehouse', 'images/image3.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Industrial Heater', 220.00, 'Space heater for warehouse', 'images/image3.jpg')">
                     <img src="images/image3.jpg" alt="Industrial Heater"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -312,7 +317,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Air Dryer', 'Industrial', 380.00, 'Compressed air dryer', 'images/image4.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Air Dryer', 380.00, 'Compressed air dryer', 'images/image4.jpg')">
                     <img src="images/image4.jpg" alt="Air Dryer" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Air Dryer</h4>
@@ -320,7 +325,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Pressure Washer', 'Industrial', 450.00, 'Heavy-duty pressure washer', 'images/image5.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Pressure Washer', 450.00, 'Heavy-duty pressure washer', 'images/image5.jpg')">
                     <img src="images/image5.jpg" alt="Pressure Washer"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -332,7 +337,7 @@
 
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Generator Accessories', 'Industrial', 150.00, 'Spare parts for generators', 'images/image6.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Generator Accessories', 150.00, 'Spare parts for generators', 'images/image6.jpg')">
                     <img src="images/image6.jpg" alt="Generator Accessories"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -341,7 +346,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial Lubricant', 'Industrial', 45.00, 'Machine lubrication oil', 'images/image7.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Industrial Lubricant', 45.00, 'Machine lubrication oil', 'images/image7.jpg')">
                     <img src="images/image7.jpg" alt="Industrial Lubricant"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -350,7 +355,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Welding Supplies', 'Industrial', 85.00, 'Welding electrodes and supplies', 'images/image8.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Welding Supplies', 85.00, 'Welding electrodes and supplies', 'images/image8.jpg')">
                     <img src="images/image8.jpg" alt="Welding Supplies"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -359,7 +364,7 @@
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Protective Gear', 'Industrial', 65.00, 'Industrial protective gear', 'images/image9.jpg')">
+                    onclick="openDeliveryForm('Industrial', 'Protective Gear', 65.00, 'Industrial protective gear', 'images/image9.jpg')">
                     <img src="images/image9.jpg" alt="Protective Gear"
                         style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
@@ -375,59 +380,6 @@
         </section>
     </main>
 
-    <script>
-        function openDeliveryForm(title, category, price, desc, image) {
-            // Redirect to product page with product details
-            const params = new URLSearchParams({
-                title: title,
-                category: category,
-                price: price,
-                desc: desc,
-                image: image
-            });
-            window.location.href = 'product.html?' + params.toString();
-        }
-    </script>
-
-    <!-- Delivery Modal -->
-    <div id="deliveryModal"
-        style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:1000; padding:20px;">
-        <div style="background:white; border-radius:16px; max-width:500px; margin:50px auto; padding:20px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                <h3>Complete Order</h3>
-                <button onclick="closeDeliveryForm()"
-                    style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
-            </div>
-            <img id="modalProductImg" src="" style="width:100px; height:100px; object-fit:cover; border-radius:8px;">
-            <h4 id="modalProductTitle" style="margin:10px 0;"></h4>
-            <p id="modalProductPrice" style="font-size:20px; font-weight:bold; color:#0abf53;"></p>
-            <p id="modalProductDesc" style="font-size:12px; color:#666; margin:10px 0;"></p>
-            <input type="text" id="fullName" placeholder="Full Name"
-                style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
-            <input type="tel" id="phoneNumber" placeholder="Phone Number"
-                style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
-            <input type="text" id="address" placeholder="Delivery Address"
-                style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
-            <button onclick="processPayment()"
-                style="width:100%; padding:15px; background:#0abf53; color:white; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer;">Pay
-                Now</button>
-        </div>
-    </div>
-
-    <script>
-        function openDeliveryForm(title, category, price, desc, image) {
-            // Redirect to product page with product details
-            const params = new URLSearchParams({
-                title: title,
-                category: category,
-                price: price,
-                desc: desc,
-                image: image
-            });
-            window.location.href = 'product.html?' + params.toString();
-        }
-    </script>
-
     <footer style="margin-top: 100px;">
         <div class="container" style="text-align: center; border-top: 1px solid #eee; padding: 40px 0;">
             <p style="color: grey; font-size: 13px;">&copy; 2026 ALFRED PRODUCTS. Global Trade Starts Here.</p>
@@ -435,6 +387,57 @@
     </footer>
 
     <script src="script.js"></script>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
+        <div style="background-color:#fefefe;margin:5% auto;padding:20px;border:1px solid #888;width:90%;max-width:600px;border-radius:10px;max-height:80vh;overflow-y:auto;">
+            <span onclick="closeCartModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
+            <h2>Your Cart</h2>
+            <div id="cartItems"></div>
+            <div style="margin-top:20px;border-top:2px solid #eee;padding-top:15px;">
+                <h3>Total: GHS <span id="cartTotal">0.00</span></h3>
+                <p style="color:#666;">Delivery Fee: GHS <span id="deliveryFee">0.00</span></p>
+                <p style="font-weight:bold;color:#0abf53;">Grand Total: GHS <span id="grandTotal">0.00</span></p>
+            </div>
+            <button onclick="checkoutCart()" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:15px;">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Delivery Form Modal -->
+    <div id="deliveryModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
+        <div style="background-color:#fefefe;margin:5% auto;padding:25px;border:1px solid #888;width:90%;max-width:500px;border-radius:10px;">
+            <span onclick="closeDeliveryModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
+            <h2>Delivery Information</h2>
+            <form id="deliveryForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="productCategory">
+                <input type="hidden" id="productTitle">
+                <input type="hidden" id="productPrice">
+                <input type="hidden" id="productDescription">
+                <input type="hidden" id="productImage">
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Full Name</label>
+                    <input type="text" id="fullName" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Phone Number</label>
+                    <input type="tel" id="phoneNumber" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Delivery Address</label>
+                    <textarea id="deliveryAddress" required rows="3" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;"></textarea>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Quantity</label>
+                    <input type="number" id="quantity" value="1" min="1" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Product</label>
+                    <div id="modalProductInfo" style="background:#f9f9f9;padding:10px;border-radius:5px;"></div>
+                </div>
+                <button type="submit" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">Make Payment</button>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>
