@@ -105,36 +105,42 @@
                 <img src="images/SHOE1.jpg"
                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
                 <span style="font-size: 12px; font-weight: 600;">Apparel</span>
+                <button style="margin-top:5px; padding:4px 8px; background:#0abf53; color:white; border:none; border-radius:4px; font-size:10px; cursor:pointer;" onclick="addProductToCart('Apparel', 'Premium Apparel Manufacturer', 45.00, 'Verified apparel supplier', 'images/SHOE1.jpg'); event.stopPropagation();">Add to Cart</button>
             </div>
             <div style="cursor: pointer; border-radius: 8px; overflow: hidden; text-align: center; padding: 10px; border: 2px solid #e5e5e5;"
                 onclick="openDeliveryForm('Electronics Supplier', 'Electronics Manufacturer', 0, 'Verified electronics supplier', 'images/SMART1.jpg')">
                 <img src="images/SMART1.jpg"
                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
                 <span style="font-size: 12px; font-weight: 600;">Electronics</span>
+                <button style="margin-top:5px; padding:4px 8px; background:#0abf53; color:white; border:none; border-radius:4px; font-size:10px; cursor:pointer;" onclick="addProductToCart('Electronics', 'Electronics Manufacturer', 120.00, 'Verified electronics supplier', 'images/SMART1.jpg'); event.stopPropagation();">Add to Cart</button>
             </div>
             <div style="cursor: pointer; border-radius: 8px; overflow: hidden; text-align: center; padding: 10px; border: 2px solid #e5e5e5;"
                 onclick="openDeliveryForm('Beauty Supplier', 'Beauty Products Manufacturer', 0, 'Verified beauty supplier', 'images/image1.jpg')">
                 <img src="images/image1.jpg"
                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
                 <span style="font-size: 12px; font-weight: 600;">Beauty</span>
+                <button style="margin-top:5px; padding:4px 8px; background:#0abf53; color:white; border:none; border-radius:4px; font-size:10px; cursor:pointer;" onclick="addProductToCart('Beauty', 'Beauty Products Manufacturer', 35.00, 'Verified beauty supplier', 'images/image1.jpg'); event.stopPropagation();">Add to Cart</button>
             </div>
             <div style="cursor: pointer; border-radius: 8px; overflow: hidden; text-align: center; padding: 10px; border: 2px solid #e5e5e5;"
                 onclick="openDeliveryForm('Bags Supplier', 'Bags Manufacturer', 0, 'Verified bags supplier', 'images/BAG1.jpg')">
                 <img src="images/BAG1.jpg"
                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
                 <span style="font-size: 12px; font-weight: 600;">Bags</span>
+                <button style="margin-top:5px; padding:4px 8px; background:#0abf53; color:white; border:none; border-radius:4px; font-size:10px; cursor:pointer;" onclick="addProductToCart('Bags', 'Bags Manufacturer', 55.00, 'Verified bags supplier', 'images/BAG1.jpg'); event.stopPropagation();">Add to Cart</button>
             </div>
             <div style="cursor: pointer; border-radius: 8px; overflow: hidden; text-align: center; padding: 10px; border: 2px solid #e5e5e5;"
                 onclick="openDeliveryForm('Shoes Supplier', 'Shoes Manufacturer', 0, 'Verified shoes supplier', 'images/SHOE5.jpg')">
                 <img src="images/SHOE5.jpg"
                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
                 <span style="font-size: 12px; font-weight: 600;">Shoes</span>
+                <button style="margin-top:5px; padding:4px 8px; background:#0abf53; color:white; border:none; border-radius:4px; font-size:10px; cursor:pointer;" onclick="addProductToCart('Shoes', 'Shoes Manufacturer', 65.00, 'Verified shoes supplier', 'images/SHOE5.jpg'); event.stopPropagation();">Add to Cart</button>
             </div>
             <div style="cursor: pointer; border-radius: 8px; overflow: hidden; text-align: center; padding: 10px; border: 2px solid #e5e5e5;"
                 onclick="openDeliveryForm('Industrial Supplier', 'Industrial Equipment', 0, 'Verified industrial supplier', 'images/banners/industrial.jpg')">
                 <img src="images/banners/industrial.jpg"
                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 8px;">
                 <span style="font-size: 12px; font-weight: 600;">Industrial</span>
+                <button style="margin-top:5px; padding:4px 8px; background:#0abf53; color:white; border:none; border-radius:4px; font-size:10px; cursor:pointer;" onclick="addProductToCart('Industrial', 'Industrial Equipment', 250.00, 'Verified industrial supplier', 'images/banners/industrial.jpg'); event.stopPropagation();">Add to Cart</button>
             </div>
         </div>
 
@@ -357,6 +363,29 @@
             </div>
             <div style="padding: 20px; border-top: 1px solid #e5e5e5;">
                 <button onclick="processPayment()" style="width: 100%; padding: 15px; background: #0abf53; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">Send Inquiry</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:1001; padding:20px;">
+        <div style="background:white; border-radius:16px; max-width:600px; width:100%; margin:50px auto; padding:24px; max-height:90vh; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2 style="margin:0; font-size:20px;">Shopping Cart (<span id="cartItemCount">0</span> items)</h2>
+                <button onclick="closeCartModal()" style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+            </div>
+            <div id="cartItemsContainer">
+                <div style="text-align:center; padding:40px 0;">
+                    <p style="color:#666;">Your cart is empty</p>
+                </div>
+            </div>
+            <div style="margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-weight:700; font-size:18px;">
+                    <span>Total:</span>
+                    <span id="cartTotal">GHS 0.00</span>
+                </div>
+                <button onclick="checkoutCart()" style="width:100%; padding:14px; background:#0abf53; color:white; border:none; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; margin-bottom:10px;">Proceed to Checkout</button>
+                <button onclick="closeCartModal()" style="width:100%; padding:12px; background:#f5f5f5; border:1px solid #ddd; border-radius:8px; cursor:pointer;">Continue Shopping</button>
             </div>
         </div>
     </div>
