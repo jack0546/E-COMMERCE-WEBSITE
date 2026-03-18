@@ -1,501 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports & Entertainment - ALFRED PRODUCTS</title>
+    <title>Sports & Entertainment - ALFRED</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#FF6600">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="1.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="1.png">
     <script src="https://js.paystack.co/v1/inline.js"></script>
 </head>
-
 <body>
-    <header>
+    <!-- Header -->
+    <header class="main-header">
         <div class="container">
-            <div class="header-top">
-                <div class="logo"><a href="index.html"><a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo"
-                                style="height: 28px;"></a></a></div>
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <img src="1.png" alt="ALFRED">
+                    <span>ALFRED</span>
+                </a>
+                <nav class="main-nav">
+                    <a href="index.html">Home</a>
+                    <a href="categories.html">Categories</a>
+                    <a href="featured.html">Featured</a>
+                    <a href="suppliers.html">Suppliers</a>
+                    <a href="messages.html">Messages</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cartCount">0</span>
+                    </a>
+                    <a href="#" class="btn" onclick="viewCart(); return false;" style="background:#0abf53;color:white;padding:8px 15px;border-radius:5px;margin-right:5px;">Checkout</a>
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="register.html" class="btn btn-primary">Register</a>
+                </div>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="categories.html">All Categories</a></li>
-                    <li><a href="featured.html">Featured Products</a></li>
-                </ul>
-            </nav>
         </div>
     </header>
 
-    <main class="container">
-        <div style="margin-top: 20px; border-radius: 12px; overflow: hidden; position: relative; height: 350px;">
-            <img src="images/image5.jpg" alt="Sports Banner" style="width: 100%; height: 100%; object-fit: cover;">
-            <div
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; padding: 60px; color: white;">
-                <h1 style="font-size: 48px; margin-bottom: 10px;">Sports & Entertainment</h1>
-                <p style="font-size: 20px;">Gear up for peak performance and outdoor adventure.</p>
-            </div>
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <a href="categories.html">Categories</a>
+            <span>/</span>
+            <span>Sports & Entertainment</span>
         </div>
+    </div>
 
-        <section class="products">
-            <h2 class="section-title">Outdoor & Fitness</h2>
+    <!-- Category Banner -->
+    <section class="category-banner" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 40px 20px; text-align: center; color: white;">
+        <h1 style="margin: 0 0 10px 0; font-size: 36px;">Sports & Entertainment</h1>
+        <p style="margin: 0; font-size: 18px; opacity: 0.9;">Premium sports equipment from verified manufacturers</p>
+    </section>
 
-            <!-- Sports Products Grid -->
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
+    <!-- Products -->
+    <main class="container" style="padding: 40px 20px;">
+        <section>
+            <h2 style="margin-bottom: 20px;">Fitness Equipment</h2>
+            <div class="product-grid modern-grid" style="margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Fitness Equipment', 'Sports', 48.00, 'Fitness equipment for home gym', 'images/image5.jpg')">
+                    onclick="openDeliveryForm('Sports', 'Fitness Equipment', 48.00, 'Fitness equipment for home gym', 'images/image5.jpg')">
                     <img src="images/image5.jpg" alt="Fitness" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Fitness Equipment</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 48.00</p>
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Fitness Equipment</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$48.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Yoga Mat', 'Sports', 35.00, 'Non-slip eco-friendly yoga mat', 'images/image6.jpg')">
+                    onclick="openDeliveryForm('Sports', 'Yoga Mat', 35.00, 'Non-slip eco-friendly yoga mat', 'images/image6.jpg')">
                     <img src="images/image6.jpg" alt="Yoga" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Yoga Mat</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 35.00</p>
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Yoga Mat</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$35.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Camping Gear', 'Sports', 120.00, 'Complete camping set', 'images/image7.jpg')">
+                    onclick="openDeliveryForm('Sports', 'Camping Gear', 120.00, 'Complete camping set', 'images/image7.jpg')">
                     <img src="images/image7.jpg" alt="Camping" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Camping Gear</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 120.00</p>
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Camping Gear</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$120.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports Accessories', 'Sports', 25.00, 'Various sports accessories', 'images/image8.jpg')">
-                    <img src="images/image8.jpg" alt="Accessories"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Sports Accessories</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 25.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Additional Sports Products -->
-            <h2 class="section-title" style="margin-top: 30px;">Sports Footwear</h2>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Running Shoes Pro', 'Sports', 85.00, 'Professional running shoes with cushioning', 'images/SHOE1.jpg')">
-                    <img src="images/SHOE1.jpg" alt="Running Shoes"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Running Shoes Pro</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 85.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Training Sneakers', 'Sports', 72.00, 'Versatile training sneakers', 'images/SHOE2.jpg')">
-                    <img src="images/SHOE2.jpg" alt="Training Sneakers"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Training Sneakers</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 72.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Outdoor Hiking Boots', 'Sports', 150.00, 'Durable hiking boots for outdoor adventures', 'images/SHOE3.jpg')">
-                    <img src="images/SHOE3.jpg" alt="Hiking Boots"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Outdoor Hiking Boots</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 150.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sport Sandals', 'Sports', 45.00, 'Comfortable sport sandals', 'images/SHOE5.jpg')">
-                    <img src="images/SHOE5.jpg" alt="Sport Sandals"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Sport Sandals</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 45.00</p>
+                    onclick="openDeliveryForm('Sports', 'Sports Accessories', 25.00, 'Various sports accessories', 'images/image8.jpg')">
+                    <img src="images/image8.jpg" alt="Accessories" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Sports Accessories</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$25.00</p>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <h2 class="section-title" style="margin-top: 30px;">Sports Bags & Gear</h2>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
+        <section>
+            <h2 style="margin-bottom: 20px;">Sports Shoes</h2>
+            <div class="product-grid modern-grid" style="margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Gym Duffel Bag', 'Sports', 55.00, 'Spacious gym duffel bag', 'images/BAG1.jpg')">
-                    <img src="images/BAG1.jpg" alt="Gym Bag" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Gym Duffel Bag</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 55.00</p>
+                    onclick="openDeliveryForm('Sports', 'Running Shoes Pro', 85.00, 'Professional running shoes with cushioning', 'images/SHOE1.jpg')">
+                    <img src="images/SHOE1.jpg" alt="Running Shoes" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Running Shoes Pro</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$85.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Travel Sports Bag', 'Sports', 68.00, 'Large travel bag for sports equipment', 'images/BAG2.jpg')">
-                    <img src="images/BAG2.jpg" alt="Travel Bag" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Travel Sports Bag</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 68.00</p>
+                    onclick="openDeliveryForm('Sports', 'Training Sneakers', 72.00, 'Versatile training sneakers', 'images/SHOE2.jpg')">
+                    <img src="images/SHOE2.jpg" alt="Training Sneakers" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Training Sneakers</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$72.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Backpack for Sports', 'Sports', 42.00, 'Lightweight sports backpack', 'images/BAG3.jpg')">
-                    <img src="images/BAG3.jpg" alt="Sports Backpack"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Backpack for Sports</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 42.00</p>
+                    onclick="openDeliveryForm('Sports', 'Outdoor Hiking Boots', 150.00, 'Durable hiking boots for outdoor adventures', 'images/SHOE3.jpg')">
+                    <img src="images/SHOE3.jpg" alt="Hiking Boots" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Outdoor Hiking Boots</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$150.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Tennis Racket Set', 'Sports', 95.00, 'Professional tennis racket with balls', 'images/BAG4.jpg')">
-                    <img src="images/BAG4.jpg" alt="Tennis Racket"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Tennis Racket Set</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
+                    onclick="openDeliveryForm('Sports', 'Basketball Shoes', 95.00, 'Professional basketball shoes', 'images/SHOE6.jpg')">
+                    <img src="images/SHOE6.jpg" alt="Basketball Shoes" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Basketball Shoes</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$95.00</p>
+                    </div>
+                </div>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                    onclick="openDeliveryForm('Sports', 'Football Boots', 88.00, 'Professional football boots', 'images/SHOE7.jpg')">
+                    <img src="images/SHOE7.jpg" alt="Football Boots" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Football Boots</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$88.00</p>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <h2 class="section-title" style="margin-top: 30px;">More Sports Equipment</h2>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
+        <section>
+            <h2 style="margin-bottom: 20px;">Sports Balls & Equipment</h2>
+            <div class="product-grid modern-grid" style="margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Basketball', 'Sports', 38.00, 'Official size basketball', 'images/image9.jpg')">
-                    <img src="images/image9.jpg" alt="Basketball"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Basketball</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 38.00</p>
+                    onclick="openDeliveryForm('Sports', 'Basketball', 38.00, 'Official size basketball', 'images/image9.jpg')">
+                    <img src="images/image9.jpg" alt="Basketball" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Basketball</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$38.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Football', 'Sports', 32.00, 'Professional football', 'images/image10.jpg')">
+                    onclick="openDeliveryForm('Sports', 'Football', 32.00, 'Professional football', 'images/image10.jpg')">
                     <img src="images/image10.jpg" alt="Football" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Football</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 32.00</p>
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Football</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$32.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Cycling Helmet', 'Sports', 48.00, 'Safety cycling helmet', 'images/image11.jpg')">
-                    <img src="images/image11.jpg" alt="Cycling Helmet"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Cycling Helmet</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 48.00</p>
+                    onclick="openDeliveryForm('Sports', 'Cycling Helmet', 48.00, 'Safety cycling helmet', 'images/image11.jpg')">
+                    <img src="images/image11.jpg" alt="Cycling Helmet" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Cycling Helmet</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$48.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Swimming Goggles', 'Sports', 28.00, 'Anti-fog swimming goggles', 'images/image12.jpg')">
-                    <img src="images/image12.jpg" alt="Swimming Goggles"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Swimming Goggles</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 28.00</p>
+                    onclick="openDeliveryForm('Sports', 'Swimming Goggles', 28.00, 'Anti-fog swimming goggles', 'images/image12.jpg')">
+                    <img src="images/image12.jpg" alt="Swimming Goggles" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Swimming Goggles</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$28.00</p>
+                    </div>
+                </div>
+                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
+                    onclick="openDeliveryForm('Sports', 'Tennis Racket Set', 95.00, 'Professional tennis racket with balls', 'images/BAG4.jpg')">
+                    <img src="images/BAG4.jpg" alt="Tennis Racket" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Tennis Racket Set</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$95.00</p>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <h2 class="section-title" style="margin-top: 30px;">More Sports Footwear</h2>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
+        <section>
+            <h2 style="margin-bottom: 20px;">Outdoor & Adventure</h2>
+            <div class="product-grid modern-grid" style="margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Basketball Shoes', 'Sports', 95.00, 'Professional basketball shoes', 'images/SHOE6.jpg')">
-                    <img src="images/SHOE6.jpg" alt="Basketball Shoes"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Basketball Shoes</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
+                    onclick="openDeliveryForm('Sports', 'Gym Duffel Bag', 55.00, 'Spacious gym duffel bag', 'images/BAG1.jpg')">
+                    <img src="images/BAG1.jpg" alt="Gym Bag" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Gym Duffel Bag</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$55.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Football Boots', 'Sports', 88.00, 'Professional football boots', 'images/SHOE7.jpg')">
-                    <img src="images/SHOE7.jpg" alt="Football Boots"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Football Boots</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 88.00</p>
+                    onclick="openDeliveryForm('Sports', 'Travel Sports Bag', 68.00, 'Large travel bag for sports equipment', 'images/BAG2.jpg')">
+                    <img src="images/BAG2.jpg" alt="Travel Bag" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Travel Sports Bag</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$68.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Tennis Shoes', 'Sports', 75.00, 'Court tennis shoes', 'images/SHOE8.jpg')">
-                    <img src="images/SHOE8.jpg" alt="Tennis Shoes"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Tennis Shoes</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 75.00</p>
+                    onclick="openDeliveryForm('Sports', 'Boxing Equipment Set', 180.00, 'Professional boxing equipment', 'images/SHOE18.jpg')">
+                    <img src="images/SHOE18.jpg" alt="Boxing Equipment" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Boxing Equipment Set</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$180.00</p>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Gym Training Shoes', 'Sports', 65.00, 'Indoor gym training shoes', 'images/SHOE9.jpg')">
-                    <img src="images/SHOE9.jpg" alt="Training Shoes"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Gym Training Shoes</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 65.00</p>
+                    onclick="openDeliveryForm('Sports', 'Golf Equipment', 280.00, 'Golf clubs and bag', 'images/SHOE26.jpg')">
+                    <img src="images/SHOE26.jpg" alt="Golf Equipment" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="padding: 12px;">
+                        <h4 style="margin: 0 0 8px 0; font-size: 14px;">Golf Equipment</h4>
+                        <p style="margin: 0; color: #4CAF50; font-weight: bold;">$280.00</p>
                     </div>
                 </div>
             </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Casual Sports Shoes', 'Sports', 55.00, 'Casual everyday sports shoes', 'images/SHOE10.jpg')">
-                    <img src="images/SHOE10.jpg" alt="Casual Shoes"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Casual Sports Shoes</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 55.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Trail Running Shoes', 'Sports', 85.00, 'Off-road trail running shoes', 'images/SHOE11.jpg')">
-                    <img src="images/SHOE11.jpg" alt="Trail Shoes"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Trail Running Shoes</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 85.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Indoor Court Shoes', 'Sports', 70.00, 'Indoor court sports shoes', 'images/SHOE12.jpg')">
-                    <img src="images/SHOE12.jpg" alt="Court Shoes"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Indoor Court Shoes</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 70.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Skateboarding Shoes', 'Sports', 78.00, 'Skateboard shoes', 'images/SHOE13.jpg')">
-                    <img src="images/SHOE13.jpg" alt="Skate Shoes"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Skateboarding Shoes</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 78.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Fitness Training Gear', 'Sports', 120.00, 'Complete fitness training set', 'images/SHOE14.jpg')">
-                    <img src="images/SHOE14.jpg" alt="Fitness Gear"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Fitness Training Gear</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 120.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Workout Accessories', 'Sports', 45.00, 'Workout accessories kit', 'images/SHOE15.jpg')">
-                    <img src="images/SHOE15.jpg" alt="Workout Accessories"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Workout Accessories</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 45.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Sports Water Bottle', 'Sports', 18.00, 'Insulated water bottle', 'images/SHOE16.jpg')">
-                    <img src="images/SHOE16.jpg" alt="Water Bottle"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Sports Water Bottle</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 18.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Yoga Accessories', 'Sports', 35.00, 'Yoga accessories set', 'images/SHOE17.jpg')">
-                    <img src="images/SHOE17.jpg" alt="Yoga Accessories"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Yoga Accessories</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 35.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Boxing Equipment Set', 'Sports', 180.00, 'Professional boxing equipment', 'images/SHOE18.jpg')">
-                    <img src="images/SHOE18.jpg" alt="Boxing Equipment"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Boxing Equipment Set</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 180.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Punching Bag', 'Sports', 150.00, 'Heavy bag for training', 'images/SHOE19.jpg')">
-                    <img src="images/SHOE19.jpg" alt="Punching Bag"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Punching Bag</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 150.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Tennis Accessories', 'Sports', 38.00, 'Tennis accessories pack', 'images/SHOE20.jpg')">
-                    <img src="images/SHOE20.jpg" alt="Tennis Accessories"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Tennis Accessories</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 38.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Badminton Set', 'Sports', 68.00, 'Complete badminton set', 'images/SHOE21.jpg')">
-                    <img src="images/SHOE21.jpg" alt="Badminton Set"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Badminton Set</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 68.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Table Tennis Paddles', 'Sports', 45.00, 'Table tennis paddle set', 'images/SHOE22.jpg')">
-                    <img src="images/SHOE22.jpg" alt="Table Tennis Paddles"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Table Tennis Paddles</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 45.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Volleyball Set', 'Sports', 95.00, 'Complete volleyball set', 'images/SHOE23.jpg')">
-                    <img src="images/SHOE23.jpg" alt="Volleyball Set"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Volleyball Set</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Baseball Equipment', 'Sports', 85.00, 'Baseball equipment set', 'images/SHOE24.jpg')">
-                    <img src="images/SHOE24.jpg" alt="Baseball Equipment"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Baseball Equipment</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 85.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Cricket Set', 'Sports', 78.00, 'Cricket bat and ball set', 'images/SHOE25.jpg')">
-                    <img src="images/SHOE25.jpg" alt="Cricket Set"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Cricket Set</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 78.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Golf Equipment', 'Sports', 280.00, 'Golf clubs and bag', 'images/SHOE26.jpg')">
-                    <img src="images/SHOE26.jpg" alt="Golf Equipment"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Golf Equipment</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 280.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Hockey Stick', 'Sports', 65.00, 'Field hockey stick', 'images/SHOE27.jpg')">
-                    <img src="images/SHOE27.jpg" alt="Hockey Stick"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Hockey Stick</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 65.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Lacrosse Stick', 'Sports', 58.00, 'Lacrosse stick set', 'images/SHOE28.jpg')">
-                    <img src="images/SHOE28.jpg" alt="Lacrosse Stick"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Lacrosse Stick</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 58.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Archery Set', 'Sports', 120.00, 'Archery bow and arrows', 'images/SHOE29.jpg')">
-                    <img src="images/SHOE29.jpg" alt="Archery Set"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Archery Set</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 120.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Darts Set', 'Sports', 28.00, 'Professional darts set', 'images/SHOE30.jpg')">
-                    <img src="images/SHOE30.jpg" alt="Darts Set" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Darts Set</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 28.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Bowling Ball', 'Sports', 55.00, 'Bowling ball and bag', 'images/SHOE31.jpg')">
-                    <img src="images/SHOE31.jpg" alt="Bowling Ball"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Bowling Ball</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 55.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Frisbee Set', 'Sports', 18.00, 'Ultimate frisbee set', 'images/SHOE32.jpg')">
-                    <img src="images/SHOE32.jpg" alt="Frisbee Set"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Frisbee Set</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 18.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Snow Sports Gear', 'Sports', 180.00, 'Ski and snow gear', 'images/SHOE33.jpg')">
-                    <img src="images/SHOE33.jpg" alt="Snow Sports"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Snow Sports Gear</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 180.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-grid" id="productGrid"></div>
         </section>
     </main>
-    <script src="script.js"></script>
-    <script>
-        function openDeliveryForm(title, category, price, desc, image) {
-            // Redirect to product page with product details
-            const params = new URLSearchParams({
-                title: title,
-                category: category,
-                price: price,
-                desc: desc,
-                image: image
-            });
-            window.location.href = 'product.html?' + params.toString();
-        }
-    </script>
-</body>
 
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>ALFRED</h4>
+                    <p>Your trusted B2B marketplace for global trade.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="about.html">About Us</a>
+                    <a href="help.html">Help Center</a>
+                    <a href="trade.html">Trade Assurance</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: support@alfred.com</p>
+                    <p>Phone: +1 234 567 890</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ALFRED. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
+        <div style="background-color:#fefefe;margin:5% auto;padding:20px;border:1px solid #888;width:90%;max-width:600px;border-radius:10px;max-height:80vh;overflow-y:auto;">
+            <span onclick="closeCartModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
+            <h2>Your Cart</h2>
+            <div id="cartItems"></div>
+            <div style="margin-top:20px;border-top:2px solid #eee;padding-top:15px;">
+                <h3>Total: GHS <span id="cartTotal">0.00</span></h3>
+                <p style="color:#666;">Delivery Fee: GHS <span id="deliveryFee">0.00</span></p>
+                <p style="font-weight:bold;color:#0abf53;">Grand Total: GHS <span id="grandTotal">0.00</span></p>
+            </div>
+            <button onclick="checkoutCart()" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:15px;">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Delivery Form Modal -->
+    <div id="deliveryModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
+        <div style="background-color:#fefefe;margin:5% auto;padding:25px;border:1px solid #888;width:90%;max-width:500px;border-radius:10px;">
+            <span onclick="closeDeliveryModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
+            <h2>Delivery Information</h2>
+            <form id="deliveryForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="productCategory">
+                <input type="hidden" id="productTitle">
+                <input type="hidden" id="productPrice">
+                <input type="hidden" id="productDescription">
+                <input type="hidden" id="productImage">
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Full Name</label>
+                    <input type="text" id="fullName" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Phone Number</label>
+                    <input type="tel" id="phoneNumber" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Delivery Address</label>
+                    <textarea id="deliveryAddress" required rows="3" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;"></textarea>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Quantity</label>
+                    <input type="number" id="quantity" value="1" min="1" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Product</label>
+                    <div id="modalProductInfo" style="background:#f9f9f9;padding:10px;border-radius:5px;"></div>
+                </div>
+                <button type="submit" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">Make Payment</button>
+            </form>
+        </div>
+    </div>
+</body>
 </html>
