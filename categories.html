@@ -9,7 +9,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#FF6600">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="1.png">
+    <link rel="apple-touch-icon" href="new_logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -348,7 +348,7 @@
         <div class="container">
             <div class="header-top">
                 <div class="logo">
-                    <a href="index.html"><img src="1.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a>
+                    <a href="index.html"><img src="new_logo.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a>
                 </div>
                 <div class="search-bar">
                     <input type="text" placeholder="Search for products or categories...">
@@ -832,15 +832,10 @@
         let currentProduct = null;
 
         // Open delivery form modal
-        function openDeliveryForm(title, category, price, desc, image) {
-            currentProduct = { title, category, price, desc, image };
-
-            document.getElementById('modalProductImg').src = image;
-            document.getElementById('modalProductTitle').textContent = title + ' - ' + category;
-            document.getElementById('modalProductPrice').textContent = 'GHS ' + price.toFixed(2);
-            document.getElementById('modalProductDesc').textContent = desc;
-
-            document.getElementById('deliveryModal').classList.add('active');
+        function openDeliveryForm(category, title, price, desc, image){
+            let p = typeof price === 'string' ? parseFloat(price.replace(/[^0-9.]/g, '')) : price;
+            let d = typeof desc !== 'undefined' ? desc : '';
+            window.location.href = 'product.html?title=' + encodeURIComponent(title) + '&price=' + p + '&desc=' + encodeURIComponent(d) + '&image=' + encodeURIComponent(image) + '&category=' + encodeURIComponent(category);
         }
 
         // Close delivery form modal
@@ -1017,7 +1012,7 @@
                             const firstItem = order.items[0];
                             ordersHTML += `
                                 <a href="orders.html" class="floating-order-item">
-                                    <img src="${firstItem.image || '1.png'}" alt="Product" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">
+                                    <img src="${firstItem.image || 'new_logo.png'}" alt="Product" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">
                                     <div style="flex: 1; overflow: hidden;">
                                         <p style="font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${firstItem.title}</p>
                                         <p style="font-size: 11px; color: #999;">${order.items.length} item(s) • GHS ${parseFloat(order.total).toFixed(2)}</p>
