@@ -9,112 +9,9 @@ let currentProduct = null;
 
 // Open Delivery Form Modal with Paystack Payment
 function openDeliveryForm(category, title, price, description, image) {
-    currentProduct = { category, title, price, description, image };
-
-    // Create modal if not exists
-    let modal = document.getElementById('deliveryModal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'deliveryModal';
-        modal.className = 'modal';
-        modal.style.cssText = 'display:flex;align-items:center;justify-content:center;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:10000;';
-        modal.innerHTML = `
-            <div style="background:white;padding:30px;border-radius:16px;width:90%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;" id="deliveryModalContent">
-                <button onclick="closeDeliveryForm()" style="position:absolute;top:15px;right:15px;background:none;border:none;font-size:24px;cursor:pointer;color:#666;">&times;</button>
-                <h2 style="margin-bottom:20px;font-size:22px;color:#1a1a1a;">Complete Your Order</h2>
-                
-                <!-- Product Summary -->
-                <div style="display:flex;gap:15px;padding:15px;background:#f9f9f9;border-radius:10px;margin-bottom:20px;">
-                    <img id="modalProductImage" src="" style="width:80px;height:80px;object-fit:cover;border-radius:8px;">
-                    <div>
-                        <h3 id="modalProductTitle" style="font-size:15px;margin-bottom:5px;"></h3>
-                        <p id="modalProductPrice" style="font-size:18px;font-weight:700;color:#0abf53;"></p>
-                    </div>
-                </div>
-                
-                <!-- Delivery Form -->
-                <form id="quickDeliveryForm" onsubmit="event.preventDefault(); processQuickPayment();">
-                    <div style="margin-bottom:15px;">
-                        <label style="display:block;margin-bottom:5px;font-size:14px;font-weight:500;">Full Name *</label>
-                        <input type="text" id="quickFullName" required style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-                    </div>
-                    <div style="margin-bottom:15px;">
-                        <label style="display:block;margin-bottom:5px;font-size:14px;font-weight:500;">Phone Number *</label>
-                        <input type="tel" id="quickPhone" required placeholder="e.g. 0551234567" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-                    </div>
-                    <div style="margin-bottom:15px;">
-                        <label style="display:block;margin-bottom:5px;font-size:14px;font-weight:500;">WhatsApp (Optional)</label>
-                        <input type="tel" id="quickWhatsapp" placeholder="e.g. 0551234567" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-                    </div>
-                    <div style="margin-bottom:15px;">
-                        <label style="display:block;margin-bottom:5px;font-size:14px;font-weight:500;">Region *</label>
-                        <select id="quickRegion" required style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;background:white;">
-                            <option value="">Select Region</option>
-                            <option value="Greater Accra">Greater Accra</option>
-                            <option value="Ashanti">Ashanti</option>
-                            <option value="Central">Central</option>
-                            <option value="Eastern">Eastern</option>
-                            <option value="Western">Western</option>
-                            <option value="Volta">Volta</option>
-                            <option value="Northern">Northern</option>
-                            <option value="Upper East">Upper East</option>
-                            <option value="Upper West">Upper West</option>
-                            <option value="Bono">Bono</option>
-                            <option value="Bono East">Bono East</option>
-                            <option value="Ahafo">Ahafo</option>
-                            <option value="Savannah">Savannah</option>
-                            <option value="North East">North East</option>
-                            <option value="Oti">Oti</option>
-                            <option value="Western North">Western North</option>
-                        </select>
-                    </div>
-                    <div style="margin-bottom:15px;">
-                        <label style="display:block;margin-bottom:5px;font-size:14px;font-weight:500;">City/Town *</label>
-                        <input type="text" id="quickCity" required style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-                    </div>
-                    <div style="margin-bottom:20px;">
-                        <label style="display:block;margin-bottom:5px;font-size:14px;font-weight:500;">Delivery Address *</label>
-                        <textarea id="quickAddress" required placeholder="Enter detailed delivery address or landmark" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;height:80px;resize:none;"></textarea>
-                    </div>
-                    
-                    <!-- Order Summary -->
-                    <div style="background:#f0fdf4;padding:15px;border-radius:10px;margin-bottom:20px;">
-                        <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-                            <span style="color:#666;">Product Price</span>
-                            <span id="modalPriceDisplay">GHS 0.00</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-                            <span style="color:#666;">Delivery Fee</span>
-                            <span>GHS 15.00</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;font-size:18px;font-weight:700;border-top:1px solid #ddd;padding-top:10px;">
-                            <span>Total</span>
-                            <span id="modalTotalDisplay" style="color:#0abf53;">GHS 0.00</span>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" style="width:100%;padding:16px;background:#0abf53;color:white;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:background 0.3s;" onmouseover="this.style.background='#08a648'" onmouseout="this.style.background='#0abf53'">
-                        <ion-icon name="lock-closed-outline" style="vertical-align:middle;margin-right:8px;"></ion-icon>
-                        Pay with Paystack
-                    </button>
-                    <p style="text-align:center;margin-top:15px;font-size:12px;color:#888;">
-                        <ion-icon name="shield-checkmark-outline" style="vertical-align:middle;"></ion-icon>
-                        Secure payment via Paystack
-                    </p>
-                </form>
-            </div>
-        `;
-        document.body.appendChild(modal);
-    }
-
-    // Update modal content
-    document.getElementById('modalProductImage').src = image;
-    document.getElementById('modalProductTitle').textContent = title;
-    document.getElementById('modalProductPrice').textContent = 'GHS ' + price.toFixed(2);
-    document.getElementById('modalPriceDisplay').textContent = 'GHS ' + price.toFixed(2);
-    document.getElementById('modalTotalDisplay').textContent = 'GHS ' + (price + 15).toFixed(2);
-
-    modal.style.display = 'flex';
+    let p = typeof price === 'string' ? parseFloat(price.replace(/[^0-9.]/g, '')) : price;
+    let d = typeof description !== 'undefined' ? description : '';
+    window.location.href = 'product.html?title=' + encodeURIComponent(title) + '&price=' + p + '&desc=' + encodeURIComponent(d) + '&image=' + encodeURIComponent(image) + '&category=' + encodeURIComponent(category);
 }
 
 function closeDeliveryForm() {
@@ -1861,7 +1758,7 @@ function changeImage(type) {
     thumbs.forEach(t => t.classList.remove('active'));
     if (type === 'hero') thumbs[0].classList.add('active');
     else if (type === 'thumb1') {
-        mainImg.src = 'thumb1.png';
+        mainImg.src = 'thumbnew_logo.png';
         thumbs[1].classList.add('active');
     }
 }
