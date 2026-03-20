@@ -888,6 +888,8 @@
         function saveOrderToFirestore(fullName, phone, region, city, address, quantity) {
             if (typeof firebase !== 'undefined' && firebase.firestore) {
                 const db = firebase.firestore();
+                const auth = firebase.auth();
+                const uid = (auth && auth.currentUser) ? auth.currentUser.uid : 'guest';
                 db.collection('orders').add({
                     productTitle: currentProduct.title,
                     category: currentProduct.category,
@@ -900,7 +902,8 @@
                     city: city,
                     address: address,
                     status: 'pending',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    userId: uid,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
                     console.log('Order saved successfully');
                 }).catch((error) => {
