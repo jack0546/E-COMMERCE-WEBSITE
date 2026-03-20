@@ -6,7 +6,7 @@
     <title>Luggage, Bags & Cases - ALFRED</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="1.png">
+    <link rel="icon" type="image/png" href="new_logo.png">
     <script src="https://js.paystack.co/v1/inline.js"></script>
 </head>
 <body>
@@ -45,7 +45,7 @@
         <div class="container">
             <div class="header-content">
                 <a href="index.html" class="logo">
-                    <img src="1.png" alt="ALFRED">
+                    <img src="new_logo.png" alt="ALFRED">
                     <span>ALFRED</span>
                 </a>
                 <nav class="main-nav">
@@ -390,7 +390,7 @@
                         querySnapshot.forEach((doc) => {
                             const order = doc.data();
                             const firstItem = order.items[0];
-                            ordersHTML += '<a href="orders.html" class="floating-order-item"><img src="' + (firstItem.image || '1.png') + '" alt="Product" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;"><div style="flex: 1; overflow: hidden;"><p style="font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + firstItem.title + '</p><p style="font-size: 11px; color: #999;">' + order.items.length + ' item(s) • GHS ' + parseFloat(order.total).toFixed(2) + '</p></div></a>';
+                            ordersHTML += '<a href="orders.html" class="floating-order-item"><img src="' + (firstItem.image || 'new_logo.png') + '" alt="Product" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;"><div style="flex: 1; overflow: hidden;"><p style="font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + firstItem.title + '</p><p style="font-size: 11px; color: #999;">' + order.items.length + ' item(s) • GHS ' + parseFloat(order.total).toFixed(2) + '</p></div></a>';
                         });
                         container.innerHTML = ordersHTML;
                     })
