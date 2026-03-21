@@ -548,18 +548,62 @@
         }
         
         function saveOrderToFirestore(orderData) {
-            if (typeof db !== 'undefined') {
-                const uid = (typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser.uid : 'guest';
+            console.log('saveOrderToFirestore called in index.html');
+            
+            if (typeof firebase === 'undefined') {
+                console.error('Firebase SDK not loaded!');
+                alert('Error: Firebase not loaded. Order saved locally only.');
+                saveOrderLocally(orderData);
+                return;
+            }
+            
+            try {
+                // Ensure Firebase is initialized
+                if (!firebase.apps.length) {
+                    firebase.initializeApp({
+                        apiKey: "AIzaSyBMhNFK9ueVA6-1i22Z_NbGV_50Uy0xXjQ",
+                        authDomain: "project-4da600f0-7b2b-45f4-808.firebaseapp.com",
+                        projectId: "project-4da600f0-7b2b-45f4-808",
+                        storageBucket: "project-4da600f0-7b2b-45f4-808.firebasestorage.app",
+                        messagingSenderId: "531999731190",
+                        appId: "1:531999731190:web:098953626b761eafb62bd7"
+                    });
+                }
+                
+                const db = firebase.firestore();
+                const auth = firebase.auth();
+                const user = auth.currentUser;
+                const uid = user ? user.uid : 'guest';
+                
+                console.log('Saving order with userId:', uid);
+                
                 db.collection('orders').add({
                     ...orderData,
                     userId: uid,
+                    userEmail: user ? user.email : (orderData.delivery ? orderData.delivery.email : 'customer@alfred.com'),
+                    userName: orderData.delivery ? (orderData.delivery.fullName || 'Guest') : (user ? user.displayName : 'Guest'),
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    console.log('Order saved successfully');
+                }).then((docRef) => {
+                    console.log('Order saved successfully! Doc ID:', docRef.id);
+                    alert('Order saved to database!');
                 }).catch(err => {
                     console.error('Error saving order:', err);
+                    alert('Error saving order: ' + err.message + '. Order saved locally.');
+                    saveOrderLocally(orderData);
                 });
+            } catch (error) {
+                console.error('Exception in saveOrderToFirestore:', error);
+                alert('Error: ' + error.message + '. Order saved locally.');
+                saveOrderLocally(orderData);
             }
+        }
+        
+        // Backup function to save orders locally
+        function saveOrderLocally(orderData) {
+            const localOrders = JSON.parse(localStorage.getItem('alfredOrders') || '[]');
+            localOrders.unshift(orderData);
+            localStorage.setItem('alfredOrders', JSON.stringify(localOrders));
+            console.log('Order saved to localStorage');
         }
         
         // Initialize on page load
