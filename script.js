@@ -1637,9 +1637,25 @@ function processCartPayment() {
                 total: (total + deliveryFee).toFixed(2),
                 reference: response.reference,
                 delivery: { fullName, phone, region, city, address },
-                status: 'paid',
+                status: 'Paid',
                 orderDate: new Date().toISOString()
             };
+            
+            // Save to Firestore
+            if (typeof firebase !== 'undefined') {
+                const db = firebase.firestore();
+                db.collection('orders').add({
+                    ...orderData,
+                    userId: 'guest',
+                    userEmail: phone + '@customer.com',
+                    userName: fullName,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    console.log('Cart order saved to Firestore!');
+                }).catch((error) => {
+                    console.error('Error saving cart order:', error);
+                });
+            }
             
             localStorage.setItem('alfredCart', JSON.stringify([]));
             updateCartBadge();
@@ -1763,22 +1779,32 @@ function changeImage(type) {
     }
 }
 
-// Save order to Firestore (for logged-in users)
+// Save order to Firestore (works for ALL customers - logged in or not)
 function saveOrderToFirestore(orderData) {
-    if (typeof firebase !== 'undefined' && firebase.auth().currentUser) {
+    if (typeof firebase !== 'undefined') {
         const db = firebase.firestore();
-        db.collection('orders').add({
+        const user = firebase.auth().currentUser;
+        
+        const orderRecord = {
             ...orderData,
-            userId: firebase.auth().currentUser.uid,
+            userId: user ? user.uid : 'guest',
+            userEmail: user ? user.email : 'customer@alfred.com',
+            userName: orderData.delivery ? (orderData.delivery.fullName || 'Guest') : (user ? user.displayName : 'Guest'),
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
-            console.log('Order saved to Firestore');
-        }).catch((error) => {
+        };
+        
+        db.collection('orders').add(orderRecord)
+        .then(() => {
+            console.log('Order saved to Firestore successfully!');
+        })
+        .catch((error) => {
             console.error('Error saving order:', error);
         });
+    } else {
+        console.log('Firebase not available');
     }
 
-    // Also save to localStorage for guests
+    // Also save to localStorage for backup
     const localOrders = JSON.parse(localStorage.getItem('alfredOrders') || '[]');
     localOrders.unshift(orderData);
     localStorage.setItem('alfredOrders', JSON.stringify(localOrders));
