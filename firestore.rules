@@ -25,11 +25,13 @@ service cloud.firestore {
     
     // Orders - allows both authenticated AND guest customers
     match /orders/{orderId} {
-      allow read: if (request.auth != null && request.auth.uid == resource.data.userId) || 
-                    (resource.data.userId == 'guest') || isAdmin();
+      allow get: if (request.auth != null && request.auth.uid == resource.data.userId) || 
+                    (resource.data.userId.startsWith('GUEST_')) || isAdmin();
+      
+      allow list: if isAdmin() || (request.auth != null && request.auth.uid == resource.data.userId);
       
       allow create: if (request.auth != null && request.auth.uid == request.resource.data.userId) || 
-                    (request.resource.data.userId == 'guest');
+                    (request.resource.data.userId.startsWith('GUEST_'));
                     
       allow update: if isAdmin();
       allow delete: if false; 
