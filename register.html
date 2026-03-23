@@ -99,23 +99,16 @@
             const password = document.getElementById('regPassword').value;
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
+            const companyName = document.getElementById('companyName').value;
 
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Update user profile
-                    return userCredential.user.updateProfile({
+                    const user = userCredential.user;
+                    return user.updateProfile({
                         displayName: firstName + ' ' + lastName
                     }).then(() => {
-                        // Check for admin redirect (case-insensitive)
-                        if (email.toLowerCase() === 'narhsnazzisco@gmail.com') {
-                            window.location.href = 'admin-dashboard/admin-dashboard.html';
-                            return;
-                        }
-                        // If there's a productId, add to cart first
-                        if (productId) {
-                            sessionStorage.setItem('pendingProductId', productId);
-                        }
-                        window.location.href = redirectUrl;
+                        // Save to Firestore so admin can see this user
+                        return saveUserToFirestore(user, { firstName, lastName, companyName });
                     });
                 })
                 .catch((error) => {
@@ -128,20 +121,51 @@
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
                 .then((result) => {
-                    // Check for admin redirect (case-insensitive)
-                    if (result.user.email.toLowerCase() === 'narhsnazzisco@gmail.com') {
-                        window.location.href = 'admin-dashboard/admin-dashboard.html';
-                        return;
-                    }
-                    // If there's a productId, add to cart first
-                    if (productId) {
-                        sessionStorage.setItem('pendingProductId', productId);
-                    }
-                    window.location.href = redirectUrl;
+                    const user = result.user;
+                    // Save to Firestore so admin can see this user
+                    saveUserToFirestore(user, {});
                 })
                 .catch((error) => {
                     alert('Google sign-in failed: ' + error.message);
                 });
+        }
+
+        // Save user to Firestore and redirect
+        function saveUserToFirestore(user, extra) {
+            const isAdmin = user.email && user.email.toLowerCase() === 'narhsnazzisco@gmail.com';
+            const db = firebase.firestore();
+
+            const userData = {
+                name: user.displayName || ((extra.firstName || '') + ' ' + (extra.lastName || '')).trim() || user.email.split('@')[0],
+                email: user.email,
+                photo: user.photoURL || '',
+                isAdmin: isAdmin,
+                provider: user.providerData[0] ? user.providerData[0].providerId : 'email',
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            if (extra.companyName) userData.company = extra.companyName;
+
+            return db.collection('users').doc(user.uid).set(userData, { merge: true })
+            .then(() => {
+                console.log('New user saved to Firestore:', user.email);
+                if (isAdmin) {
+                    window.location.href = 'admin-dashboard/admin-dashboard.html';
+                } else {
+                    if (productId) sessionStorage.setItem('pendingProductId', productId);
+                    window.location.href = redirectUrl;
+                }
+            })
+            .catch((error) => {
+                console.error('Error saving user to Firestore:', error);
+                // Still redirect even if Firestore fails
+                if (isAdmin) {
+                    window.location.href = 'admin-dashboard/admin-dashboard.html';
+                } else {
+                    window.location.href = redirectUrl;
+                }
+            });
         }
         // Check if user is already logged in as admin
         document.addEventListener('DOMContentLoaded', function() {
