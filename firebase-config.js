@@ -33,8 +33,12 @@ function signInWithGoogle() {
 }
 
 function saveUserToFirestore(user) {
-    // Check if user is admin
-    const isAdmin = user.email === 'narhsnazzisco@gmail.com';
+    // Check if user is admin (case-insensitive)
+    const userEmail = user.email ? user.email.toLowerCase() : '';
+    const isAdmin = (userEmail === 'narhsnazzisco@gmail.com');
+    
+    console.log('User email:', user.email);
+    console.log('Is admin:', isAdmin);
     
     db.collection("users").doc(user.uid).set({
         name: user.displayName,
@@ -46,6 +50,16 @@ function saveUserToFirestore(user) {
     .then(() => {
         // Redirect admin to admin dashboard, regular users to index
         if (isAdmin) {
+            alert('Admin login successful! Redirecting to dashboard...');
+            window.location.href = 'admin-dashboard/admin-dashboard.html';
+        } else {
+            window.location.href = 'index.html';
+        }
+    })
+    .catch((error) => {
+        console.error('Error saving user:', error);
+        // Still redirect even if Firestore fails
+        if (isAdmin) {
             window.location.href = 'admin-dashboard/admin-dashboard.html';
         } else {
             window.location.href = 'index.html';
@@ -56,23 +70,31 @@ function saveUserToFirestore(user) {
 // Function to save order to Firestore
 function saveOrderToFirestore(orderDetails) {
     const user = auth.currentUser;
-    if (!user) {
-        console.warn("Order not saved to Firestore: No user logged in.");
-        return;
-    }
-
-    db.collection("orders").add({
-        userId: user.uid,
-        userEmail: user.email,
-        userName: user.displayName,
+    const orderData = {
+        userId: user ? user.uid : 'GUEST_' + Date.now(),
+        userEmail: user ? user.email : (orderDetails.delivery ? orderDetails.delivery.email : 'guest@alfredproducts.com'),
+        userName: user ? user.displayName : (orderDetails.delivery ? orderDetails.delivery.fullName : 'Guest Customer'),
         items: orderDetails.items,
         total: orderDetails.total,
         reference: orderDetails.reference,
         delivery: orderDetails.delivery || {},
-        status: "Paid",
+        status: orderDetails.status || "Paid",
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    })
+    };
+
+    console.log("Saving order to Firestore:", orderData);
+
+    return db.collection("orders").add(orderData)
     .then((docRef) => {
-        console.log("Order saved with ID: ", docRef.id);
+        console.log("Order saved successfully with ID: ", docRef.id);
+        return docRef.id;
+    })
+    .catch((error) => {
+        console.error("Error saving order to Firestore:", error);
+        // Fallback: save to localStorage if Firestore fails
+        const localOrders = JSON.parse(localStorage.getItem('alfredOrders') || '[]');
+        localOrders.push({ ...orderData, id: 'local_' + Date.now(), sync: 'pending' });
+        localStorage.setItem('alfredOrders', JSON.stringify(localOrders));
+        throw error;
     });
 }
