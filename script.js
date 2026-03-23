@@ -1613,69 +1613,64 @@ function processCartPayment() {
     const address = document.getElementById('cartAddress').value;
     
     let cart = JSON.parse(localStorage.getItem('alfredCart')) || [];
-    let total = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('GHS ', '').replace(/,/g, '')) * item.quantity, 0);
+    let total = cart.reduce((sum, item) => sum + parseFloat(String(item.price).replace('GHS ', '').replace(/,/g, '')) * item.quantity, 0);
     const deliveryFee = 15;
-    const grandTotal = (total + deliveryFee) * 100; // Convert to kobo
+    const grandTotal = Math.round((total + deliveryFee) * 100); // Convert to pesewas
     
     if (typeof PaystackPop === 'undefined') {
         alert('Paystack is not loaded. Please refresh and try again.');
         return;
     }
     
+    const currentUser = typeof firebase !== 'undefined' ? firebase.auth().currentUser : null;
+    
     let handler = PaystackPop.setup({
-        key: 'pk_live_6b9968065dc0bd4842c97ffa138e49127c862888',
-        email: 'customer@alfredproducts.com',
+        key: 'pk_live_f89c4456a0860888a7fe1b1451f2808c32493',
+        email: currentUser ? currentUser.email : 'customer@alfredproducts.com',
         amount: grandTotal,
         currency: 'GHS',
-        ref: 'ALF_' + Math.floor((Math.random() * 1e9) + 1),
+        ref: 'ALF_CART_' + Math.floor((Math.random() * 1e9) + 1),
         metadata: {
             custom_fields: [
-                { display_name: 'Customer', value: fullName },
-                { display_name: 'Phone', value: phone },
-                { display_name: 'Items', value: cart.length + ' items' },
-                { display_name: 'Region', value: region },
-                { display_name: 'City', value: city },
-                { display_name: 'Address', value: address }
+                { display_name: 'Customer', variable_name: 'customer_name', value: fullName },
+                { display_name: 'Phone', variable_name: 'phone', value: phone },
+                { display_name: 'Items', variable_name: 'item_count', value: cart.length + ' items' },
+                { display_name: 'Region', variable_name: 'region', value: region },
+                { display_name: 'Address', variable_name: 'address', value: address + ', ' + city }
             ]
         },
         callback: function (response) {
-            // Payment successful
+            console.log('Cart payment success, ref:', response.reference);
+            
+            // Normalise cart items for admin dashboard display
+            const normalisedItems = cart.map(item => ({
+                title: item.title || item.name || 'Product',
+                price: parseFloat(String(item.price).replace('GHS ', '').replace(/,/g, '')) || 0,
+                quantity: item.quantity || 1,
+                image: item.image || ''
+            }));
+            
             const orderData = {
-                items: cart,
+                items: normalisedItems,
                 total: (total + deliveryFee).toFixed(2),
                 reference: response.reference,
                 delivery: { fullName, phone, region, city, address },
+                userName: fullName,
                 status: 'Paid',
                 orderDate: new Date().toISOString()
             };
             
-            // Save to Firestore
-            if (typeof saveOrderToFirestore === 'function') {
-                saveOrderToFirestore(orderData);
-            } else if (typeof firebase !== 'undefined') {
-                const db = firebase.firestore();
-                db.collection('orders').add({
-                    ...orderData,
-                    userId: 'GUEST_' + Date.now(),
-                    userEmail: (orderData.delivery ? orderData.delivery.email : phone + '@customer.com'),
-                    userName: fullName,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    console.log('Cart order saved to Firestore!');
-                }).catch((error) => {
-                    console.error('Error saving cart order:', error);
-                });
-            }
+            // Save to Firestore via the shared function
+            saveOrderToFirestore(orderData);
             
             localStorage.setItem('alfredCart', JSON.stringify([]));
             updateCartBadge();
             closeDeliveryForm();
             
-            alert('Payment successful! Thank you for your order. Reference: ' + response.reference);
-            window.location.href = 'orders.html';
+            setTimeout(function() { window.location.href = 'orders.html'; }, 1500);
         },
         onClose: function() {
-            alert('Payment cancelled. You can complete your purchase later.');
+            console.log('Cart payment dialog closed.');
         }
     });
     
@@ -1731,7 +1726,12 @@ function validateCartAndPay() {
 function payWithPaystack() {
     const params = new URLSearchParams(window.location.search);
     const prodId = parseInt(params.get('id'));
-    const product = catalog.find(p => p.id === prodId) || catalog[0];
+    const product = (catalog && catalog.find(p => p.id === prodId)) || {
+        title: params.get('title') || 'Product',
+        price: 'GHS ' + (params.get('price') || '0'),
+        image: params.get('image') || '',
+        category: params.get('category') || ''
+    };
 
     const deliveryInfo = JSON.parse(localStorage.getItem('tempDeliveryInfo'));
     if (!deliveryInfo) {
@@ -1739,33 +1739,40 @@ function payWithPaystack() {
         return;
     }
 
-    const priceNum = parseFloat(product.price.replace('GHS', '').trim());
-    const amount = priceNum * 100;
+    const priceStr = String(product.price || '0').replace('GHS', '').replace(/,/g, '').trim();
+    const priceNum = parseFloat(priceStr) || 0;
+    const amount = Math.round(priceNum * 100);
+
+    const currentUser = firebase.auth().currentUser;
 
     let handler = PaystackPop.setup({
-        key: 'pk_live_6b9968065dc0bd4842c97ffa138e49127c862888',
-        email: (auth.currentUser ? auth.currentUser.email : 'customer@alfredproducts.com'),
+        key: 'pk_live_f89c4456a0860888a7fe1b1451f2808c32493',
+        email: (currentUser ? currentUser.email : 'customer@alfredproducts.com'),
         amount: amount,
         currency: "GHS",
         ref: 'ALF_' + Math.floor((Math.random() * 1e9) + 1),
         metadata: {
             custom_fields: [
-                { display_name: "Customer", value: deliveryInfo.fullName },
-                { display_name: "Phone", value: deliveryInfo.phoneNumber },
-                { display_name: "Address", value: `${deliveryInfo.address}, ${deliveryInfo.city}` }
+                { display_name: "Customer", variable_name: "customer_name", value: deliveryInfo.fullName },
+                { display_name: "Phone", variable_name: "phone", value: deliveryInfo.phoneNumber },
+                { display_name: "Address", variable_name: "address", value: (deliveryInfo.address || '') + ', ' + (deliveryInfo.city || '') }
             ]
         },
         callback: function (response) {
-            alert('Order Placed Successfully!');
+            console.log('Paystack payment success, ref:', response.reference);
             saveOrderToFirestore({
-                items: [{ ...product, quantity: 1 }],
+                items: [{ title: product.title, price: priceNum, quantity: 1, image: product.image || '', category: product.category || '' }],
                 total: priceNum.toFixed(2),
                 reference: response.reference,
                 delivery: deliveryInfo,
-                status: 'pending'
+                userName: deliveryInfo.fullName,
+                status: 'Paid'
             });
             localStorage.removeItem('tempDeliveryInfo');
-            window.location.href = 'orders.html';
+            setTimeout(function() { window.location.href = 'orders.html'; }, 1500);
+        },
+        onClose: function() {
+            console.log('Payment dialog closed.');
         }
     });
     handler.openIframe();
@@ -1819,38 +1826,42 @@ function saveOrderToFirestore(orderData) {
         }
         
         const db = firebase.firestore();
-        const auth = firebase.auth();
-        const user = auth.currentUser;
+        const user = firebase.auth().currentUser;
+        const guestId = 'GUEST_' + Date.now();
         
-        console.log('Current user:', user);
+        console.log('Current user:', user ? user.email : 'Guest (no login)');
         
+        // Build a clean order record compatible with admin dashboard
         const orderRecord = {
-            ...orderData,
-            userId: user ? user.uid : 'GUEST_' + Date.now(),
-            userEmail: user ? user.email : (orderData.delivery ? orderData.delivery.email : 'customer@alfred.com'),
-            userName: orderData.delivery ? (orderData.delivery.fullName || 'Guest') : (user ? user.displayName : 'Guest'),
+            items: orderData.items || [],
+            total: orderData.total || '0.00',
+            reference: orderData.reference || ('REF_' + Date.now()),
+            status: orderData.status || 'Paid',
+            delivery: orderData.delivery || {},
+            userId: user ? user.uid : guestId,
+            userEmail: user ? user.email : (orderData.delivery && orderData.delivery.email ? orderData.delivery.email : 'guest@alfredproducts.com'),
+            userName: orderData.userName || (orderData.delivery ? orderData.delivery.fullName : (user ? (user.displayName || user.email) : 'Guest Customer')),
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         };
         
-        console.log('Saving order to Firestore:', orderRecord);
+        console.log('Writing to Firestore orders collection:', orderRecord);
         
         db.collection('orders').add(orderRecord)
         .then((docRef) => {
-            console.log('Order saved to Firestore successfully! Doc ID:', docRef.id);
-            // Also save locally for guests to see it on refresh
-            if (!user) {
-                saveOrderLocally(orderRecord);
+            console.log('ORDER SAVED TO FIRESTORE! Doc ID:', docRef.id);
+            // Always save locally as a backup copy
+            saveOrderLocally({...orderRecord, id: docRef.id, timestamp: new Date().toISOString()});
+            if (!orderData._silentSave) {
+                alert('Order saved successfully! Ref: ' + orderRecord.reference);
             }
-            alert('Order placed successfully! Reference: ' + (orderData.reference || docRef.id));
         })
         .catch((error) => {
-            console.error('Error saving order to Firestore:', error);
-            alert('Error saving order: ' + error.message + '. Order saved locally.');
-            saveOrderLocally(orderData);
+            console.error('Firestore save failed:', error.code, error.message);
+            alert('WARNING: Could not sync order to database.\nError: ' + error.message + '\n\nYour order is saved on this device.');
+            saveOrderLocally(orderRecord);
         });
     } catch (error) {
         console.error('Exception in saveOrderToFirestore:', error);
-        alert('Error: ' + error.message + '. Order saved locally.');
         saveOrderLocally(orderData);
     }
 }
