@@ -88,11 +88,11 @@
             <!-- Shoes Products Grid -->
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Shoes', 'Running Shoes', 2.00, 'Comfortable running shoes', 'images/SHOE5.jpg')">
+                    onclick="openDeliveryForm('Shoes', 'Running Shoes', 95.00, 'Comfortable running shoes', 'images/SHOE5.jpg')">
                     <img src="images/SHOE5.jpg" alt="Running" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Running Sports Shoes</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 2.00</p>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
                         <button onclick="event.stopPropagation(); addProductToCart('Shoes', 'Running Shoes', 95.00, 'Comfortable running shoes', 'images/SHOE5.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Casual Loafers</h4>
                         <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 2.00</p>
-                        <button onclick="event.stopPropagation(); addProductToCart('Shoes', 'Casual Loafers', 2.00, 'Comfortable casual loafers', 'images/SHOE6.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
+                        <button onclick="event.stopPropagation(); addProductToCart('Shoes', 'Casual Loafers', 75.00, 'Comfortable casual loafers', 'images/SHOE6.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
                 <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
@@ -110,7 +110,7 @@
                     <img src="images/SHOE7.jpg" alt="Formal" style="width: 100%; height: 150px; object-fit: cover;">
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Formal Dress Shoes</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 2.00</p>
+                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS .00</p>
                         <button onclick="event.stopPropagation(); addProductToCart('Shoes', 'Formal Shoes', 120.00, 'Elegant formal shoes', 'images/SHOE7.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                     <div style="padding: 10px;">
                         <h4 style="font-size: 13px; margin-bottom: 5px;">Canvas Sneakers</h4>
                         <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 2.00</p>
-                        <button onclick="event.stopPropagation(); addProductToCart('Shoes', 'Sneakers', 45.00, 'Lightweight canvas sneakers', 'images/SHOE8.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
+                        <button onclick="event.stopPropagation(); addProductToCart('Shoes', 'Sneakers', 2.00, 'Lightweight canvas sneakers', 'images/SHOE8.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
                     </div>
                 </div>
             </div>
@@ -134,14 +134,81 @@
         function openDeliveryForm(category, title, price, desc, image){
             let p = typeof price === 'string' ? parseFloat(price.replace(/[^0-9.]/g, '')) : price;
             let d = typeof desc !== 'undefined' ? desc : '';
-            window.location.href = 'product.html?title=' + encodeURIComponent(title) + '&price=' + p + '&desc=' + encodeURIComponent(d) + '&image=' + encodeURIComponent(image) + '&category=' + encodeURIComponent(category);
+            currentProduct = { title, price: p, category, desc: d, image };
+            
+            document.getElementById('modalProductImg').src = image;
+            document.getElementById('modalProductTitle').textContent = title;
+            document.getElementById('modalProductPrice').textContent = 'GHS ' + p.toFixed(2);
+            document.getElementById('modalProductDesc').textContent = d;
+            
+            const modal = document.getElementById('deliveryModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
         }
         function closeDeliveryForm() {
-            document.getElementById('deliveryModal').classList.remove('active');
+            const modal = document.getElementById('deliveryModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            currentProduct = null;
         }
+
+        // Process payment with Paystack
         function processPayment() {
-            alert('Thank you! Your order has been placed.');
-            closeDeliveryForm();
+            const fullName = document.getElementById('fullName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const address = document.getElementById('address').value;
+            
+            if (!fullName || !phoneNumber || !address) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            if (!currentProduct) {
+                alert('No product selected');
+                return;
+            }
+            
+            const priceNum = currentProduct.price || 0;
+            const deliveryInfo = { fullName, phoneNumber, address };
+            localStorage.setItem('tempDeliveryInfo', JSON.stringify(deliveryInfo));
+            
+            // Paystack payment integration
+            const paystack = new PaystackPop();
+            paystack.newTransaction({
+                key: 'pk_live_f89c4456a0860888a7fe1b1451f2808c32493',
+                amount: priceNum * 100,
+                email: 'customer@alfredproducts.com',
+                currency: 'GHS',
+                ref: 'ALF_SHOE_' + Math.floor((Math.random() * 1e9) + 1),
+                metadata: {
+                    custom_fields: [
+                        { display_name: 'Customer', variable_name: 'customer_name', value: fullName },
+                        { display_name: 'Phone', variable_name: 'phone', value: phoneNumber },
+                        { display_name: 'Product', variable_name: 'product', value: currentProduct.title },
+                        { display_name: 'Guest ID', variable_name: 'guest_id', value: localStorage.getItem('alfredGuestId') || '' }
+                    ]
+                },
+                callback: function(response) {
+                    console.log('Payment success, ref:', response.reference);
+                    saveOrderToFirestore({
+                        items: [{ title: currentProduct.title, price: priceNum, quantity: 1, image: currentProduct.image || '', category: currentProduct.category || '' }],
+                        total: priceNum.toFixed(2),
+                        reference: response.reference,
+                        delivery: deliveryInfo,
+                        userName: fullName,
+                        status: 'Paid'
+                    });
+                    localStorage.removeItem('tempDeliveryInfo');
+                    alert('Payment successful! Your order has been placed.');
+                    closeDeliveryForm();
+                    window.location.href = 'orders.html';
+                },
+                onClose: function() {
+                    console.log('Payment dialog closed.');
+                }
+            });
         }
     </script>
 
