@@ -1746,7 +1746,7 @@ function payWithPaystack() {
     const currentUser = firebase.auth().currentUser;
 
     let handler = PaystackPop.setup({
-        key: 'pk_live_f89c4456a0860888a7fe1b1451f2808c32493',
+        key: 'pk_live_6b9968065dc0bd4842c97ffa138e49127c862888',
         email: (currentUser ? currentUser.email : 'customer@alfredproducts.com'),
         amount: amount,
         currency: "GHS",
@@ -1838,7 +1838,7 @@ function saveOrderToFirestore(orderData) {
             reference: orderData.reference || ('REF_' + Date.now()),
             status: orderData.status || 'Paid',
             delivery: orderData.delivery || {},
-            userId: user ? user.uid : guestId,
+            userId: user ? user.uid : (localStorage.getItem('alfredGuestId') || guestId),
             userEmail: user ? user.email : (orderData.delivery && orderData.delivery.email ? orderData.delivery.email : 'guest@alfredproducts.com'),
             userName: orderData.userName || (orderData.delivery ? orderData.delivery.fullName : (user ? (user.displayName || user.email) : 'Guest Customer')),
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
