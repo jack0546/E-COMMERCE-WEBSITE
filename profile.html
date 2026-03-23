@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - ALFRED PRODUCTS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #FF6600 0%, #ff8533 100%);
+            padding: 40px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        .profile-pic-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto -60px;
+            z-index: 2;
+        }
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid white;
+            object-fit: cover;
+            background: white;
+        }
+        .edit-pic-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #FF6600;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .edit-pic-btn:hover {
+            transform: scale(1.1);
+        }
+        .profile-body {
+            padding: 80px 40px 40px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .info-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .info-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-input {
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        .info-input:focus {
+            border-color: #FF6600;
+        }
+        .info-input:disabled {
+            background: #f9f9f9;
+            color: #888;
+            border-color: #eee;
+        }
+        .save-btn {
+            background: #FF6600;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .save-btn:hover {
+            background: #e65c00;
+        }
+        .save-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #FF6600;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        @media (max-width: 640px) {
+            .info-grid { grid-template-columns: 1fr; }
+            .profile-body { padding: 60px 20px 30px; }
+        }
+    </style>
+</head>
+<body style="background: #f8f9fa;">
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p style="margin-top: 15px; color: #666; font-weight: 500;">Loading Profile...</p>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">
+                   <a href="index.html"><img src="new_logo.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a>
+                </div>
+                <div class="header-actions">
+                    <a href="index.html" class="action-item">
+                        <ion-icon name="home-outline"></ion-icon>
+                        <span>Home</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="profile-container">
+            <div class="profile-header">
+                <h1 style="font-size: 24px; font-weight: 700;">Account Settings</h1>
+                <p style="opacity: 0.9; margin-top: 5px; font-size: 14px;">Manage your personal information and preferences</p>
+                <div class="profile-pic-container">
+                    <img id="profileDisplay" src="" alt="Profile" class="profile-pic">
+                    <label for="profileUpload" class="edit-pic-btn">
+                        <ion-icon name="camera-outline"></ion-icon>
+                    </label>
+                    <input type="file" id="profileUpload" style="display: none;" accept="image/*">
+                </div>
+            </div>
+
+            <div class="profile-body">
+                <form id="profileForm">
+                    <div class="info-grid">
+                        <div class="info-group">
+                            <label class="info-label">Full Name</label>
+                            <input type="text" id="profName" class="info-input" placeholder="Enter your full name">
+                        </div>
+                        <div class="info-group">
+                            <label class="info-label">Email Address</label>
+                            <input type="email" id="profEmail" class="info-input" disabled>
+                        </div>
+                        <div class="info-group">
+                            <label class="info-label">Phone Number</label>
+                            <input type="tel" id="profPhone" class="info-input" placeholder="e.g., +233 50 000 0000">
+                        </div>
+                        <div class="info-group">
+                            <label class="info-label">Company Name</label>
+                            <input type="text" id="profCompany" class="info-input" placeholder="Your business name">
+                        </div>
+                        <div class="info-group" style="grid-column: span 2;">
+                            <label class="info-label">Location / Address</label>
+                            <input type="text" id="profLocation" class="info-input" placeholder="City, Region, Landmark">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="saveBtn" class="save-btn">
+                        <ion-icon name="cloud-upload-outline"></ion-icon>
+                        Update Profile
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let selectedFile = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (!user) {
+                    window.location.href = 'login.html?redirect=profile.html';
+                    return;
+                }
+
+                // Fill basic Firebase Auth info
+                document.getElementById('profEmail').value = user.email;
+                document.getElementById('profName').value = user.displayName || '';
+                const userPhoto = user.photoURL || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || user.email) + '&background=FF6600&color=fff';
+                document.getElementById('profileDisplay').src = userPhoto;
+
+                // Load extra info from Firestore
+                try {
+                    const doc = await firebase.firestore().collection('users').doc(user.uid).get();
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById('profPhone').value = data.phone || '';
+                        document.getElementById('profCompany').value = data.company || '';
+                        document.getElementById('profLocation').value = data.location || '';
+                        if (data.name) document.getElementById('profName').value = data.name;
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+
+                document.getElementById('loading-overlay').style.display = 'none';
+            });
+
+            // Handle Photo Selection
+            document.getElementById('profileUpload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Basic validation
+                    if (!file.type.startsWith('image/')) {
+                        alert('Please select an image file.');
+                        return;
+                    }
+                    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                        alert('Image size should be less than 2MB.');
+                        return;
+                    }
+
+                    selectedFile = file;
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('profileDisplay').src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Handle Form Submission
+            document.getElementById('profileForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const saveBtn = document.getElementById('saveBtn');
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<div class="spinner" style="width:20px; height:20px; border-width:2px;"></div> Updating...';
+
+                const user = firebase.auth().currentUser;
+                const name = document.getElementById('profName').value;
+                const phone = document.getElementById('profPhone').value;
+                const company = document.getElementById('profCompany').value;
+                const location = document.getElementById('profLocation').value;
+
+                try {
+                    let photoURL = user.photoURL;
+
+                    // 1. Upload new photo if selected
+                    if (selectedFile) {
+                        const storageRef = firebase.storage().ref();
+                        const fileRef = storageRef.child('profile_pictures/' + user.uid);
+                        const uploadTask = await fileRef.put(selectedFile);
+                        photoURL = await uploadTask.ref.getDownloadURL();
+                    }
+
+                    // 2. Update Firebase Auth Profile
+                    await user.updateProfile({
+                        displayName: name,
+                        photoURL: photoURL
+                    });
+
+                    // 3. Update Firestore Document
+                    await firebase.firestore().collection('users').doc(user.uid).set({
+                        name: name,
+                        phone: phone,
+                        company: company,
+                        location: location,
+                        photo: photoURL,
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+
+                    alert('Profile updated successfully!');
+                    selectedFile = null;
+                } catch (error) {
+                    console.error('Error updating profile:', error);
+                    alert('Failed to update profile: ' + error.message);
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '<ion-icon name="cloud-upload-outline"></ion-icon> Update Profile';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
