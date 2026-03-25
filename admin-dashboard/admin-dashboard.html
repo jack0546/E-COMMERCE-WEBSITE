@@ -15,6 +15,41 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
+        // Wait for firebase-config.js to load first
+        // Then initialize with config from firebase-config.js
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if firebase is loaded from firebase-config.js
+            if (typeof firebase !== 'undefined' && firebase.apps.length === 0) {
+                // firebase-config.js should have already initialized firebase
+                console.log('Firebase initialized from config file');
+            }
+        });
+        
+        // SECURE: Check admin status using Custom Claims (not email)
+        async function checkAdminStatus(user) {
+            try {
+                const idTokenResult = await user.getIdTokenResult();
+                return idTokenResult.claims.admin === true;
+            } catch (error) {
+                console.error('Error checking admin status:', error);
+                return false;
+            }
+        }
+
+        // Fallback: Check Firestore user document for admin flag
+        // This is a backup check but Custom Claims is preferred
+        async function checkAdminFromFirestore(user) {
+            try {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    return userData.isAdmin === true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking Firestore:', error);
+                return false;
+            }
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -213,12 +248,12 @@
                 </svg>
                 Sign in with Google
             </button>
-            <p class="text-sm text-gray-500 mt-4">Admin: narhsnazzisco@gmail.com</p>
+            <p class="text-sm text-gray-500 mt-4">Admin access controlled via Firebase Custom Claims</p>
         </div>
     </div>
 
-    <!-- Firebase Config -->
-    <script src="../firebase-config.js"></script>
+    <!-- Firebase Config - Use the actual config file -->
+    <script src="../../firebase-config.js"></script>
     <script>
         // Check if Firebase is loaded
         document.addEventListener('DOMContentLoaded', function () {
@@ -231,8 +266,30 @@
                 // Check auth state
                 firebase.auth().onAuthStateChanged(function (user) {
                     if (user) {
-                        if (user.email && user.email.toLowerCase() === 'narhsnazzisco@gmail.com') {
-                            document.getElementById('loading-screen')?.classList.add('hidden');
+                        // SECURE: Check admin status using Custom Claims first
+                        checkAdminStatus(user).then(async function(isAdminClaim) {
+                            // If Custom Claims says admin, allow access
+                            if (isAdminClaim) {
+                                var ls1 = document.getElementById('loading-screen');
+                                if (ls1) ls1.classList.add('hidden');
+                                showDashboard();
+                                return;
+                            }
+                            // Fallback: Check Firestore user document
+                            var isAdminFirestore = await checkAdminFromFirestore(user);
+                            if (isAdminFirestore) {
+                                var ls2 = document.getElementById('loading-screen');
+                                if (ls2) ls2.classList.add('hidden');
+                                showDashboard();
+                            } else {
+                                var ls3 = document.getElementById('loading-screen');
+                                var lm = document.getElementById('login-modal');
+                                if (ls3) ls3.classList.add('hidden');
+                                if (lm) lm.classList.remove('hidden');
+                            }
+                        });
+                        var ls = document.getElementById('loading-screen');
+                        if (ls) ls.classList.add('hidden');
                             
                             // Check for Dashboard PIN Lock
                             firebase.firestore().collection('admins').doc('config').get().then(doc => {
@@ -250,8 +307,10 @@
                             });
                         }
                     } else {
-                        document.getElementById('loading-screen')?.classList.add('hidden');
-                        document.getElementById('login-modal')?.classList.remove('hidden');
+                        var loadingScreen = document.getElementById('loading-screen');
+                        var loginModal = document.getElementById('login-modal');
+                        if (loadingScreen) { loadingScreen.classList.add('hidden'); }
+                        if (loginModal) { loginModal.classList.remove('hidden'); }
                     }
                 });
             }
@@ -259,13 +318,14 @@
 
         function signInWithGoogle() {
             if (typeof firebase !== 'undefined') {
-                const provider = new firebase.auth.GoogleAuthProvider();
+                var provider = new firebase.auth.GoogleAuthProvider();
                 firebase.auth().signInWithPopup(provider).then(function (result) {
                     if (result.user.email && result.user.email.toLowerCase() !== 'narhsnazzisco@gmail.com') {
                         alert('Access denied.');
                         firebase.auth().signOut();
                     } else {
-                        document.getElementById('login-modal').classList.add('hidden');
+                        var loginModal = document.getElementById('login-modal');
+                        if (loginModal) loginModal.classList.add('hidden');
                     }
                 }).catch(function (error) {
                     console.error('Sign in error:', error);
@@ -931,7 +991,7 @@
         // Load orders from Firestore and localStorage
     // Security: Escape HTML to prevent XSS
     function escapeHTML(str) {
-        if (!str === undefined || str === null) return '';
+        if (str === undefined || str === null) return '';
         return String(str)
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
