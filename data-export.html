@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Export | ALFRED Admin</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <style>
+    :root {
+      --primary: #FF6B35;
+      --primary-dark: #e55a2b;
+      --secondary: #FF477E;
+    }
+    
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .export-btn {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .export-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .pulse-dot {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .loading-spinner {
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="text-white">
+  
+  <!-- Header -->
+  <header class="glass-card sticky top-0 z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF6B35] to-[#FF477E] flex items-center justify-center font-bold text-lg">
+            A
+          </div>
+          <div>
+            <h1 class="text-xl font-semibold">ALFRED Admin</h1>
+            <p class="text-xs text-gray-400">Data Export Center</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+          <span class="flex items-center gap-2 text-sm text-gray-400">
+            <span class="w-2 h-2 rounded-full bg-green-400 pulse-dot"></span>
+            Firebase Connected
+          </span>
+          <a href="admin-dashboard/admin-dashboard.html" class="text-sm text-gray-400 hover:text-white transition-colors">
+            ← Back to Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 fade-in">
+      <div class="stat-card rounded-2xl p-5">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-400 text-sm">Total Orders</p>
+            <p class="text-2xl font-bold" id="orders-count">-</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stat-card rounded-2xl p-5">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-400 text-sm">Total Users</p>
+            <p class="text-2xl font-bold" id="users-count">-</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stat-card rounded-2xl p-5">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-400 text-sm">Products</p>
+            <p class="text-2xl font-bold" id="products-count">-</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stat-card rounded-2xl p-5">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-400 text-sm">Last Export</p>
+            <p class="text-lg font-medium" id="last-export">Never</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Main Export Card -->
+      <div class="lg:col-span-2 glass-card rounded-2xl p-6 fade-in" style="animation-delay: 0.1s;">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-xl font-semibold">Export Database</h2>
+            <p class="text-gray-400 text-sm mt-1">Download your data in CSV or Excel format</p>
+          </div>
+          <button onclick="exportAllData()" class="export-btn px-6 py-3 rounded-xl font-medium flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Export All Data
+          </button>
+        </div>
+        
+        <!-- Collection Cards -->
+        <div class="space-y-4">
+          <!-- Orders -->
+          <div class="bg-white/5 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold">Orders</h3>
+                  <p class="text-sm text-gray-400" id="orders-info">Loading...</p>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="exportCollection('orders', 'csv')" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors">
+                  CSV
+                </button>
+                <button onclick="exportCollection('orders', 'excel')" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors">
+                  Excel
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Users -->
+          <div class="bg-white/5 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold">Users</h3>
+                  <p class="text-sm text-gray-400" id="users-info">Loading...</p>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="exportCollection('users', 'csv')" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors">
+                  CSV
+                </button>
+                <button onclick="exportCollection('users', 'excel')" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors">
+                  Excel
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Products -->
+          <div class="bg-white/5 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold">Products</h3>
+                  <p class="text-sm text-gray-400" id="products-info">Loading...</p>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="exportCollection('products', 'csv')" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors">
+                  CSV
+                </button>
+                <button onclick="exportCollection('products', 'excel')" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors">
+                  Excel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        
+        <!-- Export History -->
+        <div class="glass-card rounded-2xl p-6 fade-in" style="animation-delay: 0.2s;">
+          <h3 class="font-semibold mb-4">Export History</h3>
+          <div id="export-history" class="space-y-3">
+            <p class="text-gray-400 text-sm">No exports yet</p>
+          </div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="glass-card rounded-2xl p-6 fade-in" style="animation-delay: 0.3s;">
+          <h3 class="font-semibold mb-4">How to Use</h3>
+          <ol class="space-y-3 text-sm text-gray-300">
+            <li class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-[#FF6B35] flex items-center justify-center text-xs font-bold">1</span>
+              <span>Click "Export All Data" or select individual collections</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-[#FF6B35] flex items-center justify-center text-xs font-bold">2</span>
+              <span>Choose CSV or Excel format</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-[#FF6B35] flex items-center justify-center text-xs font-bold">3</span>
+              <span>Files will download automatically</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-[#FF6B35] flex items-center justify-center text-xs font-bold">4</span>
+              <span>Open in Excel or import to Access</span>
+            </li>
+          </ol>
+        </div>
+        
+        <!-- Quick Tips -->
+        <div class="bg-gradient-to-br from-[#FF6B35]/20 to-[#FF477E]/20 rounded-2xl p-6 border border-[#FF6B35]/30 fade-in" style="animation-delay: 0.4s;">
+          <h3 class="font-semibold mb-2">💡 Pro Tips</h3>
+          <ul class="text-sm text-gray-300 space-y-2">
+            <li>• CSV files work best with Excel</li>
+            <li>• Use Excel format for formatted reports</li>
+            <li>• CSV can be imported to Access Database</li>
+            <li>• Export regularly for backup</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Loading/Status -->
+    <div id="status" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300">
+      <div class="glass-card rounded-xl px-6 py-4 flex items-center gap-3">
+        <div id="status-spinner" class="loading-spinner hidden"></div>
+        <span id="status-text"></span>
+      </div>
+    </div>
+    
+  </main>
+
+  <script src="firebase-config.js"></script>
+  <script>
+    const db = firebase.firestore();
+    let exportHistory = [];
+    
+    // Load counts on page load
+    async function loadCounts() {
+      try {
+        const [ordersSnap, usersSnap, productsSnap] = await Promise.all([
+          db.collection('orders').get(),
+          db.collection('users').get(),
+          db.collection('products').get()
+        ]);
+        
+        document.getElementById('orders-count').textContent = ordersSnap.size;
+        document.getElementById('users-count').textContent = usersSnap.size;
+        document.getElementById('products-count').textContent = productsSnap.size;
+        
+        document.getElementById('orders-info').textContent = `${ordersSnap.size} orders available`;
+        document.getElementById('users-info').textContent = `${usersSnap.size} users available`;
+        document.getElementById('products-info').textContent = `${productsSnap.size} products available`;
+        
+      } catch (error) {
+        console.error('Error loading counts:', error);
+        showStatus('Error connecting to Firebase', true);
+      }
+    }
+    
+    // Show status message
+    function showStatus(message, isError = false) {
+      const status = document.getElementById('status');
+      const text = document.getElementById('status-text');
+      const spinner = document.getElementById('status-spinner');
+      
+      text.textContent = message;
+      text.className = isError ? 'text-red-400' : 'text-green-400';
+      
+      status.classList.remove('translate-y-20', 'opacity-0');
+      
+      setTimeout(() => {
+        status.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+    
+    // Export single collection
+    async function exportCollection(collectionName, format) {
+      try {
+        const snapshot = await db.collection(collectionName).get();
+        const data = [];
+        
+        snapshot.forEach(doc => {
+          const docData = doc.data();
+          docData.id = doc.id;
+          data.push(docData);
+        });
+        
+        if (data.length === 0) {
+          showStatus(`No data in ${collectionName}`, true);
+          return;
+        }
+        
+        if (format === 'csv') {
+          exportToCSV(data, collectionName);
+        } else {
+          exportToExcel(data, collectionName);
+        }
+        
+        addToHistory(collectionName, format, data.length);
+        showStatus(`Exported ${data.length} ${collectionName}`);
+        
+      } catch (error) {
+        console.error('Export error:', error);
+        showStatus('Export failed: ' + error.message, true);
+      }
+    }
+    
+    // Export all collections
+    async function exportAllData() {
+      const collections = ['orders', 'users', 'products'];
+      
+      for (const collection of collections) {
+        await exportCollection(collection, 'csv');
+        await new Promise(r => setTimeout(r, 500));
+      }
+      
+      updateLastExport();
+      showStatus('All data exported successfully!');
+    }
+    
+    // CSV Export
+    function exportToCSV(data, filename) {
+      const allKeys = new Set();
+      data.forEach(doc => Object.keys(doc).forEach(key => allKeys.add(key)));
+      const headers = Array.from(allKeys);
+      
+      const csvContent = [
+        headers.join(','),
+        ...data.map(row => headers.map(header => {
+          let cell = row[header];
+          if (cell === undefined || cell === null) cell = '';
+          if (typeof cell === 'object') cell = JSON.stringify(cell).replace(/"/g, '""');
+          cell = String(cell);
+          if (cell.includes(',') || cell.includes('"') || cell.includes('\n')) {
+            cell = '"' + cell.replace(/"/g, '""') + '"';
+          }
+          return cell;
+        }).join(','))
+      ].join('\n');
+      
+      downloadFile(csvContent, `${filename}_export.csv`, 'text/csv');
+    }
+    
+    // Excel Export
+    function exportToExcel(data, filename) {
+      const allKeys = new Set();
+      data.forEach(doc => Object.keys(doc).forEach(key => allKeys.add(key)));
+      const headers = Array.from(allKeys);
+      
+      let xml = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>';
+      xml += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet">';
+      xml += '<Worksheet ss:Name="Data"><Table>';
+      xml += '<Row>' + headers.map(h => '<Cell><Data ss:Type="String">' + h + '</Data></Cell>').join('') + '</Row>';
+      
+      data.forEach(row => {
+        xml += '<Row>' + headers.map(header => {
+          let cell = row[header];
+          if (cell === undefined || cell === null) cell = '';
+          if (typeof cell === 'object') cell = JSON.stringify(cell);
+          return '<Cell><Data ss:Type="String">' + String(cell).replace(/</g, '<') + '</Data></Cell>';
+        }).join('') + '</Row>';
+      });
+      
+      xml += '</Table></Worksheet></Workbook>';
+      downloadFile(xml, `${filename}_export.xls`, 'application/vnd.ms-excel');
+    }
+    
+    // Download file
+    function downloadFile(content, filename, type) {
+      const blob = new Blob([content], { type: type + ';charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
+    }
+    
+    // History functions
+    function addToHistory(collection, format, count) {
+      const item = {
+        collection,
+        format,
+        count,
+        time: new Date().toLocaleTimeString()
+      };
+      exportHistory.unshift(item);
+      if (exportHistory.length > 5) exportHistory.pop();
+      renderHistory();
+    }
+    
+    function renderHistory() {
+      const container = document.getElementById('export-history');
+      if (exportHistory.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-sm">No exports yet</p>';
+        return;
+      }
+      
+      container.innerHTML = exportHistory.map(item => `
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-300">${item.collection} (${item.format.toUpperCase()})</span>
+          <span class="text-gray-500">${item.count} records</span>
+        </div>
+      `).join('');
+    }
+    
+    function updateLastExport() {
+      document.getElementById('last-export').textContent = new Date().toLocaleTimeString();
+    }
+    
+    // Initialize
+    loadCounts();
+  </script>
+</body>
+</html>
