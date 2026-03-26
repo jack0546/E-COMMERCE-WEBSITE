@@ -4,117 +4,589 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details - ALFRED PRODUCTS</title>
+    <title>Product Details - ALFRED</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#FF6600">
+    <meta name="theme-color" content="#FF6B35">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="new_logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://js.paystack.co/v1/inline.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script>
+    // SECURITY: Input Sanitization Functions
+    function sanitizeHTML(str) {
+        if (!str || typeof str !== 'string') return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+    
+    function sanitizePrice(price) {
+        if (typeof price === 'string') {
+            const num = parseFloat(price.replace(/[^0-9.]/g, ''));
+            return isNaN(num) ? 0 : Math.abs(num);
+        }
+        return typeof price === 'number' && price > 0 ? Math.abs(price) : 0;
+    }
+    
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    }
+    
+    function validatePhone(phone) {
+        if (!phone) return false;
+        const digits = phone.replace(/\D/g, '');
+        return digits.length === 10 || digits.length === 9;
+    }
+    
+    function validateRequired(value) {
+        return value && String(value).trim().length > 0;
+    }
+    
+    function sanitizeTextInput(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/[<>]/g, '')
+            .replace(/javascript:/gi, '')
+            .replace(/on\w+=/gi, '')
+            .trim();
+    }
+    </script>
     <script src="firebase-config.js"></script>
+    <style>
+        /* Product Detail Page Styles */
+        .product-detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            padding: 30px 0;
+        }
+        
+        .gallery {
+            position: sticky;
+            top: 100px;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 450px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f8f8f8;
+        }
+        
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-info-panel h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        
+        .product-price {
+            font-size: 32px;
+            font-weight: 800;
+            color: #FF6B35;
+            margin-bottom: 12px;
+        }
+        
+        .product-original-price {
+            font-size: 18px;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 12px;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .product-rating .stars {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .product-rating .stars ion-icon {
+            color: #FFDC00;
+            font-size: 18px;
+        }
+        
+        .product-rating span {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .product-sales {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .product-description {
+            color: #666;
+            line-height: 1.8;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .product-specs {
+            margin-bottom: 24px;
+        }
+        
+        .product-specs h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+        
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .spec-row .label {
+            color: #999;
+        }
+        
+        .spec-row .value {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        
+        .quantity-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .quantity-section label {
+            font-weight: 600;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .quantity-controls button {
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: #f8f8f8;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .quantity-controls input {
+            width: 70px;
+            height: 44px;
+            border: none;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn-add-cart {
+            flex: 1;
+            padding: 18px;
+            background: linear-gradient(135deg, #FF6B35 0%, #E55A2B 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-add-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+        }
+        
+        .btn-buy-now {
+            flex: 1;
+            padding: 18px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-buy-now:hover {
+            background: #333;
+        }
+        
+        /* Related Products */
+        .related-products {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #eee;
+        }
+        
+        .related-products h2 {
+            font-size: 24px;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+        
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .related-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .related-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .related-card .img {
+            height: 150px;
+            overflow: hidden;
+            background: #f8f8f8;
+        }
+        
+        .related-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .related-card .info {
+            padding: 12px;
+        }
+        
+        .related-card .title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .related-card .price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FF6B35;
+        }
+        
+        /* Delivery Form */
+        .delivery-form-container {
+            margin-top: 30px;
+            padding: 24px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+        
+        .delivery-form-container h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #1a1a1a;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group textarea {
+            height: 80px;
+            resize: none;
+        }
+        
+        .form-submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FF6B35 0%, #E55A2B 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 0;
+            font-size: 14px;
+        }
+        
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: #FF6B35;
+        }
+        
+        .breadcrumb span {
+            color: #FF6B35;
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .gallery {
+                position: static;
+            }
+            
+            .main-image {
+                height: 300px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Header -->
     <header>
         <div class="container">
             <div class="header-top">
                 <div class="logo">
-                    <a href="index.html"><img src="new_logo.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a>
+                    <a href="index.html">
+                        <img src="new_logo.png" alt="ALFRED">
+                    </a>
                 </div>
+                
+                <div class="search-container" style="flex: 1; max-width: 500px; margin: 0 30px;">
+                    <input type="text" placeholder="Search for products..." id="searchInput">
+                    <button onclick="performSearch()">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </button>
+                </div>
+                
                 <div class="header-actions">
+                    <a href="cart.html" class="action-item">
+                        <ion-icon name="cart-outline"></ion-icon>
+                        <span>Cart</span>
+                        <span id="cartBadge" style="display: none; background: #FF477E; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px;">0</span>
+                    </a>
                     <a href="login.html" class="action-item">
                         <ion-icon name="person-outline"></ion-icon>
                         <span>Sign In</span>
                     </a>
-                    <a href="register.html" class="action-item">
-                        <ion-icon name="person-add-outline"></ion-icon>
-                        <span>Join Free</span>
-                    </a>
-                    <a href="messages.html" class="action-item">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        <span>Messages</span>
-                    </a>
-                    <a href="orders.html" class="action-item">
-                        <ion-icon name="cart-outline"></ion-icon>
-                        <span>Orders</span>
-                    </a>
                 </div>
             </div>
+            
             <nav>
                 <ul>
                     <li><a href="categories.html">All Categories</a></li>
-                    <li><a href="featured.html">Featured Products</a></li>
-                    <li><a href="trade.html">Trade Assurance</a></li>
-                    <li><a href="logistics.html">Logistics Services</a></li>
-                    <li><a href="help.html">Help Center</a></li>
+                    <li><a href="featured.html">Featured</a></li>
+                    <li><a href="bags.html">Bags & Luggage</a></li>
+                    <li><a href="shoes.html">Shoes</a></li>
+                    <li><a href="beauty.html">Beauty</a></li>
+                    <li><a href="electronics.html">Electronics</a></li>
+                    <li><a href="apparel.html">Apparel</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main class="container">
-        <section class="product-detail-container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <a href="categories.html">Categories</a>
+            <span>/</span>
+            <span id="breadcrumbCategory">Product</span>
+        </div>
+        
+        <!-- Product Detail -->
+        <div class="product-detail-container">
             <div class="gallery">
-
                 <div class="main-image">
-                    <img id="mainImg" src="" alt="Product Image">
+                    <img id="productImage" src="" alt="Product Image">
                 </div>
             </div>
-
+            
             <div class="product-info-panel">
-                <h1 id="productTitle">Premium Oversized Cotton T-Shirt - Custom Logo Wholesale</h1>
-                <p class="product-price" id="productPrice">GHS 45.00 - GHS 68.00</p>
-                <p class="product-moq">Min. Order: 50 Pieces</p>
-
-                <div class="specs" style="margin-top: 20px;">
-                    <p><strong>Material:</strong> 100% Organic Cotton</p>
-                    <p><strong>Weight:</strong> 240 GSM</p>
-                    <p><strong>Available Colors:</strong> 12 Colors</p>
+                <h1 id="productTitle">Product Title</h1>
+                <div class="product-price">
+                    <span id="productPrice">GHS 0.00</span>
+                    <span class="product-original-price" id="originalPrice"></span>
                 </div>
-
-                <!-- Delivery Form Section -->
-                <div class="delivery-form-container"
-                    style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 12px; border: 1px solid #eee;">
-                    <h3 style="margin-bottom: 20px; font-size: 18px; color: var(--text-color);">Delivery Information
-                    </h3>
-                    <form id="deliveryForm">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div class="product-rating">
+                    <div class="stars">
+                        <ion-icon name="star"></ion-icon>
+                        <ion-icon name="star"></ion-icon>
+                        <ion-icon name="star"></ion-icon>
+                        <ion-icon name="star"></ion-icon>
+                        <ion-icon name="star-half"></ion-icon>
+                    </div>
+                    <span id="productRating">4.8 (256 reviews)</span>
+                </div>
+                <div class="product-sales" id="productSales">1,234 sold</div>
+                
+                <div class="product-description" id="productDescription">
+                    Product description will appear here...
+                </div>
+                
+                <div class="product-specs">
+                    <h3>Product Specifications</h3>
+                    <div class="spec-row">
+                        <span class="label">Category</span>
+                        <span class="value" id="specCategory">General</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="label">Material</span>
+                        <span class="value">Premium Quality</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="label">Brand</span>
+                        <span class="value">ALFRED Verified</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="label">Origin</span>
+                        <span class="value">Imported</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="label">Warranty</span>
+                        <span class="value">1 Year</span>
+                    </div>
+                </div>
+                
+                <div class="quantity-section">
+                    <label>Quantity:</label>
+                    <div class="quantity-controls">
+                        <button onclick="changeQty(-1)">-</button>
+                        <input type="number" id="quantity" value="1" min="1">
+                        <button onclick="changeQty(1)">+</button>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-add-cart" onclick="addToCart()">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                    <button class="btn-buy-now" onclick="showDeliveryForm()">
+                        <ion-icon name="flash-outline"></ion-icon> Buy Now
+                    </button>
+                </div>
+                
+                <!-- Delivery Form (Hidden by default) -->
+                <div class="delivery-form-container" id="deliveryForm" style="display: none; margin-top: 24px;">
+                    <h3><ion-icon name="location-outline"></ion-icon> Delivery Information</h3>
+                    <form id="productDeliveryForm">
+                        <div class="form-row">
                             <div class="form-group">
-                                <label
-                                    style="display: block; font-size: 12px; margin-bottom: 5px; font-weight: 600;">Full
-                                    Name</label>
-                                <input type="text" id="fullName" required placeholder="Full Name"
-                                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                                <label>Full Name *</label>
+                                <input type="text" id="fullName" required placeholder="Enter your full name">
                             </div>
                             <div class="form-group">
-                                <label
-                                    style="display: block; font-size: 12px; margin-bottom: 5px; font-weight: 600;">Phone
-                                    Number</label>
-                                <input type="tel" id="phoneNumber" required placeholder="0500000000"
-                                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                                <label>Phone Number *</label>
+                                <input type="tel" id="phoneNumber" required placeholder="e.g., 0241234567">
                             </div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                            <label
-                                style="display: block; font-size: 12px; margin-bottom: 5px; font-weight: 600;">WhatsApp
-                                Number (Optional)</label>
-                            <input type="tel" id="whatsappNumber" placeholder="WhatsApp Number"
-                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        <div class="form-group">
+                            <label>WhatsApp Number (Optional)</label>
+                            <input type="tel" id="whatsappNumber" placeholder="e.g., 0241234567">
                         </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div class="form-row">
                             <div class="form-group">
-                                <label
-                                    style="display: block; font-size: 12px; margin-bottom: 5px; font-weight: 600;">Region</label>
-                                <select id="region" required
-                                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: white;">
+                                <label>Region *</label>
+                                <select id="region" required>
                                     <option value="">Select Region</option>
                                     <option value="Greater Accra">Greater Accra</option>
                                     <option value="Ashanti">Ashanti</option>
@@ -123,104 +595,286 @@
                                     <option value="Western">Western</option>
                                     <option value="Volta">Volta</option>
                                     <option value="Northern">Northern</option>
-                                    <option value="Upper East">Upper East</option>
-                                    <option value="Upper West">Upper West</option>
-                                    <option value="Bono">Bono</option>
-                                    <option value="Bono East">Bono East</option>
-                                    <option value="Ahafo">Ahafo</option>
-                                    <option value="Savannah">Savannah</option>
-                                    <option value="North East">North East</option>
-                                    <option value="Oti">Oti</option>
-                                    <option value="Western North">Western North</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label
-                                    style="display: block; font-size: 12px; margin-bottom: 5px; font-weight: 600;">City
-                                    / Town</label>
-                                <input type="text" id="city" required placeholder="Accra"
-                                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                                <label>City/Town *</label>
+                                <input type="text" id="city" required placeholder="Enter city or town">
                             </div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                            <label
-                                style="display: block; font-size: 12px; margin-bottom: 5px; font-weight: 600;">Delivery
-                                Address / Nearest Landmark</label>
-                            <textarea id="address" required placeholder="Main Street, near the bank"
-                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; height: 80px; resize: none;"></textarea>
+                        <div class="form-group">
+                            <label>Delivery Address *</label>
+                            <textarea id="address" required placeholder="Enter detailed delivery address or nearest landmark"></textarea>
                         </div>
+                        <button type="button" class="form-submit-btn" onclick="processPayment()">
+                            <ion-icon name="lock-closed-outline"></ion-icon> Pay Now with Paystack
+                        </button>
                     </form>
                 </div>
-
-                <div class="product-actions" id="paymentActions" style="margin-top: 20px;">
-                    <button class="btn btn-primary" onclick="validateAndPay()"
-                        style="background: #000; color: #fff; border: none; width: 100%; height: 50px;">Complete
-                        Purchase</button>
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <button id="addCartBtn" class="btn btn-outline" style="flex: 1;"
-                            onclick="handleAddToCart(parseInt(new URLSearchParams(window.location.search).get('id')))">Add
-                            to Cart</button>
-                        <button class="btn btn-outline" style="flex: 1;">Contact Supplier</button>
-                    </div>
-                </div>
             </div>
-        </section>
-
-        <section class="product-tabs">
-            <div class="tabs-nav">
-                <div class="tab-link active" onclick="openTab(event, 'details')">Product Details</div>
+        </div>
+        
+        <!-- Related Products -->
+        <div class="related-products">
+            <h2>Related Products</h2>
+            <div class="related-grid" id="relatedGrid">
+                <!-- Related products will be loaded here -->
             </div>
-
-            <div id="details" class="tab-content active">
-            </div>
-        </section>
+        </div>
     </main>
 
+    <!-- Floating Menu Button -->
+    <div class="floating-menu-container">
+        <button class="floating-menu-btn" onclick="toggleFloatingMenu()">
+            <ion-icon name="menu-outline"></ion-icon>
+        </button>
+        <div class="floating-menu-dropdown" id="floatingMenu">
+            <a href="login.html" class="floating-menu-item">
+                <ion-icon name="person-outline"></ion-icon>
+                <span>Sign In</span>
+            </a>
+            <a href="cart.html" class="floating-menu-item">
+                <ion-icon name="cart-outline"></ion-icon>
+                <span>Cart</span>
+            </a>
+            <a href="orders.html" class="floating-menu-item">
+                <ion-icon name="bag-handle-outline"></ion-icon>
+                <span>Orders</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <footer>
-        <div class="container footer-grid">
-            <div class="footer-col">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Safety & Security</a></li>
-                </ul>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="#">Returns & Refunds</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>About ALFRED</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="categories.html">All Categories</a></li>
+                        <li><a href="featured.html">Featured Products</a></li>
+                        <li><a href="suppliers.html">Suppliers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li><a href="messages.html">Messages</a></li>
+                        <li><a href="#">WhatsApp: +233 000 000000</a></li>
+                        <li><a href="#">Email: support@alfred.com</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="footer-col">
-                <h4>Get App</h4>
-                <ul>
-                    <li><a href="#">App Store</a></li>
-                    <li><a href="#">Google Play</a></li>
-                </ul>
+            <div class="footer-bottom">
+                <p>&copy; 2024-2026 Alfred Products. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
     <script>
-        // Check for product details in URL parameters
-        window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const title = params.get('title');
-            const price = params.get('price');
-            const desc = params.get('desc');
-            const image = params.get('image');
-            const category = params.get('category');
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentProduct = {
+            title: urlParams.get('title') || 'Product',
+            price: parseFloat(urlParams.get('price')) || 0,
+            description: urlParams.get('desc') || 'No description available.',
+            image: urlParams.get('image') || '',
+            category: urlParams.get('category') || 'General'
+        };
+        
+        // Set original price (50% more)
+        const originalPrice = currentProduct.price * 1.5;
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProductDetails();
+            loadRelatedProducts();
+            updateCartBadge();
+        });
+        
+        function loadProductDetails() {
+            document.getElementById('productImage').src = currentProduct.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTIeMmUzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OSI+UHJvZHVjdCBJbWFnZTwvdGV4dD48L3N2Zz4=';
+            document.getElementById('productTitle').textContent = currentProduct.title;
+            document.getElementById('productPrice').textContent = 'GHS ' + currentProduct.price.toFixed(2);
+            document.getElementById('originalPrice').textContent = 'GHS ' + originalPrice.toFixed(2);
+            document.getElementById('productDescription').textContent = currentProduct.description;
+            document.getElementById('specCategory').textContent = currentProduct.category;
+            document.getElementById('breadcrumbCategory').textContent = currentProduct.category;
+        }
+        
+        function loadRelatedProducts() {
+            const relatedProducts = [
+                { title: 'Similar Product 1', price: 199.00, image: 'images/BAG1.jpg', category: currentProduct.category },
+                { title: 'Similar Product 2', price: 249.00, image: 'images/SHOE1.jpg', category: currentProduct.category },
+                { title: 'Similar Product 3', price: 179.00, image: 'images/SPRAY1.jpg', category: currentProduct.category },
+                { title: 'Similar Product 4', price: 299.00, image: 'images/SMART1.jpg', category: currentProduct.category }
+            ];
             
-            if (title) {
-                document.getElementById('productTitle').textContent = title;
+            const grid = document.getElementById('relatedGrid');
+            grid.innerHTML = relatedProducts.map((p, i) => `
+                <div class="related-card" onclick="viewProduct('${p.category}', '${p.title}', ${p.price}, 'High-quality product', '${p.image}')">
+                    <div class="img"><img src="${p.image}" alt="${p.title}"></div>
+                    <div class="info">
+                        <div class="title">${p.title}</div>
+                        <div class="price">GHS ${p.price.toFixed(2)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function viewProduct(category, title, price, desc, image) {
+            window.location.href = 'product.html?title=' + encodeURIComponent(title) + '&price=' + price + '&desc=' + encodeURIComponent(desc) + '&image=' + encodeURIComponent(image) + '&category=' + encodeURIComponent(category);
+        }
+        
+        function changeQty(delta) {
+            const input = document.getElementById('quantity');
+            let val = parseInt(input.value) + delta;
+            if (val < 1) val = 1;
+            input.value = val;
+        }
+        
+        function addToCart() {
+            let cart = JSON.parse(localStorage.getItem('alfredCart')) || [];
+            const qty = parseInt(document.getElementById('quantity').value) || 1;
+            const priceStr = 'GHS ' + currentProduct.price.toFixed(2);
+            
+            for (let i = 0; i < qty; i++) {
+                cart.push({
+                    category: currentProduct.category,
+                    title: currentProduct.title,
+                    price: priceStr,
+                    description: currentProduct.description,
+                    image: currentProduct.image,
+                    quantity: 1
+                });
             }
-            if (price) {
-                document.getElementById('productPrice').textContent = 'GHS ' + parseFloat(price).toFixed(2);
+            
+            localStorage.setItem('alfredCart', JSON.stringify(cart));
+            updateCartBadge();
+            alert('Added to cart!');
+        }
+        
+        function showDeliveryForm() {
+            document.getElementById('deliveryForm').style.display = 'block';
+            document.getElementById('deliveryForm').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function processPayment() {
+            const form = document.getElementById('productDeliveryForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
             }
-            if (desc) {
-                // Add description to the details tab
-                const detailsDiv = document.getElementById('details');
-                if (detailsDiv) {
-                    detailsDiv.innerHTML = '<h3>Product Description</h3><p style="margin-top: 15px;">' + desc + '</p>' + detailsDiv.innerHTML;
+            
+            // SECURITY: Validate and sanitize all inputs
+            const fullName = sanitizeTextInput(document.getElementById('fullName').value);
+            const phoneNumber = sanitizeTextInput(document.getElementById('phoneNumber').value);
+            const whatsappNumber = sanitizeTextInput(document.getElementById('whatsappNumber').value) || 'N/A';
+            const region = sanitizeTextInput(document.getElementById('region').value);
+            const city = sanitizeTextInput(document.getElementById('city').value);
+            const address = sanitizeTextInput(document.getElementById('address').value);
+            
+            // Additional validation
+            if (!validateRequired(fullName) || !validateRequired(phoneNumber) || 
+                !validateRequired(region) || !validateRequired(city) || !validateRequired(address)) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            if (!validatePhone(phoneNumber)) {
+                alert('Please enter a valid Ghana phone number (e.g., 0241234567).');
+                return;
+            }
+            
+            const deliveryInfo = {
+                fullName: fullName,
+                phoneNumber: phoneNumber,
+                whatsappNumber: whatsappNumber,
+                region: region,
+                city: city,
+                address: address
+            };
+            
+            const qty = parseInt(document.getElementById('quantity').value) || 1;
+            const total = currentProduct.price * qty;
+            
+            // Validate price
+            if (!total || total <= 0) {
+                alert('Invalid product price. Please refresh the page and try again.');
+                return;
+            }
+            
+            // Show loading indicator
+            const payButton = document.querySelector('.form-submit-btn');
+            const originalText = payButton.innerHTML;
+            payButton.innerHTML = '<ion-icon name="hourglass-outline"></ion-icon> Processing...';
+            payButton.disabled = true;
+            
+            // Initialize Paystack payment
+            const paystack = PaystackPop;
+            paystack.newTransaction({
+                key: 'pk_live_6b9968065dc0bd4842c97ffa138e49127c862888',
+                amount: Math.round(total * 100),
+                email: deliveryInfo.phoneNumber + '@alfred.com',
+                currency: 'GHS',
+                reference: 'ALFRED-' + Date.now(),
+                metadata: {
+                    deliveryInfo: deliveryInfo,
+                    product: currentProduct,
+                    quantity: qty,
+                    total: total
+                },
+                onSuccess: function(transaction) {
+                    alert('Payment successful! Reference: ' + transaction.reference);
+                    localStorage.removeItem('alfredCart');
+                    updateCartBadge();
+                    window.location.href = 'index.html';
+                },
+                onCancel: function() {
+                    alert('Payment cancelled. You can try again.');
+                    payButton.innerHTML = originalText;
+                    payButton.disabled = false;
+                },
+                onClose: function() {
+                    payButton.innerHTML = originalText;
+                    payButton.disabled = false;
                 }
+            });
+        }
+        
+        function updateCartBadge() {
+            let cart = JSON.parse(localStorage.getItem('alfredCart')) || [];
+            const badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = cart.length;
+                badge.style.display = cart.length > 0 ? 'inline-block' : 'none';
             }
-            if (image) {
-                document.getElementById('mainImg').src = image;
+        }
+        
+        function toggleFloatingMenu() {
+            const menu = document.getElementById('floatingMenu');
+            menu.classList.toggle('active');
+        }
+        
+        function performSearch() {
+            const term = document.getElementById('searchInput').value.trim();
+            if (term) {
+                window.location.href = 'categories.html?search=' + encodeURIComponent(term);
             }
         }
     </script>
