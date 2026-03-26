@@ -4,23 +4,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Industrial - ALFRED PRODUCTS</title>
+    <title>Industrial - ALFRED</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0abf53">
+    <meta name="theme-color" content="#FF6B35">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="new_logo.png">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <script src="script.js"></script>
 </head>
 
 <body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="new_logo.png" alt="ALFRED">
+                    </a>
+                </div>
+                
+                <div class="search-container" style="flex: 1; max-width: 500px; margin: 0 30px;">
+                    <input type="text" placeholder="Search for products..." id="searchInput">
+                    <button onclick="performSearch()">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </button>
+                </div>
+                
+                <div class="header-actions">
+                    <a href="cart.html" class="action-item">
+                        <ion-icon name="cart-outline"></ion-icon>
+                        <span>Cart</span>
+                        <span id="cartBadge" style="display: none; background: #FF477E; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px;">0</span>
+                    </a>
+                    <a href="login.html" class="action-item">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <span>Sign In</span>
+                    </a>
+                </div>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="categories.html">All Categories</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="featured.html">Featured</a></li>
+                    <li><a href="bags.html">Bags & Luggage</a></li>
+                    <li><a href="shoes.html">Shoes</a></li>
+                    <li><a href="beauty.html">Beauty</a></li>
+                    <li><a href="electronics.html">Electronics</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <a href="categories.html">Categories</a>
+            <span>/</span>
+            <span style="color: #FF6B35;">Industrial</span>
+        </div>
+
+        <!-- Category Banner -->
+        <section class="category-banner" style="background: url('images/banners/industrial.jpg'); background-size: cover; background-position: center;">
+            <h1>Industrial Supplies</h1>
+            <p>Quality industrial equipment and tools</p>
+        </section>
+
+        <!-- Products -->
+        <section class="products-section">
+            <h2 class="section-title">
+                <ion-icon name="construct-outline"></ion-icon>
+                Shop Industrial
+            </h2>
+            
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card" onclick="openDeliveryForm('Industrial', 'Power Drill Set', 850.00, 'Professional power drill with complete bit set. Cordless design, variable speed. Features: Cordless, Variable speed, Complete set, Professional grade.', 'images/banners/industrial.jpg')">
+                    <span class="badge">Best Seller</span>
+                    <div class="image-container">
+                        <img src="images/banners/industrial.jpg" alt="Power Drill">
+                    </div>
+                    <div class="info">
+                        <h4 class="title">Professional Power Drill Set</h4>
+                        <div class="price">GHS 850.00 <span class="original-price">GHS 1,200.00</span></div>
+                        <div class="rating">
+                            <ion-icon name="star"></ion-icon>
+                            <span>4.8 (156)</span>
+                        </div>
+                        <div class="sales">234 sold</div>
+                    </div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addProductToCart('Industrial', 'Power Drill Set', 850.00, 'Professional power drill', 'images/banners/industrial.jpg')">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card" onclick="openDeliveryForm('Industrial', 'Safety Helmet', 95.00, 'Industrial safety helmet with adjustable strap. Certified protection. Features: Certified, Adjustable strap, Comfortable, Impact resistant.', 'images/factory.png')">
+                    <span class="badge">-25%</span>
+                    <div class="image-container">
+                        <img src="images/factory.png" alt="Safety Helmet">
+                    </div>
+                    <div class="info">
+                        <h4 class="title">Industrial Safety Helmet</h4>
+                        <div class="price">GHS 95.00 <span class="original-price">GHS 130.00</span></div>
+                        <div class="rating">
+                            <ion-icon name="star"></ion-icon>
+                            <span>4.6 (345)</span>
+                        </div>
+                        <div class="sales">890 sold</div>
+                    </div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addProductToCart('Industrial', 'Safety Helmet', 95.00, 'Safety helmet', 'images/factory.png')">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card" onclick="openDeliveryForm('Industrial', 'Work Gloves Set', 75.00, 'Heavy duty work gloves. Multiple sizes. Grip enhancement. Features: Heavy duty, Multiple sizes, Grip enhanced, Durable.', 'images/image1.jpg')">
+                    <span class="badge">New</span>
+                    <div class="image-container">
+                        <img src="images/image1.jpg" alt="Work Gloves">
+                    </div>
+                    <div class="info">
+                        <h4 class="title">Heavy Duty Work Gloves</h4>
+                        <div class="price">GHS 75.00 <span class="original-price">GHS 120.00</span></div>
+                        <div class="rating">
+                            <ion-icon name="star"></ion-icon>
+                            <span>4.5 (234)</span>
+                        </div>
+                        <div class="sales">567 sold</div>
+                    </div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addProductToCart('Industrial', 'Work Gloves Set', 75.00, 'Work gloves', 'images/image1.jpg')">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card" onclick="openDeliveryForm('Industrial', 'Tool Box Set', 645.00, 'Complete tool box with 120 pieces. Professional quality. Features: 120 pieces, Professional, Durable case, All purpose.', 'images/image2.jpg')">
+                    <span class="badge">-40%</span>
+                    <div class="image-container">
+                        <img src="images/image2.jpg" alt="Tool Box">
+                    </div>
+                    <div class="info">
+                        <h4 class="title">120-Piece Tool Box Set</h4>
+                        <div class="price">GHS 645.00 <span class="original-price">GHS 1,080.00</span></div>
+                        <div class="rating">
+                            <ion-icon name="star"></ion-icon>
+                            <span>4.7 (189)</span>
+                        </div>
+                        <div class="sales">345 sold</div>
+                    </div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addProductToCart('Industrial', 'Tool Box Set', 645.00, 'Tool box set', 'images/image2.jpg')">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card" onclick="openDeliveryForm('Industrial', 'Measuring Tape 50m', 65.00, 'Professional measuring tape. 50 meter length. Durable fiberglass. Features: 50m length, Durable, Fiberglass, Professional.', 'images/image3.jpg')">
+                    <span class="badge">Trending</span>
+                    <div class="image-container">
+                        <img src="images/image3.jpg" alt="Measuring Tape">
+                    </div>
+                    <div class="info">
+                        <h4 class="title">50m Measuring Tape</h4>
+                        <div class="price">GHS 65.00 <span class="original-price">GHS 95.00</span></div>
+                        <div class="rating">
+                            <ion-icon name="star"></ion-icon>
+                            <span>4.4 (456)</span>
+                        </div>
+                        <div class="sales">1,234 sold</div>
+                    </div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addProductToCart('Industrial', 'Measuring Tape 50m', 65.00, 'Measuring tape', 'images/image3.jpg')">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card" onclick="openDeliveryForm('Industrial', 'Welding Equipment Set', 1,250.00, 'Complete welding kit with mask and accessories. Professional grade. Features: Complete kit, Welding mask, Accessories, Professional.', 'images/factory.png')">
+                    <span class="badge">Best Value</span>
+                    <div class="image-container">
+                        <img src="images/factory.png" alt="Welding Equipment">
+                    </div>
+                    <div class="info">
+                        <h4 class="title">Welding Equipment Set</h4>
+                        <div class="price">GHS 1,250.00 <span class="original-price">GHS 1,800.00</span></div>
+                        <div class="rating">
+                            <ion-icon name="star"></ion-icon>
+                            <span>4.7 (89)</span>
+                        </div>
+                        <div class="sales">123 sold</div>
+                    </div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addProductToCart('Industrial', 'Welding Equipment Set', 1250.00, 'Welding equipment', 'images/factory.png')">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+
+                <!-- Product 7 -->
+                <div class="product-card" onclick="openDeliveryForm('Industrial', 'Safety Goggles', 85.00, 'Industrial safety goggles. Anti-fog, UV protection. Features: Anti-fog, UV protection, Adjustable, Industrial grade.', 'images/image4.jpg')">
+                    <div class="image-container">
+                        <img src="images/image4.jpg" alt="Safety Goggles">
+                    </div>
+                    <div class="info">
+                        <h4 class="title">Industrial Safety Goggles</h4>
+                        <div class="price">GHS 85.00 <span class="original-price">GHS 120.00</span></div>
+                        <div class="rating">
+                            <ion-icon name="star"></ion-icon>
+                            <span>4.5 (234)</span>
+                        </div>
+                        <div class="sales">567 sold</div>
+                    </div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addProductToCart('Industrial', 'Safety Goggles', 85.00, 'Safety goggles', 'images/image4.jpg')">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+
+                <!-- Product 8 -->
+                <div class="product-card" onclick="openDeliveryForm('Industrial', 'Hand Saw Pro', 145.00, 'Professional hand saw with sharp blade. Comfortable grip. Features: Sharp blade, Comfortable grip, Durable, Precision cut.', 'images/image5.jpg')">
+                    <span class="badge">-30%</span>
+                    <div class="image-container">
+                        <img src="images/image5.jpg" alt="Hand Saw">
+                    </div>
+                    <div class="info">
+                        <h4 class="title">Professional Hand Saw</h4>
+                        <div class="price">GHS 145.00 <span class="original-price">GHS 210.00</span></div>
+                        <div class="rating">
+                            <ion-icon name="star"></ion-icon>
+                            <span>4.4 (178)</span>
+                        </div>
+                        <div class="sales">345 sold</div>
+                    </div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addProductToCart('Industrial', 'Hand Saw Pro', 145.00, 'Hand saw', 'images/image5.jpg')">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+
+                <!-- Product 9 -->
+                <div class="product-card" onclick="openDeliveryForm('Industrial', 'Industrial Ladder', 485.00, 'Aluminum extension ladder. 4.5 meter reach. Heavy duty. Features: 4.5m reach, Aluminum, Heavy duty, Extendable.', 'images/factory.png')">
+                    <span class="badge">Heavy</span>
+                    <div class="image-container">
+                        <img src="images/factory.png" alt="Ladder">
+                    </div>
+                    <div class="info">
+                        <h4 class="title">Aluminum Extension Ladder</h4>
+                        <div class="price">GHS 485.00 <span class="original-price">GHS 680.00</span></div>
+                        <div class="rating">
+                            <ion-icon name="star"></ion-icon>
+                            <span>4.6 (123)</span>
+                        </div>
+                        <div class="sales">234 sold</div>
+                    </div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addProductToCart('Industrial', 'Industrial Ladder', 485.00, 'Extension ladder', 'images/factory.png')">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+
+                <!-- Product 10 -->
+                <div class="product-card" onclick="openDeliveryForm('Industrial', 'Pneumatic Tool Kit', 975.00, 'Complete pneumatic tool set. Air compressor compatible. Features: Complete set, Air powered, Multiple tools, Professional.', 'images/factory.png')">
+                    <span class="badge">Pro</span>
+                    <div class="image-container">
+                        <img src="images/factory.png" alt="Pneumatic Tools">
+                    </div>
+                    <div class="info">
+                        <h4 class="title">Pneumatic Tool Kit</h4>
+                        <div class="price">GHS 975.00 <span class="original-price">GHS 1,400.00</span></div>
+                        <div class="rating">
+                            <ion-icon name="star"></ion-icon>
+                            <span>4.7 (89)</span>
+                        </div>
+                        <div class="sales">156 sold</div>
+                    </div>
+                    <button class="add-btn" onclick="event.stopPropagation(); addProductToCart('Industrial', 'Pneumatic Tool Kit', 975.00, 'Pneumatic tools', 'images/factory.png')">
+                        <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary" id="cartSummaryContainer" style="display: none;">
+            <h3><ion-icon name="cart-outline"></ion-icon> Your Shopping Cart</h3>
+            <div class="summary-row">
+                <span>Total Items:</span>
+                <span id="cartItemCount">0</span>
+            </div>
+            <div class="total-row">
+                <span class="label">Total Amount:</span>
+                <span class="amount" id="cartTotalAmount">GHS 0.00</span>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 16px;" onclick="openCheckout()">
+                <ion-icon name="card-outline"></ion-icon> Proceed to Checkout
+            </button>
+        </div>
+
+        <div class="empty-state" id="emptyCartMsg" style="display: none;">
+            <ion-icon name="cart-outline"></ion-icon>
+            <h3>Your cart is empty</h3>
+            <p>Add some products to get started!</p>
+        </div>
+    </main>
+
     <!-- Floating Menu Button -->
     <div class="floating-menu-container">
         <button class="floating-menu-btn" onclick="toggleFloatingMenu()">
@@ -31,504 +319,157 @@
                 <ion-icon name="person-outline"></ion-icon>
                 <span>Sign In</span>
             </a>
-            <a href="messages.html" class="floating-menu-item">
-                <ion-icon name="mail-outline"></ion-icon>
-                <span>Messages</span>
-            </a>
-            <div class="floating-menu-item floating-orders-btn" onclick="toggleOrdersSection()">
+            <a href="cart.html" class="floating-menu-item">
                 <ion-icon name="cart-outline"></ion-icon>
+                <span>Cart</span>
+            </a>
+            <a href="orders.html" class="floating-menu-item">
+                <ion-icon name="bag-handle-outline"></ion-icon>
                 <span>Orders</span>
-                <ion-icon name="chevron-down-outline" class="orders-chevron"></ion-icon>
+            </a>
+        </div>
+    </div>
+
+    <!-- Checkout Modal with Delivery Form -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-content" style="max-width: 550px;">
+            <div class="modal-header">
+                <h3><ion-icon name="cart-outline"></ion-icon> Checkout</h3>
+                <button class="modal-close" onclick="closeCheckout()">&times;</button>
             </div>
-            <div class="floating-orders-section" id="floatingOrdersSection">
-                <div id="floatingOrdersList">
-                    <div style="padding: 15px; text-align: center; color: #999; font-size: 13px;">
-                        <ion-icon name="bag-handle-outline" style="font-size: 24px;"></ion-icon><br>
-                        No Order
-                    </div>
+            <div class="modal-body">
+                <div style="max-height: 150px; overflow-y: auto; margin-bottom: 16px; border: 1px solid #eee; border-radius: 8px; padding: 10px;">
+                    <div id="checkoutCartItems"></div>
                 </div>
+                <div style="display: flex; justify-content: space-between; padding: 12px; background: #FFF5F2; border-radius: 8px; margin-bottom: 20px;">
+                    <span style="font-weight: 600;">Total:</span>
+                    <span id="checkoutTotalAmount" style="font-size: 20px; font-weight: 700; color: #FF6B35;">GHS 0.00</span>
+                </div>
+                <form id="checkoutDeliveryForm" class="delivery-form">
+                    <h4 style="margin-bottom: 16px; font-size: 16px;"><ion-icon name="location-outline"></ion-icon> Delivery Information</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="checkoutFullName" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" id="checkoutPhone" required placeholder="e.g., 0241234567">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp Number (Optional)</label>
+                        <input type="tel" id="checkoutWhatsapp" placeholder="e.g., 0241234567">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Region *</label>
+                            <select id="checkoutRegion" required>
+                                <option value="">Select Region</option>
+                                <option value="Greater Accra">Greater Accra</option>
+                                <option value="Ashanti">Ashanti</option>
+                                <option value="Central">Central</option>
+                                <option value="Eastern">Eastern</option>
+                                <option value="Western">Western</option>
+                                <option value="Volta">Volta</option>
+                                <option value="Northern">Northern</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>City/Town *</label>
+                            <input type="text" id="checkoutCity" required placeholder="Enter city or town">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Address *</label>
+                        <textarea id="checkoutAddress" required placeholder="Enter detailed delivery address or nearest landmark" style="height: 80px;"></textarea>
+                    </div>
+                    <button type="button" class="form-submit-btn" onclick="processCheckout()">
+                        <ion-icon name="lock-closed-outline"></ion-icon> Pay Now with Paystack
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 
-    <header>
-        <div class="container">
-            <div class="header-top" style="padding: 15px 0;">
-                <div class="logo">
-                    <a href="index.html"><img src="new_logo.png" alt="ALFRED PRODUCTS Logo" style="height: 28px;"></a>
+    <!-- Quick View Modal -->
+    <div class="modal-overlay" id="deliveryModal">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header">
+                <h3><ion-icon name="information-circle-outline"></ion-icon> Product Details</h3>
+                <button class="modal-close" onclick="closeDeliveryForm()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; gap: 16px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
+                    <img id="modalProductImg" src="" alt="Product" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
+                    <div>
+                        <h4 id="modalProductTitle" style="font-size: 16px; margin-bottom: 8px;">Product Title</h4>
+                        <div id="modalProductPrice" style="font-size: 22px; font-weight: 700; color: #FF6B35; margin-bottom: 8px;">GHS 0.00</div>
+                        <p id="modalProductDesc" style="font-size: 13px; color: #666;">Description</p>
+                    </div>
                 </div>
-                <nav>
-                    <ul>
-                        <li><a href="categories.html"><ion-icon name="apps-outline"></ion-icon> All Categories</a></li>
-                        <li><a href="index.html">Home</a></li>
-                    </ul>
-                </nav>
-                <div class="header-actions">
-                    <a href="#" onclick="viewCart(); return false;" style="background:#0abf53;color:white;padding:8px 15px;border-radius:5px;margin-right:10px;text-decoration:none;">Checkout</a>
-                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="addCurrentProductToCart()">
+                    <ion-icon name="cart-outline"></ion-icon> Add to Cart
+                </button>
             </div>
         </div>
-    </header>
+    </div>
 
-    <main class="container">
-        <!-- EDITABLE CATEGORY HEADER -->
-        <section class="category-hero"
-            style="margin-top: 30px; border-radius: 12px; overflow: hidden; position: relative; height: 300px; background: #eee;">
-            <!-- 1. CHANGE CATEGORY BANNER HERE -->
-            <img src="images/banners/industrial_main.jpg"
-                onerror="this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200'; this.onerror=null;"
-                alt="Industrial Machinery" style="width: 100%; height: 100%; object-fit: cover;">
-
-            <div
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.4), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 40px; color: white;">
-                <!-- 2. CHANGE CATEGORY TITLE HERE -->
-                <h1 style="font-size: 36px; font-weight: 800; margin-bottom: 5px;">Industrial Machinery</h1>
-                <!-- 3. CHANGE CATEGORY DESCRIPTION HERE -->
-                <p style="font-size: 16px; opacity: 0.9;">Professional-grade machinery and commercial tools for every
-                    industry.</p>
-            </div>
-        </section>
-
-        <section class="products" style="margin-top: 50px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                <h2 style="font-size: 20px; font-weight: 800;">Wholesale Product Listings</h2>
-                <div style="font-size: 14px; color: var(--text-muted);">
-                    <a href="categories.html" style="color: var(--primary-color); text-decoration: none;">View all
-                        markets →</a>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="#">Returns & Refunds</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                    </ul>
                 </div>
-            </div>
-
-            <!-- Industrial Machinery Products -->
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Industrial Generator', 2500.00, 'High-power industrial generator 5000W', 'images/BAG8.jpg')">
-                    <img src="images/BAG8.jpg" alt="Generator" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Generator</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 2,500.00</p>
-                        <button onclick="event.stopPropagation(); addProductToCart('Industrial', 'Industrial Generator', 2500.00, 'High-power industrial generator 5000W', 'images/BAG8.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
-                    </div>
+                <div class="footer-column">
+                    <h4>About ALFRED</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
                 </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Power Drill Set', 180.00, 'Professional power drill set', 'images/BAG9.jpg')">
-                    <img src="images/BAG9.jpg" alt="Power Drill" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Power Drill Set</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 180.00</p>
-                        <button onclick="event.stopPropagation(); addProductToCart('Industrial', 'Power Drill Set', 180.00, 'Professional power drill set', 'images/BAG9.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
-                    </div>
+                <div class="footer-column">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="categories.html">All Categories</a></li>
+                        <li><a href="featured.html">Featured Products</a></li>
+                        <li><a href="suppliers.html">Suppliers</a></li>
+                    </ul>
                 </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Industrial Air Compressor', 890.00, 'Heavy-duty air compressor', 'images/BAG10.jpg')">
-                    <img src="images/BAG10.jpg" alt="Air Compressor"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Air Compressor</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 890.00</p>
-                        <button onclick="event.stopPropagation(); addProductToCart('Industrial', 'Industrial Air Compressor', 890.00, 'Heavy-duty air compressor', 'images/BAG10.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Welding Machine', 1200.00, 'Professional welding machine', 'images/BAG11.jpg')">
-                    <img src="images/BAG11.jpg" alt="Welding Machine"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Welding Machine</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 1,200.00</p>
-                        <button onclick="event.stopPropagation(); addProductToCart('Industrial', 'Welding Machine', 1200.00, 'Professional welding machine', 'images/BAG11.jpg')" style="margin-top:8px;width:100%;padding:8px;background:#0abf53;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Add to Cart</button>
-                    </div>
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li><a href="messages.html">Messages</a></li>
+                        <li><a href="#">WhatsApp: +233 000 000000</a></li>
+                        <li><a href="#">Email: support@alfred.com</a></li>
+                    </ul>
                 </div>
             </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Circular Saw', 145.00, 'Industrial circular saw', 'images/BAG12.jpg')">
-                    <img src="images/BAG12.jpg" alt="Circular Saw"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Circular Saw</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 145.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Hydraulic Jack', 220.00, 'Heavy-duty hydraulic jack', 'images/BAG14.jpg')">
-                    <img src="images/BAG14.jpg" alt="Hydraulic Jack"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Hydraulic Jack</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 220.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Industrial Pump', 380.00, 'Water pump for industrial use', 'images/BAG15.jpg')">
-                    <img src="images/BAG15.jpg" alt="Industrial Pump"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Pump</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 380.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Electric Motor', 450.00, 'Industrial electric motor', 'images/BAG16.jpg')">
-                    <img src="images/BAG16.jpg" alt="Electric Motor"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Electric Motor</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 450.00</p>
-                    </div>
-                </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024-2026 Alfred Products. All rights reserved.</p>
             </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Safety Equipment Kit', 95.00, 'Complete industrial safety kit', 'images/BAG17.jpg')">
-                    <img src="images/BAG17.jpg" alt="Safety Kit" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Safety Equipment Kit</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Measuring Tools Set', 75.00, 'Precision measuring tools', 'images/BAG18.jpg')">
-                    <img src="images/BAG18.jpg" alt="Measuring Tools"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Measuring Tools Set</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 75.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Industrial Conveyor Belt', 1800.00, 'Heavy-duty conveyor belt system', 'images/BAG19.jpg')">
-                    <img src="images/BAG19.jpg" alt="Conveyor Belt"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Conveyor Belt</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 1,800.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Storage Container', 120.00, 'Large industrial storage container', 'images/BAG20.jpg')">
-                    <img src="images/BAG20.jpg" alt="Storage Container"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Storage Container</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 120.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <h2 style="font-size: 20px; font-weight: 800; margin-top: 30px; margin-bottom: 20px;">Tools & Equipment</h2>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Industrial Tool Box', 85.00, 'Heavy-duty tool box', 'images/BAG21.jpg')">
-                    <img src="images/BAG21.jpg" alt="Tool Box" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Tool Box</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 85.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Angle Grinder', 95.00, 'Power angle grinder', 'images/BAG22.jpg')">
-                    <img src="images/BAG22.jpg" alt="Angle Grinder"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Angle Grinder</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Jigsaw', 110.00, 'Electric jigsaw saw', 'images/BAG23.jpg')">
-                    <img src="images/BAG23.jpg" alt="Jigsaw" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Jigsaw</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 110.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Orbital Sander', 78.00, 'Power orbital sander', 'images/BAG24.jpg')">
-                    <img src="images/BAG24.jpg" alt="Orbital Sander"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Orbital Sander</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 78.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Bench Grinder', 145.00, 'Industrial bench grinder', 'images/BAG25.jpg')">
-                    <img src="images/BAG25.jpg" alt="Bench Grinder"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Bench Grinder</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 145.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Table Saw', 380.00, 'Professional table saw', 'images/BAG26.jpg')">
-                    <img src="images/BAG26.jpg" alt="Table Saw" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Table Saw</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 380.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Bandsaw', 450.00, 'Metal cutting bandsaw', 'images/BAG29.jpg')">
-                    <img src="images/BAG29.jpg" alt="Bandsaw" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Bandsaw</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 450.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Drill Press', 520.00, 'Floor standing drill press', 'images/BAG30.jpg')">
-                    <img src="images/BAG30.jpg" alt="Drill Press"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Drill Press</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 520.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <h2 style="font-size: 20px; font-weight: 800; margin-top: 30px; margin-bottom: 20px;">More Industrial
-                Supplies</h2>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Industrial Shelving', 280.00, 'Heavy-duty warehouse shelving', 'images/BAGS26.jpg')">
-                    <img src="images/BAGS26.jpg" alt="Industrial Shelving"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Shelving</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 280.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Pallet Jack', 350.00, 'Manual pallet jack', 'images/BAGS27.jpg')">
-                    <img src="images/BAGS27.jpg" alt="Pallet Jack"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Pallet Jack</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 350.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Forklift', 4500.00, 'Electric forklift', 'images/BAGS28.jpg')">
-                    <img src="images/BAGS28.jpg" alt="Forklift" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Forklift</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 4,500.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Workbench', 180.00, 'Steel workbench', 'images/image1.jpg')">
-                    <img src="images/image1.jpg" alt="Workbench" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Workbench</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 180.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Industrial Fan', 95.00, 'High-power industrial fan', 'images/image2.jpg')">
-                    <img src="images/image2.jpg" alt="Industrial Fan"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Fan</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 95.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Industrial Heater', 220.00, 'Space heater for warehouse', 'images/image3.jpg')">
-                    <img src="images/image3.jpg" alt="Industrial Heater"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Heater</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 220.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Air Dryer', 380.00, 'Compressed air dryer', 'images/image4.jpg')">
-                    <img src="images/image4.jpg" alt="Air Dryer" style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Air Dryer</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 380.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Pressure Washer', 450.00, 'Heavy-duty pressure washer', 'images/image5.jpg')">
-                    <img src="images/image5.jpg" alt="Pressure Washer"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Pressure Washer</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 450.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Generator Accessories', 150.00, 'Spare parts for generators', 'images/image6.jpg')">
-                    <img src="images/image6.jpg" alt="Generator Accessories"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Generator Accessories</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 150.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Industrial Lubricant', 45.00, 'Machine lubrication oil', 'images/image7.jpg')">
-                    <img src="images/image7.jpg" alt="Industrial Lubricant"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Industrial Lubricant</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 45.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Welding Supplies', 85.00, 'Welding electrodes and supplies', 'images/image8.jpg')">
-                    <img src="images/image8.jpg" alt="Welding Supplies"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Welding Supplies</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 85.00</p>
-                    </div>
-                </div>
-                <div style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid #e5e5e5;"
-                    onclick="openDeliveryForm('Industrial', 'Protective Gear', 65.00, 'Industrial protective gear', 'images/image9.jpg')">
-                    <img src="images/image9.jpg" alt="Protective Gear"
-                        style="width: 100%; height: 150px; object-fit: cover;">
-                    <div style="padding: 10px;">
-                        <h4 style="font-size: 13px; margin-bottom: 5px;">Protective Gear</h4>
-                        <p style="font-size: 14px; font-weight: 700; color: #0abf53;">GHS 65.00</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-grid" id="productGrid">
-                <!-- script.js will load industrial by cat=industrial -->
-            </div>
-        </section>
-    </main>
-
-    <footer style="margin-top: 100px;">
-        <div class="container" style="text-align: center; border-top: 1px solid #eee; padding: 40px 0;">
-            <p style="color: grey; font-size: 13px;">&copy; 2026 ALFRED PRODUCTS. Global Trade Starts Here.</p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
-
-    <!-- Cart Modal -->
-    <div id="cartModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
-        <div style="background-color:#fefefe;margin:5% auto;padding:20px;border:1px solid #888;width:90%;max-width:600px;border-radius:10px;max-height:80vh;overflow-y:auto;">
-            <span onclick="closeCartModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
-            <h2>Your Cart</h2>
-            <div id="cartItems"></div>
-            <div style="margin-top:20px;border-top:2px solid #eee;padding-top:15px;">
-                <h3>Total: GHS <span id="cartTotal">0.00</span></h3>
-                <p style="color:#666;">Delivery Fee: GHS <span id="deliveryFee">0.00</span></p>
-                <p style="font-weight:bold;color:#0abf53;">Grand Total: GHS <span id="grandTotal">0.00</span></p>
-            </div>
-            <button onclick="checkoutCart()" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:15px;">Proceed to Checkout</button>
-        </div>
-    </div>
-
-    <!-- Delivery Form Modal -->
-    <div id="deliveryModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);">
-        <div style="background-color:#fefefe;margin:5% auto;padding:25px;border:1px solid #888;width:90%;max-width:500px;border-radius:10px;">
-            <span onclick="closeDeliveryModal()" style="float:right;font-size:28px;font-weight:bold;cursor:pointer;">&times;</span>
-            <h2>Delivery Information</h2>
-            <form id="deliveryForm" onsubmit="handleFormSubmit(event)">
-                <input type="hidden" id="productCategory">
-                <input type="hidden" id="productTitle">
-                <input type="hidden" id="productPrice">
-                <input type="hidden" id="productDescription">
-                <input type="hidden" id="productImage">
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Full Name</label>
-                    <input type="text" id="fullName" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Phone Number</label>
-                    <input type="tel" id="phoneNumber" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Delivery Address</label>
-                    <textarea id="deliveryAddress" required rows="3" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;"></textarea>
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Quantity</label>
-                    <input type="number" id="quantity" value="1" min="1" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;">
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:bold;">Product</label>
-                    <div id="modalProductInfo" style="background:#f9f9f9;padding:10px;border-radius:5px;"></div>
-                </div>
-                <button type="submit" style="width:100%;padding:15px;background:#0abf53;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">Make Payment</button>
-            </form>
-        </div>
-    </div>
-    
-    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
-        // Floating Menu Functions
-        function toggleFloatingMenu() {
-            const menu = document.getElementById('floatingMenu');
-            menu.classList.toggle('active');
-        }
-        
-        function toggleOrdersSection() {
-            const section = document.getElementById('floatingOrdersSection');
-            const chevron = section.previousElementSibling.querySelector('.orders-chevron');
-            section.classList.toggle('active');
-            chevron.classList.toggle('rotated');
-            
-            if (typeof firebase !== 'undefined' && firebase.auth()) {
-                firebase.auth().onAuthStateChanged((user) => {
-                    if (user) {
-                        loadFloatingOrders(user.uid);
-                    }
-                });
-            }
-        }
-        
-        function loadFloatingOrders(uid) {
-            const container = document.getElementById('floatingOrdersList');
-            if (typeof db !== 'undefined') {
-                db.collection("orders").where("userId", "==", uid).orderBy("timestamp", "desc").limit(5).get()
-                    .then((querySnapshot) => {
-                        if (querySnapshot.empty) {
-                            container.innerHTML = '<div style="padding: 15px; text-align: center; color: #999; font-size: 13px;"><ion-icon name="bag-handle-outline" style="font-size: 24px;"></ion-icon><br>No Order</div>';
-                            return;
-                        }
-                        let ordersHTML = '';
-                        querySnapshot.forEach((doc) => {
-                            const order = doc.data();
-                            const firstItem = order.items[0];
-                            ordersHTML += '<a href="orders.html" class="floating-order-item"><img src="' + (firstItem.image || 'new_logo.png') + '" alt="Product" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;"><div style="flex: 1; overflow: hidden;"><p style="font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + firstItem.title + '</p><p style="font-size: 11px; color: #999;">' + order.items.length + ' item(s) • GHS ' + parseFloat(order.total).toFixed(2) + '</p></div></a>';
-                        });
-                        container.innerHTML = ordersHTML;
-                    })
-                    .catch((error) => {
-                        container.innerHTML = '<div style="padding: 15px; text-align: center; color: #999; font-size: 13px;"><ion-icon name="bag-handle-outline" style="font-size: 24px;"></ion-icon><br>No Order</div>';
-                    });
-            } else {
-                container.innerHTML = '<div style="padding: 15px; text-align: center; color: #999; font-size: 13px;"><ion-icon name="bag-handle-outline" style="font-size: 24px;"></ion-icon><br>No Order</div>';
-            }
-        }
-        
-        document.addEventListener('click', function(e) {
-            const menuContainer = document.querySelector('.floating-menu-container');
-            const menu = document.getElementById('floatingMenu');
-            if (menuContainer && !menuContainer.contains(e.target)) {
-                menu.classList.remove('active');
-            }
-        });
+        function toggleFloatingMenu() { document.getElementById('floatingMenu').classList.toggle('active'); }
+        function updateCartBadge() { let cart = JSON.parse(localStorage.getItem('alfredCart')) || []; const badge = document.getElementById('cartBadge'); if (badge) { badge.textContent = cart.length; badge.style.display = cart.length > 0 ? 'inline-block' : 'none'; } }
+        function updateCartSummary() { let cart = JSON.parse(localStorage.getItem('alfredCart')) || []; const summaryContainer = document.getElementById('cartSummaryContainer'); const emptyMsg = document.getElementById('emptyCartMsg'); if (cart.length === 0) { if (summaryContainer) summaryContainer.style.display = 'none'; if (emptyMsg) emptyMsg.style.display = 'block'; return; } if (summaryContainer) summaryContainer.style.display = 'block'; if (emptyMsg) emptyMsg.style.display = 'none'; let total = 0; cart.forEach(item => { const price = parseFloat(item.price.replace('GHS', '').replace(/,/g, '').trim()); total += price * item.quantity; }); document.getElementById('cartItemCount').textContent = cart.length + ' item(s)'; document.getElementById('cartTotalAmount').textContent = 'GHS ' + total.toFixed(2); }
+        function addProductToCart(category, title, price, desc, image) { let cart = JSON.parse(localStorage.getItem('alfredCart')) || []; const priceStr = 'GHS ' + parseFloat(price).toFixed(2); cart.push({ category, title, price: priceStr, description: desc, image, quantity: 1 }); localStorage.setItem('alfredCart', JSON.stringify(cart)); updateCartBadge(); updateCartSummary(); alert('Product added to cart!'); }
+        let currentProduct = null;
+        function openDeliveryForm(category, title, price, desc, image) { currentProduct = { category, title, price, desc, image }; document.getElementById('modalProductImg').src = image; document.getElementById('modalProductTitle').textContent = title; document.getElementById('modalProductPrice').textContent = 'GHS ' + parseFloat(price).toFixed(2); document.getElementById('modalProductDesc').textContent = desc; document.getElementById('deliveryModal').classList.add('active'); }
+        function closeDeliveryForm() { document.getElementById('deliveryModal').classList.remove('active'); currentProduct = null; }
+        function addCurrentProductToCart() { if (currentProduct) { addProductToCart(currentProduct.category, currentProduct.title, currentProduct.price, currentProduct.desc, currentProduct.image); closeDeliveryForm(); } }
+        function openCheckout() { let cart = JSON.parse(localStorage.getItem('alfredCart')) || []; if (cart.length === 0) { alert('Your cart is empty!'); return; } const cartItemsContainer = document.getElementById('checkoutCartItems'); let total = 0; cartItemsContainer.innerHTML = ''; cart.forEach((item) => { const price = parseFloat(item.price.replace('GHS', '').replace(/,/g, '').trim()); total += price * item.quantity; const itemDiv = document.createElement('div'); itemDiv.style.cssText = 'display: flex; align-items: center; gap: 12px; padding: 10px; border-bottom: 1px solid #eee;'; itemDiv.innerHTML = `<img src="${item.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;"><div style="flex: 1;"><p style="margin: 0; font-size: 13px; font-weight: 600;">${item.title}</p><p style="margin: 0; font-size: 12px; color: #666;">${item.price} x ${item.quantity}</p></div><p style="margin: 0; font-weight: 700; color: #FF6B35;">GHS ${(price * item.quantity).toFixed(2)}</p>`; cartItemsContainer.appendChild(itemDiv); }); document.getElementById('checkoutTotalAmount').textContent = 'GHS ' + total.toFixed(2); localStorage.setItem('cartTotal', total.toFixed(2)); document.getElementById('checkoutModal').classList.add('active'); }
+        function closeCheckout() { document.getElementById('checkoutModal').classList.remove('active'); }
+        function processCheckout() { const form = document.getElementById('checkoutDeliveryForm'); if (!form.checkValidity()) { form.reportValidity(); return; } const deliveryInfo = { fullName: document.getElementById('checkoutFullName').value, phoneNumber: document.getElementById('checkoutPhone').value, whatsappNumber: document.getElementById('checkoutWhatsapp').value || 'N/A', region: document.getElementById('checkoutRegion').value, city: document.getElementById('checkoutCity').value, address: document.getElementById('checkoutAddress').value }; let cart = JSON.parse(localStorage.getItem('alfredCart')) || []; let total = parseFloat(localStorage.getItem('cartTotal')) || 0; const paystack = PaystackPop; paystack.newTransaction({ key: 'pk_live_6b9968065dc0bd4842c97ffa138e49127c862888', amount: total * 100, email: deliveryInfo.phoneNumber + '@alfred.com', currency: 'GHS', reference: 'ALFRED-' + Date.now(), metadata: { deliveryInfo: deliveryInfo, cartItems: cart, total: total }, onSuccess: function(transaction) { alert('Payment successful! Reference: ' + transaction.reference); localStorage.removeItem('alfredCart'); updateCartBadge(); updateCartSummary(); closeCheckout(); }, onCancel: function() { alert('Payment cancelled. You can try again.'); } }); }
+        document.addEventListener('DOMContentLoaded', function() { updateCartBadge(); updateCartSummary(); });
     </script>
 </body>
 
