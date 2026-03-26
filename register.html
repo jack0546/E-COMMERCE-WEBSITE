@@ -7,7 +7,7 @@
     <title>Create Account - ALFRED</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0abf53">
+    <meta name="theme-color" content="#FF6B35">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="new_logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,96 +19,295 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF477E 50%, #7B61FF 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .logo-container img {
+            height: 36px;
+        }
+
+        .auth-title {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin: 0 0 8px 0;
+            color: #1A1A1A;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            color: #5A5A5A;
+            text-align: center;
+            margin: 0 0 24px 0;
+        }
+
+        .google-btn {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid #E5E5E5;
+            border-radius: 10px;
+            background: white;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1A1A1A;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+
+        .google-btn:hover {
+            background: #F8F9FA;
+            border-color: #D0D0D0;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: #E5E5E5;
+        }
+
+        .divider-text {
+            padding: 0 16px;
+            font-size: 12px;
+            color: #8E8E8E;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1A1A1A;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #E5E5E5;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #F8F9FA;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #FF6B35;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #5A5A5A;
+            line-height: 1.4;
+        }
+
+        .terms input {
+            margin-top: 2px;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .terms a {
+            color: #FF6B35;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FF6B35 0%, #E55A2B 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            color: #5A5A5A;
+        }
+
+        .auth-footer a {
+            color: #FF6B35;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 16px;
+            }
+            
+            .auth-card {
+                padding: 24px 20px;
+                border-radius: 16px;
+            }
+            
+            .auth-title {
+                font-size: 22px;
+            }
+            
+            .logo-container img {
+                height: 32px;
+            }
+            
+            .terms {
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Auth Page -->
-    <div class="auth-page">
-        <div class="auth-card" style="max-width: 500px;">
-            <div class="auth-header">
-                <a href="index.html" style="display: inline-block; margin-bottom: 24px;">
-                    <img src="new_logo.png" alt="ALFRED" style="height: 40px;">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="logo-container">
+                <a href="index.html">
+                    <img src="new_logo.png" alt="ALFRED">
                 </a>
-                <h1>Create your account</h1>
-                <p>Join ALFRED and start trading globally</p>
             </div>
 
-            <button class="btn btn-outline" onclick="signInWithGoogle()"
-                style="width: 100%; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px;">
-                <ion-icon name="logo-google" style="font-size: 20px; color: #4285F4;"></ion-icon> Sign up with Google
+            <h1 class="auth-title">Create an account</h1>
+            <p class="auth-subtitle">Join ALFRED and start shopping</p>
+
+            <button class="google-btn" onclick="signUpWithGoogle()">
+                <ion-icon name="logo-google" style="font-size: 20px; color: #4285F4;"></ion-icon>
+                Continue with Google
             </button>
 
-            <div style="text-align: center; position: relative; margin: 24px 0;">
-                <hr style="border: none; border-top: 1px solid var(--border-color);">
-                <span
-                    style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--bg-primary); padding: 0 12px; font-size: 12px; color: var(--text-muted);">or
-                    sign up with email</span>
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">or sign up with email</span>
+                <div class="divider-line"></div>
             </div>
 
             <form id="registerForm" onsubmit="handleRegister(event)">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                    <div class="form-group">
-                        <label class="form-label">First Name</label>
-                        <input type="text" id="firstName" class="form-input" placeholder="First name" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Last Name</label>
-                        <input type="text" id="lastName" class="form-input" placeholder="Last name" required>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="name" class="form-input" placeholder="Enter your name" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Business Email</label>
-                    <input type="email" id="regEmail" class="form-input" placeholder="your@company.com" required>
+                    <label class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Password</label>
-                    <input type="password" id="regPassword" class="form-input"
-                        placeholder="Create a password (min 6 characters)" required>
+                    <input type="password" id="password" class="form-input" placeholder="Create a password" required minlength="6">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Company Name (Optional)</label>
-                    <input type="text" id="companyName" class="form-input" placeholder="Your business name">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
                 </div>
-                <div style="margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px;">
-                    <input type="checkbox" id="terms" style="margin-top: 4px; width: 18px; height: 18px;" required>
-                    <label for="terms" style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
-                        I agree to the <a href="#" style="color: var(--primary-color);">Membership Agreement</a> and <a
-                            href="#" style="color: var(--primary-color);">Privacy Policy</a>
+
+                <div class="terms">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">
+                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary"
-                    style="width: 100%; border-radius: 8px; padding: 14px;">Create Account</button>
+
+                <button type="submit" class="submit-btn">Create Account</button>
             </form>
 
-            <div class="auth-footer" style="margin-top: 24px;">
+            <div class="auth-footer">
                 Already have an account? <a href="login.html">Sign in</a>
             </div>
         </div>
     </div>
 
     <script>
-        // Get redirect URL from query params
-        const urlParams = new URLSearchParams(window.location.search);
-        const redirectUrl = urlParams.get('redirect') || 'index.html';
-        const productId = urlParams.get('productId');
-        
-        // Register with email and password
         function handleRegister(event) {
             event.preventDefault();
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const companyName = document.getElementById('companyName').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters!');
+                return;
+            }
 
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    return user.updateProfile({
-                        displayName: firstName + ' ' + lastName
+                    user.updateProfile({
+                        displayName: name
                     }).then(() => {
-                        // Save to Firestore so admin can see this user
-                        return saveUserToFirestore(user, { firstName, lastName, companyName });
+                        saveUserToFirestore(user, name);
+                        window.location.href = 'index.html';
                     });
                 })
                 .catch((error) => {
@@ -116,65 +315,31 @@
                 });
         }
 
-        // Sign in with Google
-        function signInWithGoogle() {
+        function signUpWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
                 .then((result) => {
                     const user = result.user;
-                    // Save to Firestore so admin can see this user
-                    saveUserToFirestore(user, {});
+                    saveUserToFirestore(user, user.displayName);
+                    window.location.href = 'index.html';
                 })
                 .catch((error) => {
-                    alert('Google sign-in failed: ' + error.message);
+                    alert('Google sign-up failed: ' + error.message);
                 });
         }
 
-        // Save user to Firestore and redirect
-        function saveUserToFirestore(user, extra) {
-            const isAdmin = user.email && user.email.toLowerCase() === 'narhsnazzisco@gmail.com';
-            const db = firebase.firestore();
-
-            const userData = {
-                name: user.displayName || ((extra.firstName || '') + ' ' + (extra.lastName || '')).trim() || user.email.split('@')[0],
-                email: user.email,
-                photo: user.photoURL || '',
-                isAdmin: isAdmin,
-                provider: user.providerData[0] ? user.providerData[0].providerId : 'email',
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                joinedAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            if (extra.companyName) userData.company = extra.companyName;
-
-            return db.collection('users').doc(user.uid).set(userData, { merge: true })
-            .then(() => {
-                console.log('New user saved to Firestore:', user.email);
-                if (isAdmin) {
-                    window.location.href = 'admin-dashboard/admin-dashboard.html';
-                } else {
-                    if (productId) sessionStorage.setItem('pendingProductId', productId);
-                    window.location.href = redirectUrl;
-                }
-            })
-            .catch((error) => {
-                console.error('Error saving user to Firestore:', error);
-                // Still redirect even if Firestore fails
-                if (isAdmin) {
-                    window.location.href = 'admin-dashboard/admin-dashboard.html';
-                } else {
-                    window.location.href = redirectUrl;
-                }
-            });
+        function saveUserToFirestore(user, name) {
+            if (typeof db !== 'undefined') {
+                db.collection('users').doc(user.uid).set({
+                    email: user.email,
+                    displayName: name || user.displayName || user.email.split('@')[0],
+                    photoURL: user.photoURL,
+                    phoneNumber: user.phoneNumber,
+                    createdAt: new Date(),
+                    lastLogin: new Date()
+                }, { merge: true });
+            }
         }
-        // Check if user is already logged in as admin
-        document.addEventListener('DOMContentLoaded', function() {
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user && user.email && user.email.toLowerCase() === 'narhsnazzisco@gmail.com') {
-                    window.location.href = 'admin-dashboard/admin-dashboard.html';
-                }
-            });
-        });
     </script>
 </body>
 
