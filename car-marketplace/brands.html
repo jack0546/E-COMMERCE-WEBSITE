@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse cars by brand - Toyota, Honda, Hyundai. Find your perfect car on AutoGhana.">
+  <title>Car Brands - AutoGhana</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="headerContainer"></div>
+
+  <!-- Brand Hero -->
+  <div class="brand-hero" id="brandHero">
+    <div class="container">
+      <h1 id="brandTitle">Browse by Brand</h1>
+      <p id="brandSubtitle">Explore our collection of quality vehicles</p>
+      <div class="brand-models" id="brandModels"></div>
+    </div>
+  </div>
+
+  <div class="page-content" style="margin-top:0">
+    <div class="container">
+      <!-- Brand Selector (when no brand selected) -->
+      <div id="brandSelector" style="padding:40px 0">
+        <div class="section-header">
+          <h2 class="section-title">Select a <span>Brand</span></h2>
+        </div>
+        <div class="brand-logos" style="gap:40px;margin-top:24px">
+          <a href="brands.html?brand=Toyota" class="brand-logo" style="padding:32px 48px">
+            <div class="brand-logo-icon" style="width:80px;height:80px;font-size:1.5rem">T</div>
+            <span style="font-size:1.1rem">Toyota</span>
+          </a>
+          <a href="brands.html?brand=Honda" class="brand-logo" style="padding:32px 48px">
+            <div class="brand-logo-icon" style="width:80px;height:80px;font-size:1.5rem">H</div>
+            <span style="font-size:1.1rem">Honda</span>
+          </a>
+          <a href="brands.html?brand=Hyundai" class="brand-logo" style="padding:32px 48px">
+            <div class="brand-logo-icon" style="width:80px;height:80px;font-size:1.5rem">HY</div>
+            <span style="font-size:1.1rem">Hyundai</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Toyota Section -->
+      <div id="sectionToyota" class="section" style="display:none">
+        <div class="section-header">
+          <h2 class="section-title">Toyota <span>Cars</span></h2>
+          <span class="inventory-count" id="toyotaCount"></span>
+        </div>
+        <div class="cars-grid" id="toyotaGrid"></div>
+      </div>
+
+      <!-- Honda Section -->
+      <div id="sectionHonda" class="section" style="display:none">
+        <div class="section-header">
+          <h2 class="section-title">Honda <span>Cars</span></h2>
+          <span class="inventory-count" id="hondaCount"></span>
+        </div>
+        <div class="cars-grid" id="hondaGrid"></div>
+      </div>
+
+      <!-- Hyundai Section -->
+      <div id="sectionHyundai" class="section" style="display:none">
+        <div class="section-header">
+          <h2 class="section-title">Hyundai <span>Cars</span></h2>
+          <span class="inventory-count" id="hyundaiCount"></span>
+        </div>
+        <div class="cars-grid" id="hyundaiGrid"></div>
+      </div>
+
+      <!-- All Brands (when specific brand selected, show others too) -->
+      <div id="otherBrandsSection" style="display:none;padding:40px 0">
+        <div class="section-header">
+          <h2 class="section-title">Other <span>Brands</span></h2>
+        </div>
+        <div class="brand-logos" style="gap:32px;margin-top:16px" id="otherBrands"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="footerContainer"></div>
+
+  <script src="js/database/db.js"></script>
+  <script src="js/security/security.js"></script>
+  <script src="js/database/seed.js"></script>
+  <script src="js/auth/auth.js"></script>
+  <script src="js/messaging/messaging.js"></script>
+  <script src="js/installment/installment.js"></script>
+  <script src="js/ui/ui.js"></script>
+  <script>
+    document.getElementById('headerContainer').innerHTML = UI.getHeaderHTML('brands');
+    document.getElementById('footerContainer').innerHTML = UI.getFooterHTML();
+
+    const brandModels = {
+      Toyota: ['Voxy', 'Sienta', 'Vitz', 'Yaris', 'Corolla', 'RAV4', 'Highlander', 'Fortuner', 'Hilux', 'Land Cruiser', 'Prado', 'Camry', 'Hiace', 'Coaster'],
+      Honda: ['Fit', 'Vezel', 'CR-V', 'Accord'],
+      Hyundai: ['Elantra', 'Sonata', 'Tucson', 'Santa Fe']
+    };
+
+    let selectedModel = '';
+
+    async function init() {
+      await UI.initPage('brands');
+      const params = new URLSearchParams(window.location.search);
+      const brand = params.get('brand');
+
+      if (brand && brandModels[brand]) {
+        loadBrandPage(brand);
+      } else {
+        document.getElementById('brandSelector').style.display = '';
+      }
+    }
+
+    async function loadBrandPage(brand) {
+      document.title = `${brand} Cars - AutoGhana`;
+      document.getElementById('brandSelector').style.display = 'none';
+
+      // Hero
+      document.getElementById('brandTitle').textContent = `${brand} Cars`;
+      document.getElementById('brandSubtitle').textContent = `Explore our collection of quality ${brand} vehicles in Ghana`;
+
+      // Model tags
+      const models = brandModels[brand];
+      document.getElementById('brandModels').innerHTML =
+        `<button class="brand-model-tag active" onclick="filterByModel('', this)">All</button>` +
+        models.map(m => `<button class="brand-model-tag" onclick="filterByModel('${m}', this)">${m}</button>`).join('');
+
+      // Load cars
+      const allCars = await CarDB.query('cars', c => c.brand === brand && c.status === 'available');
+      const section = document.getElementById(`section${brand}`);
+      const grid = document.getElementById(`${brand.toLowerCase()}Grid`);
+      const countEl = document.getElementById(`${brand.toLowerCase()}Count`);
+
+      section.style.display = '';
+
+      window._brandCars = allCars;
+      window._brandName = brand;
+
+      renderBrandCars(allCars, grid, countEl);
+
+      // Other brands
+      const otherBrands = Object.keys(brandModels).filter(b => b !== brand);
+      document.getElementById('otherBrandsSection').style.display = '';
+      document.getElementById('otherBrands').innerHTML = otherBrands.map(b => `
+        <a href="brands.html?brand=${b}" class="brand-logo">
+          <div class="brand-logo-icon">${b === 'Hyundai' ? 'HY' : b[0]}</div>
+          <span>${b}</span>
+        </a>
+      `).join('');
+    }
+
+    function renderBrandCars(cars, grid, countEl) {
+      countEl.innerHTML = `<strong>${cars.length}</strong> cars found`;
+      if (cars.length === 0) {
+        grid.innerHTML = '<div class="empty-state"><h3>No cars found for this model</h3><p>Try selecting a different model</p></div>';
+      } else {
+        grid.innerHTML = cars.map(c => UI.createCarCard(c)).join('');
+      }
+    }
+
+    function filterByModel(model, btn) {
+      selectedModel = model;
+      document.querySelectorAll('.brand-model-tag').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+
+      const brand = window._brandName;
+      const cars = model ? window._brandCars.filter(c => c.model === model) : window._brandCars;
+      const grid = document.getElementById(`${brand.toLowerCase()}Grid`);
+      const countEl = document.getElementById(`${brand.toLowerCase()}Count`);
+      renderBrandCars(cars, grid, countEl);
+    }
+
+    init();
+  </script>
+</body>
+</html>

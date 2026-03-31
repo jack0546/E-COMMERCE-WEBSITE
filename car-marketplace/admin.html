@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Admin Dashboard - Manage cars, users, and orders.">
+  <title>Admin Dashboard - AutoGhana</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="headerContainer"></div>
+
+  <div class="dashboard-layout">
+    <aside class="dashboard-sidebar" id="dashSidebar">
+      <div class="dash-user-info">
+        <div class="dash-avatar" id="dashAvatar" style="background:var(--secondary)"></div>
+        <div class="dash-user-name" id="dashName"></div>
+        <div class="dash-user-role">Administrator</div>
+      </div>
+      <nav class="dash-nav">
+        <a href="#" class="active" onclick="showTab('overview',this)">&#127968; Overview</a>
+        <a href="#" onclick="showTab('cars',this)">&#128663; Manage Cars</a>
+        <a href="#" onclick="showTab('addcar',this)">&#10010; Add Car</a>
+        <a href="#" onclick="showTab('users',this)">&#128101; Users</a>
+        <a href="#" onclick="showTab('installments',this)">&#128176; Installments</a>
+        <a href="#" onclick="showTab('messages',this)">&#9993; Messages <span id="msgBadge" class="badge badge-primary" style="margin-left:auto;display:none">0</span></a>
+        <a href="#" onclick="handleLogout()" style="color:var(--danger)">&#10140; Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <button class="dash-mobile-toggle" onclick="toggleDashSidebar()">&#9776; Menu</button>
+
+      <!-- Overview -->
+      <div class="tab-content active" id="tab-overview">
+        <div class="dash-header"><h1>Admin Dashboard</h1></div>
+        <div class="dash-stats">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(230,57,70,0.1);color:var(--primary)">&#128663;</div>
+            <div class="stat-value" id="statCars">0</div>
+            <div class="stat-label">Total Cars</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(42,157,143,0.1);color:var(--success)">&#128101;</div>
+            <div class="stat-value" id="statUsers">0</div>
+            <div class="stat-label">Users</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(244,162,97,0.1);color:var(--accent)">&#128176;</div>
+            <div class="stat-value" id="statPlans">0</div>
+            <div class="stat-label">Installment Requests</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(69,123,157,0.1);color:var(--secondary-light)">&#9993;</div>
+            <div class="stat-value" id="statMsgs">0</div>
+            <div class="stat-label">Conversations</div>
+          </div>
+        </div>
+        <h3 style="font-weight:700;margin-bottom:16px">Recent Listings</h3>
+        <div id="recentListings"></div>
+      </div>
+
+      <!-- Manage Cars -->
+      <div class="tab-content" id="tab-cars">
+        <div class="dash-header">
+          <h1>Manage Cars</h1>
+          <button class="btn btn-primary" onclick="showTab('addcar',document.querySelector('.dash-nav a:nth-child(3)'))">+ Add New Car</button>
+        </div>
+        <div id="carsTableContainer"></div>
+      </div>
+
+      <!-- Add/Edit Car -->
+      <div class="tab-content" id="tab-addcar">
+        <div class="dash-header"><h1 id="carFormTitle">Add New Car</h1></div>
+        <div class="admin-car-form">
+          <form id="carForm" onsubmit="saveCar(event)">
+            <input type="hidden" id="carEditId">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Brand</label>
+                <select id="carBrand" required>
+                  <option value="">Select Brand</option>
+                  <option value="Toyota">Toyota</option>
+                  <option value="Honda">Honda</option>
+                  <option value="Hyundai">Hyundai</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Model</label>
+                <input type="text" id="carModel" placeholder="e.g. Corolla" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Year</label>
+                <input type="number" id="carYear" min="2000" max="2025" required>
+              </div>
+              <div class="form-group">
+                <label>Price (GHS)</label>
+                <input type="number" id="carPriceInput" min="0" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Mileage (km)</label>
+                <input type="number" id="carMileage" min="0" required>
+              </div>
+              <div class="form-group">
+                <label>Transmission</label>
+                <select id="carTransmission" required>
+                  <option value="Automatic">Automatic</option>
+                  <option value="Manual">Manual</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Fuel Type</label>
+                <select id="carFuel" required>
+                  <option value="Petrol">Petrol</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="Hybrid">Hybrid</option>
+                  <option value="Electric">Electric</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Color</label>
+                <input type="text" id="carColor" placeholder="e.g. White" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Engine Size</label>
+                <input type="text" id="carEngine" placeholder="e.g. 2.0L">
+              </div>
+              <div class="form-group">
+                <label>Body Type</label>
+                <select id="carBody">
+                  <option value="Sedan">Sedan</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Hatchback">Hatchback</option>
+                  <option value="Pickup">Pickup</option>
+                  <option value="Van">Van</option>
+                  <option value="Bus">Bus</option>
+                  <option value="Coupe">Coupe</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Doors</label>
+                <input type="number" id="carDoors" value="4" min="2" max="6">
+              </div>
+              <div class="form-group">
+                <label>Seats</label>
+                <input type="number" id="carSeats" value="5" min="2" max="50">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Condition</label>
+                <select id="carCondition">
+                  <option value="Used">Used</option>
+                  <option value="New">New</option>
+                  <option value="Certified Pre-Owned">Certified Pre-Owned</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Location</label>
+                <select id="carLocation">
+                  <option value="Accra">Accra</option>
+                  <option value="Kumasi">Kumasi</option>
+                  <option value="Tema">Tema</option>
+                  <option value="Tamale">Tamale</option>
+                  <option value="Takoradi">Takoradi</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="carDescription" rows="4" style="width:100%;padding:12px;border-radius:var(--radius);background:var(--bg-alt);border:1px solid var(--border);color:var(--text);resize:vertical" placeholder="Describe the car..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="carFeatured"> Featured Listing
+              </label>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="form-group">
+              <label>Car Images</label>
+              <div class="image-upload" id="imageUploadArea" onclick="document.getElementById('imageInput').click()">
+                <div style="font-size:2.5rem;color:var(--text-secondary)">&#128247;</div>
+                <p>Click to upload images<br><small>Supported: JPG, PNG, WebP</small></p>
+              </div>
+              <input type="file" id="imageInput" accept="image/*" multiple style="display:none" onchange="handleImageUpload(event)">
+              <div class="image-preview-grid" id="imagePreviewGrid"></div>
+            </div>
+
+            <div style="display:flex;gap:12px;margin-top:24px">
+              <button type="submit" class="btn btn-primary" id="carFormBtn">Add Car</button>
+              <button type="button" class="btn btn-ghost" onclick="resetCarForm()">Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Users -->
+      <div class="tab-content" id="tab-users">
+        <div class="dash-header"><h1>Users</h1></div>
+        <div id="usersTableContainer"></div>
+      </div>
+
+      <!-- Installments -->
+      <div class="tab-content" id="tab-installments">
+        <div class="dash-header"><h1>Installment Requests</h1></div>
+        <div id="adminInstallments"></div>
+      </div>
+
+      <!-- Messages -->
+      <div class="tab-content" id="tab-messages">
+        <div class="dash-header"><h1>Messages</h1></div>
+        <div id="adminChatContainer"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/database/db.js"></script>
+  <script src="js/security/security.js"></script>
+  <script src="js/database/seed.js"></script>
+  <script src="js/auth/auth.js"></script>
+  <script src="js/messaging/messaging.js"></script>
+  <script src="js/installment/installment.js"></script>
+  <script src="js/ui/ui.js"></script>
+  <script>
+    document.getElementById('headerContainer').innerHTML = UI.getHeaderHTML('');
+
+    let adminUser = null;
+    let carImages = [];
+    let activeConvoId = null;
+    let activeConvoUserId = null;
+
+    async function init() {
+      await UI.initPage('');
+      if (!await Auth.requireAuth()) return;
+      if (!await Auth.requireAdmin()) return;
+
+      adminUser = await Auth.getCurrentUser();
+      document.getElementById('dashAvatar').textContent = UI.getInitials(adminUser.fullName);
+      document.getElementById('dashName').textContent = adminUser.fullName;
+
+      await loadOverview();
+      await loadUnreadBadge();
+    }
+
+    async function loadOverview() {
+      const cars = await CarDB.getAll('cars');
+      const users = await CarDB.getAll('users');
+      const plans = await Installment.getAllPlans();
+      const convos = await Messaging.getAllConversations();
+
+      document.getElementById('statCars').textContent = cars.length;
+      document.getElementById('statUsers').textContent = users.filter(u => u.role !== 'admin').length;
+      document.getElementById('statPlans').textContent = plans.filter(p => p.status === 'pending').length;
+      document.getElementById('statMsgs').textContent = convos.length;
+
+      const recent = cars.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 5);
+      document.getElementById('recentListings').innerHTML = `<table class="dash-table"><thead><tr><th>Car</th><th>Price</th><th>Status</th><th>Date</th></tr></thead><tbody>
+        ${recent.map(c => `<tr><td>${c.year} ${c.brand} ${c.model}</td><td>${UI.formatPrice(c.price)}</td><td><span class="badge badge-success">${c.status}</span></td><td>${UI.formatDate(c.createdAt)}</td></tr>`).join('')}
+      </tbody></table>`;
+    }
+
+    async function loadUnreadBadge() {
+      const count = await Messaging.getUnreadCount(adminUser.id, 'admin');
+      const badge = document.getElementById('msgBadge');
+      if (count > 0) { badge.style.display = ''; badge.textContent = count; }
+      else { badge.style.display = 'none'; }
+    }
+
+    function showTab(tabName, el) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.dash-nav a').forEach(a => a.classList.remove('active'));
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      if (el) el.classList.add('active');
+      document.getElementById('dashSidebar').classList.remove('mobile-open');
+
+      if (tabName === 'cars') loadCarsTable();
+      if (tabName === 'users') loadUsersTable();
+      if (tabName === 'installments') loadAdminInstallments();
+      if (tabName === 'messages') loadAdminMessages();
+    }
+
+    // ---- CARS MANAGEMENT ----
+    async function loadCarsTable() {
+      const cars = await CarDB.getAll('cars');
+      const sorted = cars.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      document.getElementById('carsTableContainer').innerHTML = `
+        <table class="dash-table"><thead><tr><th>Car</th><th>Price</th><th>Year</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead><tbody>
+        ${sorted.map(c => `<tr>
+          <td><strong>${c.brand} ${c.model}</strong></td>
+          <td>${UI.formatPrice(c.price)}</td>
+          <td>${c.year}</td>
+          <td><span class="badge badge-${c.status === 'available' ? 'success' : 'warning'}">${c.status}</span></td>
+          <td>${c.featured ? '<span class="badge badge-primary">Yes</span>' : 'No'}</td>
+          <td>
+            <button class="btn btn-sm btn-outline" onclick="editCar(${c.id})">Edit</button>
+            <button class="btn btn-sm" style="color:var(--danger)" onclick="deleteCar(${c.id})">Delete</button>
+          </td>
+        </tr>`).join('')}
+        </tbody></table>`;
+    }
+
+    async function editCar(id) {
+      const car = await CarDB.get('cars', id);
+      if (!car) return;
+      showTab('addcar', document.querySelector('.dash-nav a:nth-child(3)'));
+      document.getElementById('carFormTitle').textContent = 'Edit Car';
+      document.getElementById('carFormBtn').textContent = 'Update Car';
+      document.getElementById('carEditId').value = id;
+      document.getElementById('carBrand').value = car.brand;
+      document.getElementById('carModel').value = car.model;
+      document.getElementById('carYear').value = car.year;
+      document.getElementById('carPriceInput').value = car.price;
+      document.getElementById('carMileage').value = car.mileage;
+      document.getElementById('carTransmission').value = car.transmission;
+      document.getElementById('carFuel').value = car.fuel;
+      document.getElementById('carColor').value = car.color;
+      document.getElementById('carEngine').value = car.engineSize || '';
+      document.getElementById('carBody').value = car.bodyType || 'Sedan';
+      document.getElementById('carDoors').value = car.doors || 4;
+      document.getElementById('carSeats').value = car.seats || 5;
+      document.getElementById('carCondition').value = car.condition || 'Used';
+      document.getElementById('carLocation').value = car.location || 'Accra';
+      document.getElementById('carDescription').value = car.description || '';
+      document.getElementById('carFeatured').checked = car.featured;
+      carImages = car.images || [];
+      renderImagePreviews();
+    }
+
+    async function saveCar(e) {
+      e.preventDefault();
+      const editId = document.getElementById('carEditId').value;
+      const carData = {
+        brand: document.getElementById('carBrand').value,
+        model: document.getElementById('carModel').value,
+        year: parseInt(document.getElementById('carYear').value),
+        price: parseInt(document.getElementById('carPriceInput').value),
+        mileage: parseInt(document.getElementById('carMileage').value),
+        transmission: document.getElementById('carTransmission').value,
+        fuel: document.getElementById('carFuel').value,
+        color: document.getElementById('carColor').value,
+        engineSize: document.getElementById('carEngine').value,
+        bodyType: document.getElementById('carBody').value,
+        doors: parseInt(document.getElementById('carDoors').value),
+        seats: parseInt(document.getElementById('carSeats').value),
+        condition: document.getElementById('carCondition').value,
+        location: document.getElementById('carLocation').value,
+        description: document.getElementById('carDescription').value,
+        featured: document.getElementById('carFeatured').checked,
+        status: 'available',
+        images: carImages.length > 0 ? carImages : ['car-placeholder.svg'],
+        specs: { horsepower: 'N/A', torque: 'N/A', drivetrain: 'FWD', fuelEconomy: 'N/A' }
+      };
+
+      try {
+        if (editId) {
+          const existing = await CarDB.get('cars', parseInt(editId));
+          await CarDB.put('cars', { ...existing, ...carData });
+          UI.toast('Car updated successfully!', 'success');
+        } else {
+          await CarDB.add('cars', carData);
+          UI.toast('Car added successfully!', 'success');
+        }
+        resetCarForm();
+        showTab('cars', document.querySelector('.dash-nav a:nth-child(2)'));
+      } catch (err) {
+        UI.toast('Error: ' + err.message, 'error');
+      }
+    }
+
+    async function deleteCar(id) {
+      if (!confirm('Are you sure you want to delete this car?')) return;
+      await CarDB.remove('cars', id);
+      UI.toast('Car deleted', 'info');
+      loadCarsTable();
+    }
+
+    function resetCarForm() {
+      document.getElementById('carForm').reset();
+      document.getElementById('carEditId').value = '';
+      document.getElementById('carFormTitle').textContent = 'Add New Car';
+      document.getElementById('carFormBtn').textContent = 'Add Car';
+      carImages = [];
+      document.getElementById('imagePreviewGrid').innerHTML = '';
+    }
+
+    function handleImageUpload(e) {
+      const files = Array.from(e.target.files);
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const fileName = `car_${Date.now()}_${Math.random().toString(36).substr(2, 6)}.jpg`;
+          carImages.push(fileName);
+          // Store image data in localStorage for demo
+          localStorage.setItem(`car_img_${fileName}`, ev.target.result);
+          renderImagePreviews();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderImagePreviews() {
+      const grid = document.getElementById('imagePreviewGrid');
+      grid.innerHTML = carImages.map((img, i) => {
+        const src = localStorage.getItem(`car_img_${img}`) || `assets/images/cars/${img}`;
+        return `<div class="image-preview">
+          <img src="${src}" alt="Car image ${i+1}" onerror="this.style.background='var(--bg-alt)'">
+          <button class="remove-image" onclick="removeImage(${i})">&times;</button>
+        </div>`;
+      }).join('');
+    }
+
+    function removeImage(index) {
+      const img = carImages[index];
+      localStorage.removeItem(`car_img_${img}`);
+      carImages.splice(index, 1);
+      renderImagePreviews();
+    }
+
+    // ---- USERS ----
+    async function loadUsersTable() {
+      const users = await CarDB.getAll('users');
+      const nonAdmin = users.filter(u => u.role !== 'admin');
+      document.getElementById('usersTableContainer').innerHTML = nonAdmin.length === 0
+        ? '<div class="empty-state"><h3>No users registered yet</h3></div>'
+        : `<table class="dash-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Location</th><th>Joined</th></tr></thead><tbody>
+        ${nonAdmin.map(u => `<tr>
+          <td><strong>${u.fullName}</strong></td>
+          <td>${u.email}</td>
+          <td>${u.phone || '-'}</td>
+          <td>${u.location || '-'}</td>
+          <td>${UI.formatDate(u.createdAt)}</td>
+        </tr>`).join('')}
+        </tbody></table>`;
+    }
+
+    // ---- INSTALLMENTS ----
+    async function loadAdminInstallments() {
+      const plans = await Installment.getAllPlans();
+      const sorted = plans.sort((a, b) => b.createdAt - a.createdAt);
+      const el = document.getElementById('adminInstallments');
+
+      if (sorted.length === 0) {
+        el.innerHTML = '<div class="empty-state"><h3>No installment requests yet</h3></div>';
+        return;
+      }
+
+      el.innerHTML = `<table class="dash-table"><thead><tr><th>User</th><th>Car</th><th>Down Payment</th><th>Monthly</th><th>Duration</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+        ${await Promise.all(sorted.map(async p => {
+          const user = await CarDB.get('users', p.userId);
+          return `<tr>
+            <td>${user ? user.fullName : 'Unknown'}</td>
+            <td>${p.carTitle}</td>
+            <td>${UI.formatPrice(p.downPayment)}</td>
+            <td>${UI.formatPrice(p.monthlyPayment)}</td>
+            <td>${p.months} mo</td>
+            <td><span class="badge badge-${p.status === 'approved' ? 'success' : p.status === 'rejected' ? 'danger' : 'warning'}">${p.status}</span></td>
+            <td>${p.status === 'pending' ? `
+              <button class="btn btn-sm btn-primary" onclick="approvePlan(${p.id})">Approve</button>
+              <button class="btn btn-sm" style="color:var(--danger)" onclick="rejectPlan(${p.id})">Reject</button>
+            ` : (p.adminNote || '-')}</td>
+          </tr>`;
+        })).then(rows => rows.join(''))}
+      </tbody></table>`;
+    }
+
+    async function approvePlan(id) {
+      const note = prompt('Add a note (optional):') || 'Approved';
+      await Installment.approvePlan(id, note);
+      UI.toast('Plan approved!', 'success');
+      loadAdminInstallments();
+    }
+
+    async function rejectPlan(id) {
+      const note = prompt('Reason for rejection:') || 'Rejected';
+      await Installment.rejectPlan(id, note);
+      UI.toast('Plan rejected', 'info');
+      loadAdminInstallments();
+    }
+
+    // ---- MESSAGES ----
+    async function loadAdminMessages() {
+      const convos = await Messaging.getAllConversations();
+      const container = document.getElementById('adminChatContainer');
+
+      if (convos.length === 0) {
+        container.innerHTML = '<div class="empty-state"><h3>No conversations yet</h3></div>';
+        return;
+      }
+
+      // Build chat layout
+      let listHTML = '';
+      for (const c of convos) {
+        const user = await CarDB.get('users', c.userId);
+        listHTML += `
+          <div class="chat-item ${activeConvoId === c.id ? 'active' : ''}" onclick="openAdminChat(${c.id}, ${c.userId})">
+            <div class="chat-item-avatar">${user ? UI.getInitials(user.fullName) : '?'}</div>
+            <div class="chat-item-info">
+              <div class="chat-item-name">${user ? user.fullName : 'Unknown'}</div>
+              <div class="chat-item-preview">${c.lastMessage || 'No messages'}</div>
+            </div>
+            ${c.unreadAdmin > 0 ? `<div class="unread-badge">${c.unreadAdmin}</div>` : ''}
+          </div>`;
+      }
+
+      container.innerHTML = `
+        <div class="chat-layout">
+          <div class="chat-list">
+            <div class="chat-list-header">Conversations</div>
+            ${listHTML}
+          </div>
+          <div class="chat-main" id="adminChatMain">
+            <div class="empty-state" style="margin:auto"><h3>Select a conversation</h3></div>
+          </div>
+        </div>`;
+
+      if (activeConvoId) openAdminChat(activeConvoId, activeConvoUserId);
+    }
+
+    async function openAdminChat(convoId, userId) {
+      activeConvoId = convoId;
+      activeConvoUserId = userId;
+      await Messaging.markAsRead(convoId, 'admin');
+      await loadUnreadBadge();
+
+      const messages = await Messaging.getMessages(convoId);
+      const user = await CarDB.get('users', userId);
+      const chatMain = document.getElementById('adminChatMain');
+
+      chatMain.innerHTML = `
+        <div class="chat-header">
+          <div class="chat-item-avatar" style="width:36px;height:36px;font-size:0.8rem">${user ? UI.getInitials(user.fullName) : '?'}</div>
+          <div><div class="chat-item-name">${user ? user.fullName : 'Unknown'}</div><div style="font-size:0.75rem;color:var(--text-secondary)">${user ? user.email : ''}</div></div>
+        </div>
+        <div class="chat-messages" id="adminChatMessages">
+          ${messages.map(m => `
+            <div class="chat-message ${m.senderRole === 'admin' ? 'sent' : 'received'}">
+              <div>
+                <div class="chat-message-bubble">${m.text}</div>
+                <div class="chat-message-time">${UI.formatTime(m.timestamp)}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="chat-input">
+          <input type="text" id="adminChatInput" placeholder="Type a reply..." onkeydown="if(event.key==='Enter')sendAdminChat()">
+          <button onclick="sendAdminChat()">&#10148;</button>
+        </div>
+      `;
+
+      // Update active state in list
+      document.querySelectorAll('.chat-item').forEach(el => el.classList.remove('active'));
+      const items = document.querySelectorAll('.chat-item');
+      items.forEach(el => {
+        if (el.onclick && el.onclick.toString().includes(convoId)) el.classList.add('active');
+      });
+
+      const msgArea = document.getElementById('adminChatMessages');
+      msgArea.scrollTop = msgArea.scrollHeight;
+    }
+
+    async function sendAdminChat() {
+      const input = document.getElementById('adminChatInput');
+      const text = input.value.trim();
+      if (!text || !activeConvoId) return;
+      input.value = '';
+      await Messaging.sendMessage(activeConvoId, adminUser.id, 'admin', text);
+      openAdminChat(activeConvoId, activeConvoUserId);
+    }
+
+    function handleLogout() {
+      Auth.logout();
+      window.location.href = 'index.html';
+    }
+
+    function toggleDashSidebar() {
+      document.getElementById('dashSidebar').classList.toggle('mobile-open');
+    }
+
+    init();
+  </script>
+</body>
+</html>
