@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AutoGhana - Ghana's trusted car marketplace. Buy, sell, and finance quality vehicles.">
+  <title>AutoGhana - Ghana's #1 Car Marketplace</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="headerContainer"></div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Find Your Perfect <span class="highlight">Car</span> in Ghana</h1>
+        <p>Browse thousands of quality vehicles from trusted sellers across Ghana. Finance available.</p>
+        <div class="hero-search">
+          <div class="search-tabs">
+            <button class="search-tab active">Buy a Car</button>
+            <button class="search-tab">Sell Your Car</button>
+          </div>
+          <div class="search-row">
+            <div class="search-field">
+              <select id="searchBrand">
+                <option value="">Select Brand</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Honda">Honda</option>
+                <option value="Hyundai">Hyundai</option>
+              </select>
+            </div>
+            <div class="search-field">
+              <select id="searchPrice">
+                <option value="">Price Range</option>
+                <option value="0-100000">Under GHS 100,000</option>
+                <option value="100000-200000">GHS 100K - 200K</option>
+                <option value="200000-400000">GHS 200K - 400K</option>
+                <option value="400000-1000000">GHS 400K+</option>
+              </select>
+            </div>
+            <button class="search-btn" onclick="handleSearch()">&#128269; Search Cars</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brand Logos -->
+  <section class="brands-bar">
+    <div class="container">
+      <h3>Browse by Brand</h3>
+      <div class="brand-logos">
+        <a href="brands.html?brand=Toyota" class="brand-logo">
+          <div class="brand-logo-icon">T</div>
+          <span>Toyota</span>
+        </a>
+        <a href="brands.html?brand=Honda" class="brand-logo">
+          <div class="brand-logo-icon">H</div>
+          <span>Honda</span>
+        </a>
+        <a href="brands.html?brand=Hyundai" class="brand-logo">
+          <div class="brand-logo-icon">HY</div>
+          <span>Hyundai</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Cars -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Featured <span>Cars</span></h2>
+        <a href="inventory.html?featured=true" class="section-link">View All &rarr;</a>
+      </div>
+      <div class="cars-grid" id="featuredCars">
+        <!-- Skeleton loading -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Installment Banner -->
+  <section class="section">
+    <div class="container">
+      <div class="installment-banner reveal">
+        <div class="installment-banner-content">
+          <h2>Drive Now, Pay Later!</h2>
+          <p>Get flexible installment plans with as low as 30% down payment. Approval in 24 hours.</p>
+          <a href="inventory.html" class="btn">Explore Cars &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Listings -->
+  <section class="section" style="background:var(--bg-alt)">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Latest <span>Listings</span></h2>
+        <a href="inventory.html" class="section-link">View All &rarr;</a>
+      </div>
+      <div class="cars-grid" id="latestCars">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Sell Your Car CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="sell-cta reveal">
+        <h2>Want to Sell Your Car?</h2>
+        <p>List your car on AutoGhana and reach thousands of potential buyers across Ghana.</p>
+        <a href="register.html" class="btn btn-primary btn-lg">Get Started &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section" style="background:var(--bg-alt)">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">What Our <span>Customers</span> Say</h2>
+      </div>
+      <div class="testimonials-grid" id="testimonials">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <div id="footerContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/database/db.js"></script>
+  <script src="js/security/security.js"></script>
+  <script src="js/database/seed.js"></script>
+  <script src="js/auth/auth.js"></script>
+  <script src="js/messaging/messaging.js"></script>
+  <script src="js/installment/installment.js"></script>
+  <script src="js/ui/ui.js"></script>
+  <script>
+    // Initialize page
+    document.getElementById('headerContainer').innerHTML = UI.getHeaderHTML('home');
+    document.getElementById('footerContainer').innerHTML = UI.getFooterHTML();
+
+    async function init() {
+      await UI.initPage('home');
+      await loadFeaturedCars();
+      await loadLatestCars();
+      loadTestimonials();
+    }
+
+    async function loadFeaturedCars() {
+      const grid = document.getElementById('featuredCars');
+      grid.innerHTML = Array(4).fill(UI.createSkeletonCard()).join('');
+      await new Promise(r => setTimeout(r, 400));
+      const cars = await CarDB.query('cars', c => c.featured && c.status === 'available');
+      grid.innerHTML = cars.slice(0, 8).map(c => UI.createCarCard(c)).join('');
+    }
+
+    async function loadLatestCars() {
+      const grid = document.getElementById('latestCars');
+      grid.innerHTML = Array(4).fill(UI.createSkeletonCard()).join('');
+      await new Promise(r => setTimeout(r, 300));
+      const cars = await CarDB.getAll('cars');
+      const sorted = cars.filter(c => c.status === 'available').sort((a, b) => b.createdAt - a.createdAt);
+      grid.innerHTML = sorted.slice(0, 8).map(c => UI.createCarCard(c)).join('');
+    }
+
+    function loadTestimonials() {
+      const grid = document.getElementById('testimonials');
+      const t = SeedData.testimonials;
+      grid.innerHTML = t.map(item => `
+        <div class="testimonial-card reveal">
+          <div class="testimonial-stars">${'&#9733;'.repeat(item.rating)}${'&#9734;'.repeat(5 - item.rating)}</div>
+          <p class="testimonial-text">"${item.text}"</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">${UI.getInitials(item.name)}</div>
+            <div>
+              <div class="testimonial-name">${item.name}</div>
+              <div class="testimonial-role">${item.role}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      setTimeout(() => UI.initRevealAnimations(), 100);
+    }
+
+    function handleSearch() {
+      const brand = document.getElementById('searchBrand').value;
+      const price = document.getElementById('searchPrice').value;
+      let url = 'inventory.html?';
+      if (brand) url += `brand=${brand}&`;
+      if (price) url += `price=${price}&`;
+      window.location.href = url;
+    }
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').catch(() => {});
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Login to your AutoGhana account.">
+  <title>Login - AutoGhana</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="headerContainer"></div>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <h2>Welcome Back</h2>
+      <p class="auth-subtitle">Login to your AutoGhana account</p>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="Enter your email" required>
+          <div class="error" id="emailError"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+            <button type="button" class="toggle-password" onclick="togglePass()">&#128065;</button>
+          </div>
+          <div class="error" id="passwordError"></div>
+        </div>
+
+        <div class="error" id="loginError" style="margin-bottom:16px;text-align:center"></div>
+
+        <button type="submit" class="btn btn-primary w-full btn-lg" id="loginBtn">Login</button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="register.html">Register here</a>
+      </div>
+
+      <div style="margin-top:20px;padding:16px;background:var(--bg-alt);border-radius:var(--radius);font-size:0.8rem;color:var(--text-secondary)" id="demoBox">
+        <strong>Demo Admin Account:</strong><br>
+        <span id="demoInfo"></span>
+      </div>
+      <script>
+        (function(){
+          var e=['admin','carmarket','gh'],p=[65,100,109,105,110,64,49,50,51].map(function(c){return String.fromCharCode(c)}).join('');
+          document.getElementById('demoInfo').innerHTML='Email: '+e[0]+'@'+e[1]+'.'+e[2]+'<br>Pass: '+p;
+        })();
+      </script>
+    </div>
+  </div>
+
+  <script src="js/database/db.js"></script>
+  <script src="js/security/security.js"></script>
+  <script src="js/database/seed.js"></script>
+  <script src="js/auth/auth.js"></script>
+  <script src="js/messaging/messaging.js"></script>
+  <script src="js/installment/installment.js"></script>
+  <script src="js/ui/ui.js"></script>
+  <script>
+    document.getElementById('headerContainer').innerHTML = UI.getHeaderHTML('');
+
+    async function initLogin() {
+      await UI.initPage('');
+      const authed = await Auth.isAuthenticated();
+      if (authed) {
+        const user = await Auth.getCurrentUser();
+        window.location.href = user.role === 'admin' ? 'admin.html' : 'dashboard.html';
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('loginBtn');
+      const errEl = document.getElementById('loginError');
+
+      errEl.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
+
+      try {
+        await Auth.login(email, password);
+        const user = await Auth.getCurrentUser();
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get('redirect');
+
+        if (redirect) {
+          window.location.href = redirect;
+        } else {
+          window.location.href = user.role === 'admin' ? 'admin.html' : 'dashboard.html';
+        }
+      } catch (err) {
+        errEl.textContent = err.message;
+        btn.disabled = false;
+        btn.textContent = 'Login';
+      }
+    }
+
+    function togglePass() {
+      const input = document.getElementById('loginPassword');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    initLogin();
+  </script>
+</body>
+</html>

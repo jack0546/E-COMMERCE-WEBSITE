@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse our inventory of quality cars for sale in Ghana. Filter by brand, price, year, and more.">
+  <title>Car Inventory - AutoGhana</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="headerContainer"></div>
+
+  <div class="page-content">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="separator">/</span>
+        <span>Inventory</span>
+      </div>
+
+      <button class="filter-toggle-mobile" onclick="toggleFilterSidebar()">
+        &#9776; Filters
+      </button>
+
+      <div class="inventory-layout">
+        <!-- Filter Sidebar -->
+        <aside class="filter-sidebar" id="filterSidebar">
+          <div class="filter-card">
+            <h3>Filters <button class="btn btn-ghost btn-sm" onclick="clearFilters()">Clear</button></h3>
+
+            <div class="filter-group">
+              <label>Brand</label>
+              <select id="filterBrand" onchange="applyFilters()">
+                <option value="">All Brands</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Honda">Honda</option>
+                <option value="Hyundai">Hyundai</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Model</label>
+              <select id="filterModel" onchange="applyFilters()">
+                <option value="">All Models</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Price Range (GHS)</label>
+              <div class="price-range">
+                <input type="number" id="filterPriceMin" placeholder="Min" onchange="applyFilters()">
+                <span>-</span>
+                <input type="number" id="filterPriceMax" placeholder="Max" onchange="applyFilters()">
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label>Year</label>
+              <div class="price-range">
+                <select id="filterYearMin" onchange="applyFilters()">
+                  <option value="">From</option>
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                  <option value="2020">2020</option>
+                  <option value="2021">2021</option>
+                  <option value="2022">2022</option>
+                  <option value="2023">2023</option>
+                  <option value="2024">2024</option>
+                </select>
+                <span>-</span>
+                <select id="filterYearMax" onchange="applyFilters()">
+                  <option value="">To</option>
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                  <option value="2020">2020</option>
+                  <option value="2021">2021</option>
+                  <option value="2022">2022</option>
+                  <option value="2023">2023</option>
+                  <option value="2024">2024</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label>Transmission</label>
+              <select id="filterTransmission" onchange="applyFilters()">
+                <option value="">All</option>
+                <option value="Automatic">Automatic</option>
+                <option value="Manual">Manual</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Fuel Type</label>
+              <select id="filterFuel" onchange="applyFilters()">
+                <option value="">All</option>
+                <option value="Petrol">Petrol</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Body Type</label>
+              <select id="filterBody" onchange="applyFilters()">
+                <option value="">All</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="Pickup">Pickup</option>
+                <option value="Van">Van</option>
+                <option value="Bus">Bus</option>
+              </select>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+          <div class="inventory-header">
+            <span class="inventory-count" id="inventoryCount">Loading...</span>
+            <div class="inventory-sort">
+              <select id="sortSelect" onchange="applyFilters()">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="year-new">Year: Newest</option>
+                <option value="mileage-low">Mileage: Lowest</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="cars-grid" id="carsGrid"></div>
+          <div id="paginationContainer"></div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <div id="footerContainer"></div>
+
+  <script src="js/database/db.js"></script>
+  <script src="js/security/security.js"></script>
+  <script src="js/database/seed.js"></script>
+  <script src="js/auth/auth.js"></script>
+  <script src="js/messaging/messaging.js"></script>
+  <script src="js/installment/installment.js"></script>
+  <script src="js/ui/ui.js"></script>
+  <script>
+    document.getElementById('headerContainer').innerHTML = UI.getHeaderHTML('inventory');
+    document.getElementById('footerContainer').innerHTML = UI.getFooterHTML();
+
+    let allCars = [];
+    let filteredCars = [];
+    let currentPage = 1;
+    const ITEMS_PER_PAGE = 12;
+
+    async function init() {
+      await UI.initPage('inventory');
+      allCars = await CarDB.query('cars', c => c.status === 'available');
+      applyUrlParams();
+      applyFilters();
+    }
+
+    function applyUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('brand')) document.getElementById('filterBrand').value = params.get('brand');
+      if (params.get('featured')) { /* show featured only handled in filter */ }
+      if (params.get('price')) {
+        const [min, max] = params.get('price').split('-');
+        if (min) document.getElementById('filterPriceMin').value = min;
+        if (max) document.getElementById('filterPriceMax').value = max;
+      }
+      updateModelOptions();
+    }
+
+    function updateModelOptions() {
+      const brand = document.getElementById('filterBrand').value;
+      const modelSelect = document.getElementById('filterModel');
+      const models = [...new Set(allCars.filter(c => !brand || c.brand === brand).map(c => c.model))].sort();
+      modelSelect.innerHTML = '<option value="">All Models</option>' + models.map(m => `<option value="${m}">${m}</option>`).join('');
+    }
+
+    function applyFilters() {
+      const brand = document.getElementById('filterBrand').value;
+      const model = document.getElementById('filterModel').value;
+      const priceMin = parseInt(document.getElementById('filterPriceMin').value) || 0;
+      const priceMax = parseInt(document.getElementById('filterPriceMax').value) || Infinity;
+      const yearMin = parseInt(document.getElementById('filterYearMin').value) || 0;
+      const yearMax = parseInt(document.getElementById('filterYearMax').value) || Infinity;
+      const transmission = document.getElementById('filterTransmission').value;
+      const fuel = document.getElementById('filterFuel').value;
+      const body = document.getElementById('filterBody').value;
+      const sort = document.getElementById('sortSelect').value;
+      const params = new URLSearchParams(window.location.search);
+      const featuredOnly = params.get('featured') === 'true';
+
+      updateModelOptions();
+
+      filteredCars = allCars.filter(car => {
+        if (brand && car.brand !== brand) return false;
+        if (model && car.model !== model) return false;
+        if (car.price < priceMin || car.price > priceMax) return false;
+        if (car.year < yearMin || car.year > yearMax) return false;
+        if (transmission && car.transmission !== transmission) return false;
+        if (fuel && car.fuel !== fuel) return false;
+        if (body && car.bodyType !== body) return false;
+        if (featuredOnly && !car.featured) return false;
+        return true;
+      });
+
+      // Sort
+      switch (sort) {
+        case 'newest': filteredCars.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); break;
+        case 'oldest': filteredCars.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0)); break;
+        case 'price-low': filteredCars.sort((a, b) => a.price - b.price); break;
+        case 'price-high': filteredCars.sort((a, b) => b.price - a.price); break;
+        case 'year-new': filteredCars.sort((a, b) => b.year - a.year); break;
+        case 'mileage-low': filteredCars.sort((a, b) => a.mileage - b.mileage); break;
+      }
+
+      currentPage = 1;
+      renderCars();
+    }
+
+    function renderCars() {
+      const grid = document.getElementById('carsGrid');
+      const countEl = document.getElementById('inventoryCount');
+      const pagEl = document.getElementById('paginationContainer');
+
+      const start = (currentPage - 1) * ITEMS_PER_PAGE;
+      const paginated = filteredCars.slice(start, start + ITEMS_PER_PAGE);
+
+      countEl.innerHTML = `Showing <strong>${paginated.length}</strong> of <strong>${filteredCars.length}</strong> cars`;
+
+      if (paginated.length === 0) {
+        grid.innerHTML = '<div class="empty-state"><h3>No cars found</h3><p>Try adjusting your filters</p></div>';
+        pagEl.innerHTML = '';
+        return;
+      }
+
+      grid.innerHTML = paginated.map(c => UI.createCarCard(c)).join('');
+
+      // Pagination
+      const totalPages = Math.ceil(filteredCars.length / ITEMS_PER_PAGE);
+      if (totalPages <= 1) { pagEl.innerHTML = ''; return; }
+
+      let pagHTML = '<div class="pagination">';
+      pagHTML += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">&laquo;</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+          pagHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+        } else if (i === currentPage - 3 || i === currentPage + 3) {
+          pagHTML += '<button disabled>...</button>';
+        }
+      }
+      pagHTML += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">&raquo;</button>`;
+      pagHTML += '</div>';
+      pagEl.innerHTML = pagHTML;
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderCars();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function clearFilters() {
+      document.getElementById('filterBrand').value = '';
+      document.getElementById('filterModel').value = '';
+      document.getElementById('filterPriceMin').value = '';
+      document.getElementById('filterPriceMax').value = '';
+      document.getElementById('filterYearMin').value = '';
+      document.getElementById('filterYearMax').value = '';
+      document.getElementById('filterTransmission').value = '';
+      document.getElementById('filterFuel').value = '';
+      document.getElementById('filterBody').value = '';
+      applyFilters();
+    }
+
+    function toggleFilterSidebar() {
+      document.getElementById('filterSidebar').classList.toggle('mobile-open');
+    }
+
+    init();
+  </script>
+</body>
+</html>
